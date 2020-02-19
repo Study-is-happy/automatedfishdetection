@@ -1,0 +1,245 @@
+<QuestionForm xmlns='http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2017-11-06/QuestionForm.xsd'>
+  <Question>
+    <QuestionIdentifier>q0</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <strong><font color='green' size='6'>This is just an easy tutorial, you can re-take it at any time!</font></strong>
+        <hr/>
+        <table>
+          <tr>
+            <td colspan='4'><strong><font color='red' size='4'>Fish</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/fish1.png' alt='fish1' width='150' height='150'/></td>
+          </tr>
+          <tr>
+            <td colspan='4'><strong><font color='orange' size='4'>Starfish</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish1.png' alt='starfish1' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish2.png' alt='starfish2' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish3.png' alt='starfish3' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish4.png' alt='starfish4' width='150' height='150'/></td>
+          </tr>
+          <tr>
+            <td colspan='4'><strong><font color='grey' size='4'>Background(Means nothing here)</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background1.png' alt='background1' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background2.png' alt='background2' width='150' height='150'/></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>Understood</SelectionIdentifier>
+            <Text>Understood</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>Not understood</SelectionIdentifier>
+            <Text>Not understood</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+  <Question>
+    <QuestionIdentifier>q1</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <table>
+          <tr>
+            <td><strong><font size='4'>What is this species?</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_starfish1.png' alt='test_starfish1' width='150' height='150'/></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>background</SelectionIdentifier>
+            <Text>background</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>fish</SelectionIdentifier>
+            <Text>fish</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>starfish</SelectionIdentifier>
+            <Text>starfish</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+  <Question>
+    <QuestionIdentifier>q2</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <table>
+          <tr>
+            <td><strong><font size='4'>What is this species?</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_background1.png' alt='test_background1' width='150' height='150'/></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>background</SelectionIdentifier>
+            <Text>background</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>fish</SelectionIdentifier>
+            <Text>fish</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>starfish</SelectionIdentifier>
+            <Text>starfish</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+  <Question>
+    <QuestionIdentifier>q3</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <table>
+          <tr>
+            <td><strong><font size='4'>What is this species?</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_starfish2.png' alt='test_starfish2' width='150' height='150'/></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>background</SelectionIdentifier>
+            <Text>background</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>fish</SelectionIdentifier>
+            <Text>fish</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>starfish</SelectionIdentifier>
+            <Text>starfish</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+  <Question>
+    <QuestionIdentifier>q4</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <table>
+          <tr>
+            <td><strong><font size='4'>What is this species?</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_starfish3.png' alt='test_starfish3' width='150' height='150'/></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>background</SelectionIdentifier>
+            <Text>background</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>fish</SelectionIdentifier>
+            <Text>fish</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>starfish</SelectionIdentifier>
+            <Text>starfish</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+  <Question>
+    <QuestionIdentifier>q5</QuestionIdentifier>
+    <IsRequired>true</IsRequired>
+    <QuestionContent>
+      <FormattedContent>
+        <![CDATA[
+        <table>
+          <tr>
+            <td colspan='4'><strong><font size='4'>Which one is the correct bounding box?</font></strong></td>
+          </tr>
+          <tr>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_bound_1.png' alt='test_bound_1' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_bound_2.png' alt='test_bound_2' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_bound_3.png' alt='test_bound_3' width='150' height='150'/></td>
+            <td><img src='https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/test_bound_4.png' alt='test_bound_4' width='150' height='150'/></td>
+          </tr>
+          <tr>
+            <td align='center'><strong><font size='4'>A</font></strong></td>
+            <td align='center'><strong><font size='4'>B</font></strong></td>
+            <td align='center'><strong><font size='4'>C</font></strong></td>
+            <td align='center'><strong><font size='4'>D</font></strong></td>
+          </tr>
+        </table>
+        ]]>
+      </FormattedContent>
+    </QuestionContent>
+    <AnswerSpecification>
+      <SelectionAnswer>
+        <Selections>
+          <Selection>
+            <SelectionIdentifier>A</SelectionIdentifier>
+            <Text>A</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>B</SelectionIdentifier>
+            <Text>B</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>C</SelectionIdentifier>
+            <Text>C</Text>
+          </Selection>
+          <Selection>
+            <SelectionIdentifier>D</SelectionIdentifier>
+            <Text>D</Text>
+          </Selection>
+        </Selections>
+      </SelectionAnswer>
+    </AnswerSpecification>
+  </Question>
+</QuestionForm>

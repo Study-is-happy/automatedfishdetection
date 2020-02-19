@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <div id="tutorialModal">
+    <div id="tutorialModalContent">
+      <span id="closeSpan" onclick="closeTutorialModal()">&times;</span>
+      <div class="titleText">Tutorial</div>
+      <hr />
+      <div class="instructionText" id="tutorialModalText"></div>
+      <video id="tutorialModalVideo" width="100%" autoplay loop>
+        <source id="tutorialModalVideoSource" src="" type="video/mp4">
+        Loading...
+      </video>
+      <hr />
+      <div align="right">
+        <button type="button" id="tutorialModalButton" class="button" onclick="nextTutorialModal()">Next</button>
+      </div>
+    </div>
+  </div>
+  <table id="layoutTable" align="center">
+    <thead>
+      <tr class="titleText">
+        <th>Workspace</th>
+        <th>Examples</th>
+      </tr>
+    </thead>
+    <tr valign="top">
+      <td>
+        <div id="imgContainer">
+          <div id="imgDiv">
+            <img id="img" />
+            <div id="boxDiv">
+              <div id="nResizerDiv" class="resizerDiv"></div>
+              <div id="sResizerDiv" class="resizerDiv"></div>
+              <div id="wResizerDiv" class="resizerDiv"></div>
+              <div id="eResizerDiv" class="resizerDiv"></div>
+              <div id="nwResizerDiv" class="resizerDiv"></div>
+              <div id="seResizerDiv" class="resizerDiv"></div>
+              <div id="neResizerDiv" class="resizerDiv"></div>
+              <div id="swResizerDiv" class="resizerDiv"></div>
+            </div>
+          </div>
+          <select id="categorySelect">
+            <option value="" disabled>Choose Species</option>
+          </select>
+        </div>
+        <div id="progressContainer">
+          <div id="progressDiv" align="center"></div>
+        </div>
+        <table width="100%" id="buttonTable" cellpadding="0">
+          <tr>
+            <td>
+              <button id="prevButton" type="button" class="button" onclick="prev()">Prev</button>
+            </td>
+            <td align="center">
+              <button type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
+              <button type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
+            </td>
+            <td align="right" id="nextButtonTd">
+              <button id="nextButton" type="button" class="button">Next</button>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <div class="instructionText">
+          <font color="red">Fish</font>
+        </div>
+        <table border="5" bordercolor="red">
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/fish1.png" alt="fish1" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/fish2.png" alt="fish2" width="120" height="120" />
+            </td>
+          </tr>
+        </table>
+        <div class="instructionText">
+          <font color="orange">Starfish</font>
+        </div>
+        <table border="5" bordercolor="orange">
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish1.png" alt="starfish1" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish2.png" alt="starfish2" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/starfish3.png" alt="starfish3" width="120" height="120" />
+            </td>
+          </tr>
+        </table>
+        <div class="instructionText">
+          <font color="black">Sponge</font>
+        </div>
+        <table border="5" bordercolor="black">
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/sponge1.png" alt="sponge1" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/sponge2.png" alt="sponge2" width="120" height="120" />
+            </td>
+          </tr>
+        </table>
+        <div class="instructionText">
+          <font color="grey">None of the above</font>
+        </div>
+        <table border="5" bordercolor="grey">
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background1.png" alt="background1" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background2.png" alt="background2" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background3.png" alt="background3" width="120" height="120" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background4.png" alt="background4" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background5.png" alt="background5" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background6.png" alt="background6" width="120" height="120" />
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <input id="userAgentInput" name="userAgentInput" type="hidden" value="" />
+  <input id="annotationsInput" name="annotationsInput" type="hidden" value="[]" />
+  <button id="submitButton">Submit</button>
+</body>
+<script type="text/javascript">
+const dataSrc = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/"
+
+const categories = [
+  { "name": "Fish", "color": "red" },
+  { "name": "Starfish", "color": "orange" },
+  { "name": "Sponge", "color": "white" },
+  { "name": "None of the above", "color": "silver" }
+]
+
+const tutorialModalTexts = ["Step1: Choose Species", "Step2: Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Step3: Some objects overlap, labeling the unlabeled one"]
+
+const workspaceWidth = window.innerHeight - 150
+
+const imgBorderWidth = 4
+
+const boxBorderWidth = 3
+
+const resizerExtraWidth = 4
+
+const gtIndexes = [9]
+
+const maxZoom = 4
+
+const animationZoomInterval = 1.05
+
+const onmouseholdInterval = 15
+
+const onmouseholdspeed = 10
+
+const cacheImg = new Image()
+
+let annotations = []
+
+let existAnnotations = []
+
+let tutorialIndex = 0
+
+let currentIndex = 0
+
+let zoomLevel, annotation, edge_timer, corner_timer, minZoom, animationTimer, onmouseholdTimer, checkSelect, checkBox, warningTimer
+
+const tutorialModalText = document.getElementById("tutorialModalText")
+const tutorialModalVideo = document.getElementById("tutorialModalVideo")
+const tutorialModalVideoSource = document.getElementById("tutorialModalVideoSource")
+const tutorialModalButton = document.getElementById("tutorialModalButton")
+
+const imgDiv = document.getElementById("imgDiv")
+const img = document.getElementById("img")
+const boxDiv = document.getElementById("boxDiv")
+const nResizerDiv = document.getElementById("nResizerDiv")
+const sResizerDiv = document.getElementById("sResizerDiv")
+const wResizerDiv = document.getElementById("wResizerDiv")
+const eResizerDiv = document.getElementById("eResizerDiv")
+const nwResizerDiv = document.getElementById("nwResizerDiv")
+const seResizerDiv = document.getElementById("seResizerDiv")
+const neResizerDiv = document.getElementById("neResizerDiv")
+const swResizerDiv = document.getElementById("swResizerDiv")
+const categorySelect = document.getElementById("categorySelect")
+
+const progressDiv = document.getElementById("progressDiv")
+const prevButton = document.getElementById("prevButton")
+const nextButtonTd = document.getElementById("nextButtonTd")
+const nextButton = document.getElementById("nextButton")
+
+const userAgentInput = document.getElementById("userAgentInput")
+const annotationsInput = document.getElementById("annotationsInput")
+const submitButton = document.getElementById("submitButton")
+
+userAgentInput.value = navigator.userAgent
+
+function nextTutorialModal() {
+  tutorialModalText.innerHTML = tutorialModalTexts[tutorialIndex]
+  tutorialModalVideoSource.src = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/tutorial_step" + (tutorialIndex + 1) + ".mp4"
+  tutorialModalVideo.load()
+  if (tutorialIndex === tutorialModalTexts.length - 1) {
+    tutorialModalButton.innerHTML = "Finish"
+    tutorialModalButton.onclick = closeTutorialModal
+  }
+
+  tutorialIndex += 1
+}
+
+function closeTutorialModal() {
+  tutorialModal.style.display = "none"
+}
+
+imgDiv.style.borderWidth = imgBorderWidth + "px"
+
+boxDiv.style.borderWidth = boxBorderWidth + "px"
+
+for (let i = 0; i < categories.length; i++) {
+  categorySelect.add(new Option(categories[i]["name"], i))
+}
+
+categorySelect.onchange = function() {
+
+  annotation["category_id"] = categorySelect.value
+
+  boxDiv.style.borderColor = categories[categorySelect.value]["color"]
+
+  checkSelect = true
+
+  if (categorySelect.value == categories.length - 1) {
+    boxDiv.style.borderStyle = "solid"
+    checkBox = true
+  }
+
+  checkNext()
+}
+
+categorySelect.onmousedown = function(event) {
+  event.stopPropagation()
+}
+
+function norm(num, min, max) {
+  if (num < min) {
+    return min
+  }
+  if (num > max) {
+    return max
+  }
+  return num
+}
+
+function display() {
+
+  clearInterval(animationTimer)
+
+  progressDiv.style.width = ((currentIndex + 1) / annotations.length * 100) + "%"
+  progressDiv.innerHTML = (currentIndex + 1) + "/" + annotations.length
+
+  if (currentIndex === annotations.length - 1) {
+    nextButton.innerHTML = "Submit"
+    nextButton.onclick = function() {
+      annotations.forEach(function(annotation) {
+        annotation["category_id"] = parseInt(annotation["category_id"])
+      })
+      annotationsInput.value = JSON.stringify(annotations)
+      submitButton.click()
+      console.log(annotations)
+    }
+  } else {
+    nextButton.innerHTML = "Next"
+    nextButton.onclick = next
+    cacheImg.src = dataSrc + "predict/images/" + annotations[currentIndex + 1]["image_id"] + ".jpg"
+  }
+
+  if (currentIndex === 0) {
+    prevButton.disabled = true
+  } else {
+    prevButton.disabled = false
+  }
+
+  annotation = annotations[currentIndex]
+
+  categorySelect.value = annotation["category_id"]
+
+  if (annotation["category_id"] === "") {
+    boxDiv.style.borderStyle = "dashed"
+    boxDiv.style.borderColor = "yellow"
+    checkSelect = false
+    checkBox = false
+    nextButton.disabled = true
+    nextButton.style.backgroundColor = ""
+    nextButton.style.color = ""
+    nextButtonTd.onmouseenter = function(event) {
+      clearInterval(warningTimer)
+      warningTimer = setInterval(function() {
+          if (!checkSelect) {
+            if (categorySelect.style.opacity == 1) {
+              categorySelect.style.opacity = 0.4
+            } else {
+              categorySelect.style.opacity = 1
+            }
+          }
+          if (!checkBox) {
+            if (boxDiv.style.opacity == 1) {
+              boxDiv.style.opacity = 0.4
+            } else {
+              boxDiv.style.opacity = 1
+            }
+          }
+        },
+        170)
+    }
+    nextButtonTd.onmouseleave = function(event) {
+      clearInterval(warningTimer)
+      categorySelect.style.opacity = 1
+      boxDiv.style.opacity = 1
+    }
+  } else {
+    boxDiv.style.borderStyle = "solid"
+    boxDiv.style.borderColor = categories[categorySelect.value]["color"]
+    checkSelect = true
+    checkBox = true
+    checkNext()
+  }
+
+  const existBoxDivs = document.getElementsByClassName('existBoxDiv')
+  while (existBoxDivs[0]) {
+    imgDiv.removeChild(existBoxDivs[0])
+  }
+
+  const existXhr = new XMLHttpRequest()
+  existXhr.open("GET", dataSrc + "predict/exist_annotations/" + annotation["image_id"] + ".json")
+  existXhr.onload = function() {
+    if (existXhr.readyState === 4 && existXhr.status === 200) {
+
+      existAnnotations = JSON.parse(existXhr.response)
+
+      existAnnotations.forEach(function(existAnnotation) {
+        const existBoxDiv = document.createElement("div")
+        existBoxDiv.className = "existBoxDiv"
+        existBoxDiv.style.borderColor = categories[existAnnotation["category_id"]]["color"]
+        imgDiv.appendChild(existBoxDiv)
+      })
+    } else {
+      existAnnotations = []
+    }
+    img.src = ""
+    img.src = dataSrc + "predict/images/" + annotation["image_id"] + ".jpg"
+  }
+  existXhr.send()
+}
+
+function zoom() {
+
+  img.width = annotation["width"] * zoomLevel
+
+  let left = imgDiv.clientWidth / 2 - (annotation["bbox"][2] + annotation["bbox"][0]) / 2 * img.width
+  let top = imgDiv.clientHeight / 2 - (annotation["bbox"][3] + annotation["bbox"][1]) / 2 * img.height
+
+  left = norm(left, imgDiv.clientWidth - img.width, 0)
+  top = norm(top, imgDiv.clientHeight - img.height, 0)
+
+  img.style.left = left + "px"
+  img.style.top = top + "px"
+
+  locateBoxDivs()
+}
+
+function prev() {
+  currentIndex -= 1
+  display()
+}
+
+function zoomOut() {
+  zoomLevel /= 1.5
+  zoomLevel = norm(zoomLevel, minZoom, maxZoom)
+  zoom()
+}
+
+function zoomIn() {
+  zoomLevel *= 1.5
+  zoomLevel = norm(zoomLevel, minZoom, maxZoom)
+  zoom()
+}
+
+function next() {
+  console.clear()
+  currentIndex += 1
+  display()
+}
+
+img.onload = function() {
+
+  minZoom = Math.max(imgDiv.clientWidth / annotation["width"], imgDiv.clientHeight / annotation["height"])
+
+  let currentZoom = Math.min(imgDiv.clientWidth / ((annotation["bbox"][2] - annotation["bbox"][0]) * annotation["width"]), imgDiv.clientHeight / ((annotation["bbox"][3] - annotation["bbox"][1]) * annotation["height"])) / 1.6
+
+  currentZoom = norm(currentZoom, minZoom, maxZoom)
+
+  zoomLevel = minZoom
+
+  animationTimer = setInterval(function() {
+
+      zoom()
+
+      if (zoomLevel >= currentZoom) {
+        zoomLevel = currentZoom
+        clearInterval(animationTimer)
+      } else {
+        zoomLevel *= animationZoomInterval
+      }
+    },
+    20)
+}
+
+imgDiv.onmousedown = function(event) {
+
+  event.preventDefault()
+  clearInterval(animationTimer)
+
+  let tempX = event.clientX
+  let tempY = event.clientY
+
+  document.documentElement.onmousemove = function(event) {
+
+    let deltaX = tempX - event.clientX
+    let deltaY = tempY - event.clientY
+
+    pan(deltaX, deltaY)
+
+    tempX = event.clientX
+    tempY = event.clientY
+  }
+
+  document.documentElement.onmouseup = cancelEvents
+}
+
+function pan(deltaX, deltaY) {
+  let left = img.offsetLeft - deltaX
+  let top = img.offsetTop - deltaY
+
+  left = norm(left, imgDiv.clientWidth - img.width, 0)
+  top = norm(top, imgDiv.clientHeight - img.height, 0)
+
+  img.style.left = left + "px"
+  img.style.top = top + "px"
+
+  locateBoxDivs()
+}
+
+function getMouseX(event) {
+  return event.clientX - Math.round(imgDiv.getBoundingClientRect().left) - imgBorderWidth
+}
+
+function getMouseY(event) {
+  return event.clientY - Math.round(imgDiv.getBoundingClientRect().top) - imgBorderWidth
+}
+
+boxDiv.onmouseover = function(event) {
+  boxDiv.style.opacity = 0.4
+  categorySelect.style.opacity = 0.1
+}
+
+boxDiv.onmouseout = function(event) {
+  boxDiv.style.opacity = 1
+  categorySelect.style.opacity = 1
+}
+
+function locateBoxDiv(boxDiv, annotation) {
+  boxDiv.style.left = annotation["bbox"][0] * img.width + img.offsetLeft + "px"
+  boxDiv.style.top = annotation["bbox"][1] * img.height + img.offsetTop + "px"
+  boxDiv.style.width = (annotation["bbox"][2] - annotation["bbox"][0]) * img.width + "px"
+  boxDiv.style.height = (annotation["bbox"][3] - annotation["bbox"][1]) * img.height + "px"
+}
+
+function locateCategorySelect() {
+  categorySelect.style.left = boxDiv.offsetLeft + boxBorderWidth + "px"
+  categorySelect.style.top = boxDiv.offsetTop + boxBorderWidth - categorySelect.offsetHeight + "px"
+}
+
+function locateBoxDivs() {
+  const existBoxDivs = document.getElementsByClassName('existBoxDiv')
+  for (let i = 0; i < existAnnotations.length; i++) {
+    locateBoxDiv(existBoxDivs[i], existAnnotations[i])
+  }
+
+  locateBoxDiv(boxDiv, annotation)
+
+  locateResizers()
+}
+
+function locateResizers() {
+
+  locateNResizerDiv()
+  locateSResizerDiv()
+  locateWResizerDiv()
+  locateEResizerDiv()
+  locateNWResizerDiv()
+  locateSEResizerDiv()
+  locateNEResizerDiv()
+  locateSWResizerDiv()
+  locateCategorySelect()
+}
+
+function locateNResizerDiv() {
+
+  nResizerDiv.style.left = resizerExtraWidth + "px"
+  nResizerDiv.style.top = -resizerExtraWidth - boxBorderWidth + "px"
+  let width = boxDiv.clientWidth - resizerExtraWidth * 2
+  nResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  nResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+function holdNResizerDiv(mouseY) {
+  mouseY = norm(mouseY, Math.max(img.offsetTop, -onmouseholdspeed), boxDiv.offsetTop + boxDiv.offsetHeight - boxBorderWidth * 2)
+
+  const height = boxDiv.offsetTop + boxDiv.offsetHeight - mouseY
+
+  boxDiv.style.top = mouseY + "px"
+
+  boxDiv.style.height = height + "px"
+
+  return mouseY
+}
+
+nResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  edge_timer = setInterval(function() {
+      annotation["edge_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+
+    mouseY = holdNResizerDiv(mouseY)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdNResizerDiv(mouseY)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+  }
+}
+
+function locateSResizerDiv() {
+
+  sResizerDiv.style.left = resizerExtraWidth + "px"
+  sResizerDiv.style.top = boxDiv.clientHeight - resizerExtraWidth + "px"
+  let width = boxDiv.clientWidth - resizerExtraWidth * 2
+  sResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  sResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+function holdSResizerDiv(mouseY) {
+  mouseY = norm(mouseY, boxDiv.offsetTop + boxBorderWidth * 2, Math.min(img.offsetHeight + img.offsetTop, imgDiv.clientHeight + onmouseholdspeed))
+
+  const height = mouseY - boxDiv.offsetTop
+
+  boxDiv.style.height = height + "px"
+
+  return mouseY
+}
+
+sResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  edge_timer = setInterval(function() {
+      annotation["edge_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+
+    mouseY = holdSResizerDiv(mouseY)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdSResizerDiv(mouseY)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+  }
+}
+
+function locateWResizerDiv() {
+
+  wResizerDiv.style.left = -resizerExtraWidth - boxBorderWidth + "px"
+  wResizerDiv.style.top = resizerExtraWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  wResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = boxDiv.clientHeight - resizerExtraWidth * 2
+  wResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+function holdWResizerDiv(mouseX) {
+  mouseX = norm(mouseX, Math.max(img.offsetLeft, -onmouseholdspeed), boxDiv.offsetLeft + boxDiv.offsetWidth - boxBorderWidth * 2)
+
+  const width = boxDiv.offsetLeft + boxDiv.offsetWidth - mouseX
+
+  boxDiv.style.left = mouseX + "px"
+
+  boxDiv.style.width = width + "px"
+
+  return mouseX
+}
+
+wResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  edge_timer = setInterval(function() {
+      annotation["edge_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseX = getMouseX(event)
+
+    mouseX = holdWResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseX = holdWResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
+  }
+}
+
+function locateEResizerDiv() {
+
+  eResizerDiv.style.left = boxDiv.clientWidth - resizerExtraWidth + "px"
+  eResizerDiv.style.top = resizerExtraWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  eResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = boxDiv.clientHeight - resizerExtraWidth * 2
+  eResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+function holdEResizerDiv(mouseX) {
+  mouseX = norm(mouseX, boxDiv.offsetLeft + boxBorderWidth * 2, Math.min(img.offsetWidth + img.offsetLeft, imgDiv.clientWidth + onmouseholdspeed))
+
+  const width = mouseX - boxDiv.offsetLeft
+
+  boxDiv.style.width = width + "px"
+
+  return mouseX
+}
+
+eResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  edge_timer = setInterval(function() {
+      annotation["edge_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseX = getMouseX(event)
+
+    mouseX = holdEResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseX = holdEResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
+  }
+}
+
+function locateNWResizerDiv() {
+
+  nwResizerDiv.style.left = -resizerExtraWidth - boxBorderWidth + "px"
+  nwResizerDiv.style.top = -resizerExtraWidth - boxBorderWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  nwResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  nwResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+nwResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  corner_timer = setInterval(function() {
+      annotation["corner_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+    let mouseX = getMouseX(event)
+
+    mouseY = holdNResizerDiv(mouseY)
+    mouseX = holdWResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdNResizerDiv(mouseY)
+          mouseX = holdWResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
+    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+  }
+}
+
+function locateSEResizerDiv() {
+
+  seResizerDiv.style.left = boxDiv.clientWidth - resizerExtraWidth + "px"
+  seResizerDiv.style.top = boxDiv.clientHeight - resizerExtraWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  seResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  seResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+seResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  corner_timer = setInterval(function() {
+      annotation["corner_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+    let mouseX = getMouseX(event)
+
+    mouseY = holdSResizerDiv(mouseY)
+    mouseX = holdEResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdSResizerDiv(mouseY)
+          mouseX = holdEResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
+    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+  }
+}
+
+function locateNEResizerDiv() {
+
+  neResizerDiv.style.left = boxDiv.clientWidth - resizerExtraWidth + "px"
+  neResizerDiv.style.top = -resizerExtraWidth - boxBorderWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  neResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  neResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+neResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  corner_timer = setInterval(function() {
+      annotation["corner_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+    let mouseX = getMouseX(event)
+
+    mouseY = holdNResizerDiv(mouseY)
+    mouseX = holdEResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdNResizerDiv(mouseY)
+          mouseX = holdEResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
+    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+  }
+}
+
+function locateSWResizerDiv() {
+
+  swResizerDiv.style.left = -resizerExtraWidth - boxBorderWidth + "px"
+  swResizerDiv.style.top = boxDiv.clientHeight - resizerExtraWidth + "px"
+  let width = resizerExtraWidth * 2 + boxBorderWidth
+  swResizerDiv.style.width = norm(width, 0, width) + "px"
+  let height = resizerExtraWidth * 2 + boxBorderWidth
+  swResizerDiv.style.height = norm(height, 0, height) + "px"
+}
+
+swResizerDiv.onmousedown = function(event) {
+
+  resizerStart(event)
+
+  corner_timer = setInterval(function() {
+      annotation["corner_timer"] += 1
+    },
+    100)
+
+  document.documentElement.onmousemove = function(event) {
+
+    clearInterval(onmouseholdTimer)
+
+    let mouseY = getMouseY(event)
+    let mouseX = getMouseX(event)
+
+    mouseY = holdSResizerDiv(mouseY)
+    mouseX = holdWResizerDiv(mouseX)
+
+    locateResizers()
+
+    onmouseholdTimer = setInterval(function() {
+
+        let hold = false
+
+        if (mouseY < 0) {
+          pan(0, mouseY)
+          hold = true
+        } else if (mouseY > imgDiv.clientHeight) {
+          pan(0, mouseY - imgDiv.clientHeight)
+          hold = true
+        }
+
+        if (mouseX < 0) {
+          pan(mouseX, 0)
+          hold = true
+        } else if (mouseX > imgDiv.clientWidth) {
+          pan(mouseX - imgDiv.clientWidth, 0)
+          hold = true
+        }
+
+        if (hold) {
+          mouseY = holdSResizerDiv(mouseY)
+          mouseX = holdWResizerDiv(mouseX)
+          locateResizers()
+        } else {
+          clearInterval(onmouseholdTimer)
+        }
+      },
+      onmouseholdInterval)
+  }
+
+  document.documentElement.onmouseup = function(event) {
+
+    resizerEnd()
+
+    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
+    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+  }
+}
+
+function resizerStart(event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+function resizerEnd() {
+  cancelEvents()
+  clearInterval(edge_timer)
+  clearInterval(corner_timer)
+  clearInterval(onmouseholdTimer)
+  boxDiv.style.borderStyle = "solid"
+  checkBox = true
+  checkNext()
+}
+
+function cancelEvents() {
+  document.documentElement.onmousemove = null
+  document.documentElement.onmouseup = null
+}
+
+function checkNext() {
+  if (checkSelect && checkBox) {
+    nextButton.disabled = false
+    nextButton.style.backgroundColor = "green"
+    nextButton.style.color = "white"
+    nextButtonTd.onmouseover = null
+    nextButtonTd.onmouseleave = null
+  }
+}
+
+function modifyGtBbox(bbox) {
+  bboxWidth = bbox[2] - bbox[0]
+  bboxHeight = bbox[3] - bbox[1]
+  bbox[0] -= bboxWidth * 0.18
+  bbox[0] = norm(bbox[0], 0, 1)
+  bbox[1] -= bboxHeight * 0.18
+  bbox[1] = norm(bbox[1], 0, 1)
+  bbox[2] += bboxWidth * 0.18
+  bbox[2] = norm(bbox[2], 0, 1)
+  bbox[3] += bboxHeight * 0.18
+  bbox[3] = norm(bbox[3], 0, 1)
+}
+
+window.onload = function() {
+
+  nextTutorialModal()
+
+  imgDivWidth = workspaceWidth - imgBorderWidth * 2
+
+  imgDiv.style.width = imgDivWidth + "px"
+  imgDiv.style.height = imgDivWidth + "px"
+
+  const xhr = new XMLHttpRequest()
+  xhr.open("GET", dataSrc + "predict/annotations/33.json")
+  xhr.onload = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+
+      annotations = JSON.parse(xhr.response)
+
+      gtIndexes.forEach(function(gtIndex) {
+        modifyGtBbox(annotations[gtIndex]["bbox"])
+      })
+
+      annotations.forEach(function(annotation) {
+        annotation["category_id"] = ""
+        annotation["edge_timer"] = 0
+        annotation["corner_timer"] = 0
+      })
+
+      display()
+    }
+  }
+  xhr.send()
+}
+</script>
+<style>
+#tutorialModal {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#tutorialModalContent {
+  position: relative;
+  width: 400px;
+  top: 20px;
+  margin: auto;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#closeSpan {
+  font-size: 25px;
+  float: right;
+  cursor: pointer;
+  text-align: center;
+  width: 30px;
+  line-height: 30px;
+  border-radius: 5px;
+  background-color: lightgrey;
+}
+
+#tutorialModalButton {
+  background-color: green;
+  color: white;
+}
+
+.titleText {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.instructionText {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 6px;
+}
+
+#layoutTable {
+  border-spacing: 20px 5px
+}
+
+#imgContainer {
+  position: relative;
+}
+
+#imgDiv {
+  position: relative;
+  border: solid;
+  cursor: move;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+#img {
+  position: absolute;
+}
+
+#boxDiv {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.existBoxDiv {
+  position: absolute;
+  box-sizing: border-box;
+  border: solid;
+}
+
+#nResizerDiv,
+#sResizerDiv {
+  cursor: row-resize;
+}
+
+#wResizerDiv,
+#eResizerDiv {
+  cursor: col-resize;
+}
+
+#nwResizerDiv,
+#seResizerDiv {
+  cursor: nwse-resize;
+}
+
+#neResizerDiv,
+#swResizerDiv {
+  cursor: nesw-resize;
+}
+
+.resizerDiv {
+  position: absolute;
+}
+
+#categorySelect {
+  font-size: 20px;
+  position: absolute;
+}
+
+#progressContainer {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  height: 30px;
+  width: 100%;
+  background-color: lightgray;
+}
+
+#progressDiv {
+  height: 100%;
+  line-height: 30px;
+  font-size: 20px;
+  color: white;
+  background-color: green;
+}
+
+#buttonTable {
+  border-collapse: collapse;
+}
+
+.button {
+  font-size: 32px;
+  cursor: pointer;
+}
+
+#submitButton {
+  display: none;
+}
+</style>
+
+</html>
