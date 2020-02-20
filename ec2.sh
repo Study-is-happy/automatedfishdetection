@@ -67,6 +67,9 @@ unzip update.zip
 # download model_final.pth to local
 scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_final.pth ~/datasets/fish_detection/outputs/
 
+# download metrics.json to local
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/metrics.json ~/datasets/fish_detection/outputs/
+
 # zip predict
 zip -r predict.zip predict/
 
