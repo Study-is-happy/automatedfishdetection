@@ -54,7 +54,7 @@ source ~/.bashrc
 cd ..
 
 # copy config.py to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/venv/AutomatedFishDetection/config.py ubuntu@ec2-3-15-18-50.us-east-2.compute.amazonaws.com:~/venv/automatedfishdetection/
+scp -i ~/Desktop/Study-is-happy.pem ~/venv/automatedfishdetection/config.py ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/venv/automatedfishdetection/
 
 python init.py
 
