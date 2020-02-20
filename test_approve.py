@@ -12,8 +12,6 @@ results_path = config.project_dir+'results/results2_7.csv'
 ###########################################################################
 
 gt_indexes = [9]
-inside_threshold = 0.15
-outside_threshold = 0.15
 iou_threshold = 0.6
 abs_timer_threshold = 0
 approve_rate = 0.5
@@ -23,7 +21,7 @@ print_results = {'approve': 0, 'reject': 0}
 results_approve_path_parts = os.path.splitext(results_path)
 
 results_approve_path = results_approve_path_parts[0] + \
-    '_test_approve'+results_approve_path_parts[1]
+    '_approve'+results_approve_path_parts[1]
 
 with open(results_path) as results_file:
 
@@ -134,14 +132,14 @@ with open(results_path) as results_file:
                                             exist_annotations_file)
 
                                     for exist_annotation in exist_annotations:
-                                        if util.get_bboxes_iou(exist_annotation['bbox'], result_annotation['bbox']) > 0.95:
+                                        if util.get_bboxes_iou(exist_annotation['bbox'], result_annotation['bbox']) > 0.7:
                                             approve = False
                                             reject_reasons.add(
                                                 'Duplicate bounding box')
                                             break
 
                             if approve:
-                                if predict_annotation['category_id'] == result_annotation['category_id']:
+                                if predict_annotation['category_id'] == result_annotation['category_id'] or util.get_bboxes_iou(predict_annotation['bbox'], result_annotation['bbox']) < 0.1:
                                     conf_indexes.append(unchecked_index)
                                 else:
                                     not_conf_indexes.append(unchecked_index)

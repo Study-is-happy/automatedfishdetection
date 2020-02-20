@@ -12,8 +12,6 @@ results_path = config.project_dir+'results/results2_7.csv'
 ###########################################################################
 
 gt_indexes = [9]
-inside_threshold = 0.10
-outside_threshold = 0.10
 iou_threshold = 0.8
 abs_timer_threshold = 10
 approve_rate = 0.8
@@ -141,7 +139,7 @@ with open(results_path) as results_file:
                                             break
 
                             if approve:
-                                if predict_annotation['category_id'] == result_annotation['category_id']:
+                                if predict_annotation['category_id'] == result_annotation['category_id'] or util.get_bboxes_iou(predict_annotation['bbox'], result_annotation['bbox']) < 0.1:
                                     conf_indexes.append(unchecked_index)
                                 else:
                                     not_conf_indexes.append(unchecked_index)
