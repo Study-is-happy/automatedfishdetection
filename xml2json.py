@@ -81,7 +81,7 @@ with open(src_images_file_path) as image_ids:
                 #     object_node.find('difficult').text)
                 annotation['difficult'] = 1
 
-                annotation['temp'] = 0
+                # annotation['temp'] = 0
 
                 instance['annotations'].append(annotation)
 

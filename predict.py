@@ -45,7 +45,7 @@ predictor = DefaultPredictor(cfg)
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
-with open(config.project_dir+'test/instances.json') as test_instances_file:
+with open(config.project_dir+'easy/instances.json') as test_instances_file:
     easy_annotation_generator = util.easy_annotation_generator(
         json.load(test_instances_file))
 

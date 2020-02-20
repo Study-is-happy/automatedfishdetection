@@ -1,4 +1,4 @@
-ssh -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com
+ssh -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com
 
 cat << EOF | sudo tee --append /etc/modprobe.d/blacklist.conf
 blacklist vga16fb
@@ -55,27 +55,27 @@ source ~/.bashrc
 cd ..
 
 # copy config.py to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/venv/AutomatedFishDetection/config.py ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com:~/venv/AutomatedFishDetection/
+scp -i ~/Desktop/Study-is-happy.pem ~/venv/AutomatedFishDetection/config.py ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com:~/venv/AutomatedFishDetection/
 
 python init.py
 
 # upload update_instances to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
+scp -i ~/Desktop/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
 
 # upload update.zip to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com:~/fish_detection/
+scp -i ~/Desktop/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com:~/fish_detection/
 
 # unzip update
 unzip update.zip
 
 # download model_final.pth to local
-scp -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_final.pth ~/datasets/fish_detection/outputs/
+scp -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_final.pth ~/datasets/fish_detection/outputs/
 
 # zip predict
 zip -r predict.zip predict/
 
 # download predict.zip to local
-scp -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-16-218-73.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
+scp -i ~/Desktop/Study-is-happy.pem ubuntu@ec2-3-12-161-79.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
 
 # nohup
 nohup python train.py >/dev/null 2>&1 &
