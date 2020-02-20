@@ -53,9 +53,6 @@ echo 'export PYTHONPATH=$PYTHONPATH:~/venv/automatedfishdetection/detectron2' >>
 source ~/.bashrc
 cd ..
 
-# copy config.py to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/venv/automatedfishdetection/config.py ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/venv/automatedfishdetection/
-
 python init.py
 
 # upload update_instances to ec2
