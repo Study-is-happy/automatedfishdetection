@@ -42,20 +42,19 @@ pip install opencv-python
 pip install 'git+https://github.com/facebookresearch/fvcore'
 pip install cython; pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 
-git clone https://github.com/PushyamiKaveti/AutomatedFishDetection.git
+git clone https://gitlab.com/neufieldrobotics/automatedfishdetection.git
 
-cd AutomatedFishDetection/
-git checkout zhiyong-detectron2
+cd automatedfishdetection/
 git submodule init
 git submodule update
 cd detectron2/
 python setup.py build develop
-echo 'export PYTHONPATH=$PYTHONPATH:~/venv/AutomatedFishDetection/detectron2' >> ~/.bashrc
+echo 'export PYTHONPATH=$PYTHONPATH:~/venv/automatedfishdetection/detectron2' >> ~/.bashrc
 source ~/.bashrc
 cd ..
 
 # copy config.py to ec2
-scp -i ~/Desktop/Study-is-happy.pem ~/venv/AutomatedFishDetection/config.py ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/venv/AutomatedFishDetection/
+scp -i ~/Desktop/Study-is-happy.pem ~/venv/AutomatedFishDetection/config.py ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/venv/scp -i ~/Desktop/Study-is-happy.pem ~/venv/automatedfishdetection/config.py ubuntu@ec2-18-189-192-91.us-east-2.compute.amazonaws.com:~/venv/automatedfishdetection/
 
 python init.py
 
