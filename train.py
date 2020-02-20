@@ -96,7 +96,6 @@ if config.train_update:
 else:
     cfg.DATASETS.TRAIN = ['train/']
     cfg.DATASETS.TEST = ['test/']
-    # cfg.DATASETS.TEST = []
 
     cfg.INPUT.MIN_SIZE_TEST = 1024
 
