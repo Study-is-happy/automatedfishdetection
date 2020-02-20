@@ -16,7 +16,7 @@ import config
 
 # src_images_file_path = src_dataset_dir+'down_images.txt'
 
-src_dataset_dir = config.project_dir+'pmfs/'
+src_dataset_dir = config.project_dir+'pacstorm/'
 
 src_images_dir = src_dataset_dir+'images/'
 

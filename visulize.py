@@ -28,8 +28,8 @@ for image_id, instance in instances_dict.items():
     # if image_id != '20100922.160600.00394':
     #     continue
 
-    if len(instance['annotations']) < 10:
-        continue
+    # if len(instance['annotations']) < 10:
+    #     continue
 
     image = mpimg.imread(images_dir+image_id+'.jpg')
 
