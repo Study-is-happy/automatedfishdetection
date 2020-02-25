@@ -7,13 +7,13 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/results2_7.csv'
+results_path = config.project_dir+'results/results1_7.csv'
 
 ###########################################################################
 
 gt_indexes = [9]
-iou_threshold = 0.8
-abs_timer_threshold = 10
+iou_threshold = 0.85
+abs_timer_threshold = 15
 approve_rate = 0.8
 
 print_results = {'approve': 0, 'reject': 0}

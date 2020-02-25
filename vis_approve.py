@@ -10,7 +10,7 @@ import util
 # TODO: Set the path
 
 results_approve_path = config.project_dir + \
-    'results/results2_3_approve.csv'
+    'results/results1_7_approve.csv'
 
 ###########################################################################
 
@@ -24,13 +24,13 @@ with open(results_approve_path) as results_approve_file:
 
     headers = next(results)
 
-    # here = False
+    here = False
 
     for result in results:
 
         print(result[-9])
 
-        # if result[-9] == '401':
+        # if result[-9] == '400':
         #     here = True
         # if not here:
         #     continue

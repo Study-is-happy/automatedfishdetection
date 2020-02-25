@@ -7,7 +7,7 @@ import util
 
 # TODO: Set the path
 
-results_approve_path = config.project_dir+'results/results2_7_approve.csv'
+results_approve_path = config.project_dir+'results/results1_7_approve.csv'
 
 ###########################################################################
 
@@ -18,9 +18,9 @@ predict_per_file = annotation_per_file-len(gt_indexes)
 with open(config.project_dir+'predict/annotations/cache.json') as cache_annotations_file:
     cache_annotations = json.load(cache_annotations_file)
 
-with open(config.project_dir+'test/instances.json') as test_instances_file:
+with open(config.project_dir+'easy/instances.json') as easy_instances_file:
     easy_annotation_generator = util.easy_annotation_generator(
-        json.load(test_instances_file))
+        json.load(easy_instances_file))
 
 with open(config.project_dir+'predict/annotation_ids.csv') as annotation_ids_file:
     annotation_id = int(annotation_ids_file.readlines()[-1])+1

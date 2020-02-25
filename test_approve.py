@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/results2_7.csv'
+results_path = config.project_dir+'results/results1_7.csv'
 
 ###########################################################################
 
@@ -21,7 +21,7 @@ print_results = {'approve': 0, 'reject': 0}
 results_approve_path_parts = os.path.splitext(results_path)
 
 results_approve_path = results_approve_path_parts[0] + \
-    '_approve'+results_approve_path_parts[1]
+    '_test_approve'+results_approve_path_parts[1]
 
 with open(results_path) as results_file:
 

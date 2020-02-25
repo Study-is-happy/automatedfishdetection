@@ -228,7 +228,7 @@ class RPNOutputs(object):
         gt_classes=None,
         gt_boxes=None,
         smooth_l1_beta=0.0,
-        ignore_prob=0.1,
+        ignore_prob=0.5,
         cls_loss_factor=1
     ):
         """
