@@ -26,7 +26,7 @@ MODEL_RPN_POST_NMS_TOPK_TRAIN = 1000
 SOLVER_STEPS = (15000, 18000)
 SOLVER_MAX_ITER = 20000
 
-train_update = False
+train_update = True
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
