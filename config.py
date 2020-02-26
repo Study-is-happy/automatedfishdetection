@@ -16,7 +16,7 @@ else:
 
     INPUT_MIN_SIZE_TRAIN = (128,)
 
-categories = ['fish', 'starfish', 'sponge', 'background', 'ignored']
+categories = ['fish', 'starfish', 'sponge', 'background']
 
 num_categories = len(categories)-1
 

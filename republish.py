@@ -7,7 +7,7 @@ import util
 
 # TODO: Set the path
 
-results_approve_path = config.project_dir+'results/results1_16_approve.csv'
+results_approve_path = config.project_dir+'results/results1_17_approve.csv'
 
 ###########################################################################
 
