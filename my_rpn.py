@@ -10,7 +10,8 @@ from detectron2.modeling.anchor_generator import build_anchor_generator
 from detectron2.modeling.box_regression import Box2BoxTransform
 from detectron2.modeling.matcher import Matcher
 from detectron2.modeling.proposal_generator.build import PROPOSAL_GENERATOR_REGISTRY
-from my_rpn_outputs import RPNOutputs, find_top_rpn_proposals
+from detectron2.modeling.proposal_generator.rpn_outputs import RPNOutputs, find_top_rpn_proposals
+from my_rpn_outputs import my_RPNOutputs, my_find_top_rpn_proposals
 
 from detectron2.modeling.proposal_generator.rpn import build_rpn_head
 
@@ -85,28 +86,41 @@ class my_RPN(nn.Module):
         anchors = self.anchor_generator(features)
         # TODO: The anchors only depend on the feature map shape; there's probably
         # an opportunity for some optimizations (e.g., caching anchors).
-        outputs = RPNOutputs(
-            self.box2box_transform,
-            self.anchor_matcher,
-            self.num_classes,
-            self.batch_size_per_image,
-            self.positive_fraction,
-            images,
-            pred_objectness_logits,
-            pred_anchor_deltas,
-            anchors,
-            self.boundary_threshold,
-            gt_classes,
-            gt_boxes,
-            self.smooth_l1_beta,
-            self.ignore_prob,
-            self.cls_loss_factor
-        )
 
         if self.training:
+            outputs = my_RPNOutputs(
+                self.box2box_transform,
+                self.anchor_matcher,
+                self.num_classes,
+                self.batch_size_per_image,
+                self.positive_fraction,
+                images,
+                pred_objectness_logits,
+                pred_anchor_deltas,
+                anchors,
+                self.boundary_threshold,
+                gt_classes,
+                gt_boxes,
+                self.smooth_l1_beta,
+                self.ignore_prob,
+                self.cls_loss_factor
+            )
             losses = {k: v * self.loss_weight for k,
                       v in outputs.losses().items()}
         else:
+            outputs = RPNOutputs(
+                self.box2box_transform,
+                self.anchor_matcher,
+                self.batch_size_per_image,
+                self.positive_fraction,
+                images,
+                pred_objectness_logits,
+                pred_anchor_deltas,
+                anchors,
+                self.boundary_threshold,
+                gt_boxes,
+                self.smooth_l1_beta,
+            )
             losses = {}
 
         with torch.no_grad():
@@ -115,17 +129,29 @@ class my_RPN(nn.Module):
             # joint training with roi heads. This approach ignores the derivative
             # w.r.t. the proposal boxes’ coordinates that are also network
             # responses, so is approximate.
-            proposals = find_top_rpn_proposals(
-                outputs.predict_proposals(),
-                outputs.predict_objectness_logits(),
-                outputs.gt_objectness_logits,
-                images,
-                self.nms_thresh,
-                self.pre_nms_topk[self.training],
-                self.post_nms_topk[self.training],
-                self.min_box_side_len,
-                self.training,
-            )
+            if self.training:
+                proposals = my_find_top_rpn_proposals(
+                    outputs.predict_proposals(),
+                    outputs.predict_objectness_logits(),
+                    outputs.gt_objectness_logits,
+                    images,
+                    self.nms_thresh,
+                    self.pre_nms_topk[self.training],
+                    self.post_nms_topk[self.training],
+                    self.min_box_side_len,
+                    self.training,
+                )
+            else:
+                proposals = find_top_rpn_proposals(
+                    outputs.predict_proposals(),
+                    outputs.predict_objectness_logits(),
+                    images,
+                    self.nms_thresh,
+                    self.pre_nms_topk[self.training],
+                    self.post_nms_topk[self.training],
+                    self.min_box_side_len,
+                    self.training,
+                )
             # For RPN-only models, the proposals are the final output and we return them in
             # high-to-low confidence order.
             # For end-to-end models, the RPN proposals are an intermediate state

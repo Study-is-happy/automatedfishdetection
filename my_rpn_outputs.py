@@ -47,7 +47,7 @@ Naming convention:
 """
 
 
-def find_top_rpn_proposals(
+def my_find_top_rpn_proposals(
     proposals,
     pred_objectness_logits,
     gt_objectness_logits,
@@ -212,7 +212,7 @@ def rpn_losses(
     return objectness_loss, localization_loss
 
 
-class RPNOutputs(object):
+class my_RPNOutputs(object):
     def __init__(
         self,
         box2box_transform,
