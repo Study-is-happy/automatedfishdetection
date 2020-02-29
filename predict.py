@@ -100,7 +100,7 @@ for image_file_name in os.listdir(images_dir):
 
                 if update_annotations is not None:
                     for update_annotation in update_annotations:
-                        if util.get_bboxes_iou(annotation['bbox'], update_annotation['bbox']) > config.MODEL_ROI_HEADS_NMS_THRESH_TEST:
+                        if util.get_bboxes_iou(annotation['bbox'], update_annotation['bbox']) > 0.3:
                             annotation['score'] = 0
                             break
 
