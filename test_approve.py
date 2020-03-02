@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/results1_49.csv'
+results_path = config.project_dir+'results/results2_20.csv'
 
 ###########################################################################
 

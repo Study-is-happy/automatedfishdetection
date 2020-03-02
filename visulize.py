@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'train/'
+dataset_dir = config.project_dir+'predict/'
 
 ###########################################################################
 
@@ -52,8 +52,8 @@ for image_id, instance in instances_dict.items():
 
         if 'score' in annotation:
             linestyle = 'dashed'
-            plt.text(bbox[0]*width, bbox[1]*height, format(
-                annotation['score'], '0.2f'), color=color, size=30)
+            # plt.text(bbox[0]*width, bbox[1]*height, format(
+            #     annotation['score'], '0.2f'), color=color, size=30)
         else:
             linestyle = '-'
 
