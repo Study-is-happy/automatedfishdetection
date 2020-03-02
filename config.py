@@ -1,6 +1,6 @@
 # TODO
 
-remote = False
+remote = True
 
 ###########################################################################
 
@@ -48,4 +48,4 @@ TEST_DETECTIONS_PER_IMAGE = 200
 CUSTOM_IGNORE_PROB = 0.5
 CUSTOM_CLS_LOSS_FACTOR = 1.0
 
-MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_2.pth'
+MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_0.pth'
