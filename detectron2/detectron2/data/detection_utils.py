@@ -7,6 +7,7 @@ typical object detection data pipeline.
 """
 import logging
 import numpy as np
+import pycocotools.mask as mask_util
 import torch
 from fvcore.common.file_io import PathManager
 from PIL import Image, ImageOps
@@ -19,6 +20,7 @@ from detectron2.structures import (
     Keypoints,
     PolygonMasks,
     RotatedBoxes,
+    polygons_to_bitmask,
 )
 
 from . import transforms as T
@@ -41,7 +43,7 @@ def read_image(file_name, format=None):
         format (str): one of the supported image modes in PIL, or "BGR"
 
     Returns:
-        image (np.ndarray): an HWC image
+        image (np.ndarray): an HWC image in the given format.
     """
     with PathManager.open(file_name, "rb") as f:
         image = Image.open(f)
@@ -159,18 +161,32 @@ def transform_instance_annotations(
             transformed according to `transforms`.
             The "bbox_mode" field will be set to XYXY_ABS.
     """
-    bbox = BoxMode.convert(
-        annotation["bbox"], annotation["bbox_mode"], BoxMode.XYXY_ABS)
+    bbox = BoxMode.convert(annotation["bbox"], annotation["bbox_mode"], BoxMode.XYXY_ABS)
     # Note that bbox is 1d (per-instance bounding box)
     annotation["bbox"] = transforms.apply_box([bbox])[0]
     annotation["bbox_mode"] = BoxMode.XYXY_ABS
 
     if "segmentation" in annotation:
         # each instance contains 1 or more polygons
-        polygons = [np.asarray(p).reshape(-1, 2)
-                    for p in annotation["segmentation"]]
-        annotation["segmentation"] = [
-            p.reshape(-1) for p in transforms.apply_polygons(polygons)]
+        segm = annotation["segmentation"]
+        if isinstance(segm, list):
+            # polygons
+            polygons = [np.asarray(p).reshape(-1, 2) for p in segm]
+            annotation["segmentation"] = [
+                p.reshape(-1) for p in transforms.apply_polygons(polygons)
+            ]
+        elif isinstance(segm, dict):
+            # RLE
+            mask = mask_util.decode(segm)
+            mask = transforms.apply_segmentation(mask)
+            assert tuple(mask.shape[:2]) == image_size
+            annotation["segmentation"] = mask
+        else:
+            raise ValueError(
+                "Cannot transform segmentation of type '{}'!"
+                "Supported types are: polygons as list[list[float] or ndarray],"
+                " COCO-style RLE as a dict.".format(type(segm))
+            )
 
     if "keypoints" in annotation:
         keypoints = transform_keypoint_annotations(
@@ -196,8 +212,7 @@ def transform_keypoint_annotations(keypoints, transforms, image_size, keypoint_h
     keypoints[:, :2] = transforms.apply_coords(keypoints[:, :2])
 
     # This assumes that HorizFlipTransform is the only one that does flip
-    do_hflip = sum(isinstance(t, T.HFlipTransform)
-                   for t in transforms.transforms) % 2 == 1
+    do_hflip = sum(isinstance(t, T.HFlipTransform) for t in transforms.transforms) % 2 == 1
 
     # Alternative way: check if probe points was horizontally flipped.
     # probe = np.asarray([[0.0, 0.0], [image_width, 0.0]])
@@ -232,8 +247,7 @@ def annotations_to_instances(annos, image_size, mask_format="polygon"):
             "gt_masks", "gt_keypoints", if they can be obtained from `annos`.
             This is the format that builtin models expect.
     """
-    boxes = [BoxMode.convert(
-        obj["bbox"], obj["bbox_mode"], BoxMode.XYXY_ABS) for obj in annos]
+    boxes = [BoxMode.convert(obj["bbox"], obj["bbox_mode"], BoxMode.XYXY_ABS) for obj in annos]
     target = Instances(image_size)
     boxes = target.gt_boxes = Boxes(boxes)
     boxes.clip(image_size)
@@ -243,12 +257,36 @@ def annotations_to_instances(annos, image_size, mask_format="polygon"):
     target.gt_classes = classes
 
     if len(annos) and "segmentation" in annos[0]:
-        polygons = [obj["segmentation"] for obj in annos]
+        segms = [obj["segmentation"] for obj in annos]
         if mask_format == "polygon":
-            masks = PolygonMasks(polygons)
+            masks = PolygonMasks(segms)
         else:
             assert mask_format == "bitmask", mask_format
-            masks = BitMasks.from_polygon_masks(polygons, *image_size)
+            masks = []
+            for segm in segms:
+                if isinstance(segm, list):
+                    # polygon
+                    masks.append(polygons_to_bitmask(segm, *image_size))
+                elif isinstance(segm, dict):
+                    # COCO RLE
+                    masks.append(mask_util.decode(segm))
+                elif isinstance(segm, np.ndarray):
+                    assert segm.ndim == 2, "Expect segmentation of 2 dimensions, got {}.".format(
+                        segm.ndim
+                    )
+                    # mask array
+                    masks.append(segm)
+                else:
+                    raise ValueError(
+                        "Cannot convert segmentation of type '{}' to BitMasks!"
+                        "Supported types are: polygons as list[list[float] or ndarray],"
+                        " COCO-style RLE as a dict, or a full-image segmentation mask "
+                        "as a 2D ndarray.".format(type(segm))
+                    )
+            # torch.from_numpy does not support array with negative stride.
+            masks = BitMasks(
+                torch.stack([torch.from_numpy(np.ascontiguousarray(x)) for x in masks])
+            )
         target.gt_masks = masks
 
     if len(annos) and "keypoints" in annos[0]:
@@ -350,9 +388,14 @@ def gen_crop_transform_with_instance(crop_size, image_size, instance):
             dataset format.
     """
     crop_size = np.asarray(crop_size, dtype=np.int32)
-    bbox = BoxMode.convert(
-        instance["bbox"], instance["bbox_mode"], BoxMode.XYXY_ABS)
+    bbox = BoxMode.convert(instance["bbox"], instance["bbox_mode"], BoxMode.XYXY_ABS)
     center_yx = (bbox[1] + bbox[3]) * 0.5, (bbox[0] + bbox[2]) * 0.5
+    assert (
+        image_size[0] >= center_yx[0] and image_size[1] >= center_yx[1]
+    ), "The annotation bounding box is outside of the image!"
+    assert (
+        image_size[0] >= crop_size[0] and image_size[1] >= crop_size[1]
+    ), "Crop size is larger than image size!"
 
     min_yx = np.maximum(np.floor(center_yx).astype(np.int32) - crop_size, 0)
     max_yx = np.maximum(np.asarray(image_size, dtype=np.int32) - crop_size, 0)
@@ -378,21 +421,18 @@ def check_metadata_consistency(key, dataset_names):
     if len(dataset_names) == 0:
         return
     logger = logging.getLogger(__name__)
-    entries_per_dataset = [getattr(MetadataCatalog.get(d), key)
-                           for d in dataset_names]
+    entries_per_dataset = [getattr(MetadataCatalog.get(d), key) for d in dataset_names]
     for idx, entry in enumerate(entries_per_dataset):
         if entry != entries_per_dataset[0]:
             logger.error(
-                "Metadata '{}' for dataset '{}' is '{}'".format(
-                    key, dataset_names[idx], str(entry))
+                "Metadata '{}' for dataset '{}' is '{}'".format(key, dataset_names[idx], str(entry))
             )
             logger.error(
                 "Metadata '{}' for dataset '{}' is '{}'".format(
                     key, dataset_names[0], str(entries_per_dataset[0])
                 )
             )
-            raise ValueError(
-                "Datasets have different metadata '{}'!".format(key))
+            raise ValueError("Datasets have different metadata '{}'!".format(key))
 
 
 def build_transform_gen(cfg, is_train):

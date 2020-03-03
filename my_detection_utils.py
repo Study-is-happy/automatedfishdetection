@@ -420,7 +420,8 @@ def build_transform_gen(cfg, is_train):
     tfm_gens = []
     tfm_gens.append(T.ResizeShortestEdge(min_size, max_size, sample_style))
     if is_train:
-        tfm_gens.append(T.RandomFlip())
+        tfm_gens.append(T.RandomFlip(horizontal=True, vertical=False))
+        tfm_gens.append(T.RandomFlip(horizontal=False, vertical=True))
         tfm_gens.append(T.RandomBrightness(0.8, 1.2))
         logger.info("TransformGens used in training: " + str(tfm_gens))
     return tfm_gens

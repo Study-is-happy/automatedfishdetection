@@ -13,6 +13,11 @@ _CURRENT_STORAGE_STACK = []
 
 
 def get_event_storage():
+    """
+    Returns:
+        The :class:`EventStorage` object that's currently being used.
+        Throws an error if no :class`EventStorage` is currently enabled.
+    """
     assert len(
         _CURRENT_STORAGE_STACK
     ), "get_event_storage() has to be called inside a 'with EventStorage(...)' context!"
@@ -179,11 +184,7 @@ class CommonMetricPrinter(EventWriter):
 
         # NOTE: max_mem is parsed by grep in "dev/parse_results.sh"
         self.logger.info(
-            """\
-eta: {eta}  iter: {iter}  {losses}  \
-{time}  {data_time}  \
-lr: {lr}  {memory}\
-""".format(
+            " eta: {eta}  iter: {iter}  {losses}  {time}  {data_time}  lr: {lr}  {memory}".format(
                 eta=eta_string,
                 iter=iteration,
                 losses="  ".join(
