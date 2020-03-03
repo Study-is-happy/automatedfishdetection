@@ -9,7 +9,7 @@ from fvcore.nn import smooth_l1_loss
 from detectron2.layers import batched_nms, cat
 from detectron2.structures import Boxes, Instances, pairwise_iou
 from detectron2.utils.events import get_event_storage
-from detectron2.modeling.sampling import subsample_labels
+from my_sampling import subsample_labels
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +114,7 @@ def my_find_top_rpn_proposals(
 
             logits_i[index_j][gt_logits_j == -1] \
                 = torch.min(logits_j)*2-logits_j[gt_logits_j == -1]
+
             num_remain_logits.append(
                 Hi_Wi_A-torch.sum(gt_logits_j == -1).item())
 
@@ -322,8 +323,13 @@ class my_RPNOutputs(object):
                 )
 
                 matched_gt_classes_i = gt_classes_i[matched_idxs]
-                background_index = torch.nonzero((matched_gt_classes_i == self.num_classes) & (
-                    gt_objectness_logits_i == 1)).squeeze(1)
+
+                gt_objectness_logits_i[(matched_gt_classes_i ==
+                                        self.num_classes) & (
+                    gt_objectness_logits_i == 1)] = 2
+
+                background_index = torch.nonzero(
+                    gt_objectness_logits_i == 2).squeeze(1)
 
                 fg_index = torch.nonzero(
                     gt_objectness_logits_i == 1).squeeze(1)
@@ -363,7 +369,7 @@ class my_RPNOutputs(object):
             included in the sample.
             """
             pos_idx, neg_idx = subsample_labels(
-                label, self.batch_size_per_image, self.positive_fraction, 0
+                label, self.batch_size_per_image, self.positive_fraction, 2
             )
             # Fill with the ignore label (-1), then set positive and negative labels
             label.fill_(-1)
@@ -465,7 +471,6 @@ class my_RPNOutputs(object):
             self.cls_loss_factor  # cls: classification loss
         loss_loc = localization_loss * normalizer  # loc: localization loss
         losses = {"loss_rpn_cls": loss_cls, "loss_rpn_loc": loss_loc}
-        # print(losses)
 
         return losses
 
