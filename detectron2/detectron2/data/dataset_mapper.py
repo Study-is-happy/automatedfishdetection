@@ -88,9 +88,6 @@ class DatasetMapper:
             # Crop around an instance if there are instances in the image.
             # USER: Remove if you don't use cropping
             if self.crop_gen:
-                print(dataset_dict["annotations"])
-                print(np.random.choice(dataset_dict["annotations"]))
-                print('---')
                 crop_tfm = utils.gen_crop_transform_with_instance(
                     self.crop_gen.get_crop_size(image.shape[:2]),
                     image.shape[:2],
