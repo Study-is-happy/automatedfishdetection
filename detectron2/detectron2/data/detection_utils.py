@@ -159,15 +159,18 @@ def transform_instance_annotations(
             transformed according to `transforms`.
             The "bbox_mode" field will be set to XYXY_ABS.
     """
-    bbox = BoxMode.convert(annotation["bbox"], annotation["bbox_mode"], BoxMode.XYXY_ABS)
+    bbox = BoxMode.convert(
+        annotation["bbox"], annotation["bbox_mode"], BoxMode.XYXY_ABS)
     # Note that bbox is 1d (per-instance bounding box)
     annotation["bbox"] = transforms.apply_box([bbox])[0]
     annotation["bbox_mode"] = BoxMode.XYXY_ABS
 
     if "segmentation" in annotation:
         # each instance contains 1 or more polygons
-        polygons = [np.asarray(p).reshape(-1, 2) for p in annotation["segmentation"]]
-        annotation["segmentation"] = [p.reshape(-1) for p in transforms.apply_polygons(polygons)]
+        polygons = [np.asarray(p).reshape(-1, 2)
+                    for p in annotation["segmentation"]]
+        annotation["segmentation"] = [
+            p.reshape(-1) for p in transforms.apply_polygons(polygons)]
 
     if "keypoints" in annotation:
         keypoints = transform_keypoint_annotations(
@@ -193,7 +196,8 @@ def transform_keypoint_annotations(keypoints, transforms, image_size, keypoint_h
     keypoints[:, :2] = transforms.apply_coords(keypoints[:, :2])
 
     # This assumes that HorizFlipTransform is the only one that does flip
-    do_hflip = sum(isinstance(t, T.HFlipTransform) for t in transforms.transforms) % 2 == 1
+    do_hflip = sum(isinstance(t, T.HFlipTransform)
+                   for t in transforms.transforms) % 2 == 1
 
     # Alternative way: check if probe points was horizontally flipped.
     # probe = np.asarray([[0.0, 0.0], [image_width, 0.0]])
@@ -228,7 +232,8 @@ def annotations_to_instances(annos, image_size, mask_format="polygon"):
             "gt_masks", "gt_keypoints", if they can be obtained from `annos`.
             This is the format that builtin models expect.
     """
-    boxes = [BoxMode.convert(obj["bbox"], obj["bbox_mode"], BoxMode.XYXY_ABS) for obj in annos]
+    boxes = [BoxMode.convert(
+        obj["bbox"], obj["bbox_mode"], BoxMode.XYXY_ABS) for obj in annos]
     target = Instances(image_size)
     boxes = target.gt_boxes = Boxes(boxes)
     boxes.clip(image_size)
@@ -344,8 +349,11 @@ def gen_crop_transform_with_instance(crop_size, image_size, instance):
         instance (dict): an annotation dict of one instance, in Detectron2's
             dataset format.
     """
+    print(crop_size)
+    print(image_size)
     crop_size = np.asarray(crop_size, dtype=np.int32)
-    bbox = BoxMode.convert(instance["bbox"], instance["bbox_mode"], BoxMode.XYXY_ABS)
+    bbox = BoxMode.convert(
+        instance["bbox"], instance["bbox_mode"], BoxMode.XYXY_ABS)
     center_yx = (bbox[1] + bbox[3]) * 0.5, (bbox[0] + bbox[2]) * 0.5
 
     min_yx = np.maximum(np.floor(center_yx).astype(np.int32) - crop_size, 0)
@@ -372,18 +380,21 @@ def check_metadata_consistency(key, dataset_names):
     if len(dataset_names) == 0:
         return
     logger = logging.getLogger(__name__)
-    entries_per_dataset = [getattr(MetadataCatalog.get(d), key) for d in dataset_names]
+    entries_per_dataset = [getattr(MetadataCatalog.get(d), key)
+                           for d in dataset_names]
     for idx, entry in enumerate(entries_per_dataset):
         if entry != entries_per_dataset[0]:
             logger.error(
-                "Metadata '{}' for dataset '{}' is '{}'".format(key, dataset_names[idx], str(entry))
+                "Metadata '{}' for dataset '{}' is '{}'".format(
+                    key, dataset_names[idx], str(entry))
             )
             logger.error(
                 "Metadata '{}' for dataset '{}' is '{}'".format(
                     key, dataset_names[0], str(entries_per_dataset[0])
                 )
             )
-            raise ValueError("Datasets have different metadata '{}'!".format(key))
+            raise ValueError(
+                "Datasets have different metadata '{}'!".format(key))
 
 
 def build_transform_gen(cfg, is_train):

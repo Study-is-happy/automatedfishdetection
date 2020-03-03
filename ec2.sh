@@ -77,4 +77,4 @@ zip -r predict.zip predict/
 scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-191-69-167.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
 
 # nohup
-nohup python train.py &
+nohup python train.py > nohup.out 2>&1 &
