@@ -349,8 +349,6 @@ def gen_crop_transform_with_instance(crop_size, image_size, instance):
         instance (dict): an annotation dict of one instance, in Detectron2's
             dataset format.
     """
-    print(crop_size)
-    print(image_size)
     crop_size = np.asarray(crop_size, dtype=np.int32)
     bbox = BoxMode.convert(
         instance["bbox"], instance["bbox_mode"], BoxMode.XYXY_ABS)
