@@ -2,13 +2,14 @@ import numpy as np
 import json
 import torch
 import os
-from detectron2.data import DatasetCatalog, MetadataCatalog
+from detectron2.data import DatasetCatalog, MetadataCatalog, build_detection_train_loader
 from detectron2.config import get_cfg
 from detectron2.engine import DefaultTrainer
 from detectron2.structures import BoxMode
 from detectron2.utils.logger import setup_logger
 
 from my_rpn import my_RPN
+from my_dataset_mapper import DatasetMapper
 from evaluator import Evaluator
 
 import util
@@ -105,6 +106,10 @@ for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
 
 
 class Trainer(DefaultTrainer):
+
+    @classmethod
+    def build_train_loader(cls, cfg):
+        return build_detection_train_loader(cfg, DatasetMapper(cfg, True))
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name):
