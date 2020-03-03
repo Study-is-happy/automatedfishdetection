@@ -65,7 +65,7 @@ cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 cfg.INPUT.MIN_SIZE_TEST = 1024
 
 cfg.INPUT.CROP.ENABLED = True
-cfg.INPUT.CROP.TYPE = "relative"
+cfg.INPUT.CROP.TYPE = "relative_range"
 
 cfg.SOLVER.IMS_PER_BATCH = 2
 cfg.SOLVER.BASE_LR = 0.0025
