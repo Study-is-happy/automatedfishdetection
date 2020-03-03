@@ -288,7 +288,6 @@ class my_RPNOutputs(object):
         """
         gt_objectness_logits = []
         gt_anchor_deltas = []
-        background_indexes = []
         # Concatenate anchors from all feature maps into a single Boxes per image
         anchors = [Boxes.cat(anchors_i) for anchors_i in self.anchors]
 
@@ -328,12 +327,6 @@ class my_RPNOutputs(object):
                                         self.num_classes) & (
                     gt_objectness_logits_i == 1)] = 2
 
-                background_index = torch.nonzero(
-                    gt_objectness_logits_i == 2).squeeze(1)
-
-                fg_index = torch.nonzero(
-                    gt_objectness_logits_i == 1).squeeze(1)
-
                 # _, top_index = predict_objectness_logits_i.sort(
                 #     descending=True)
                 # top_index = top_index[:(num_fg-num_bg)*self.remain_ratio]
@@ -342,16 +335,13 @@ class my_RPNOutputs(object):
                 # print(torch.sum(predict_objectness_logits_i > 0.1).item())
                 # print(len(fg_index))
 
-                gt_objectness_logits_i[predict_objectness_logits_i >
-                                       self.ignore_prob] = -1
-
-                gt_objectness_logits_i[fg_index] = 1
+                gt_objectness_logits_i[(predict_objectness_logits_i >
+                                        self.ignore_prob) & (gt_objectness_logits_i == 0)] = -1
 
             gt_objectness_logits.append(gt_objectness_logits_i)
             gt_anchor_deltas.append(gt_anchor_deltas_i)
-            background_indexes.append(background_index)
 
-        return gt_objectness_logits, gt_anchor_deltas, background_indexes
+        return gt_objectness_logits, gt_anchor_deltas
 
     def losses(self):
         """
@@ -377,10 +367,12 @@ class my_RPNOutputs(object):
             label.scatter_(0, neg_idx, 0)
             return label
 
-        gt_objectness_logits, gt_anchor_deltas, background_indexes = self._get_ground_truth()
+        gt_objectness_logits, gt_anchor_deltas = self._get_ground_truth()
 
         self.gt_objectness_logits = torch.stack(
             gt_objectness_logits, dim=0).clone()
+
+        self.gt_objectness_logits[self.gt_objectness_logits == 2] = 0
 
         """
         gt_objectness_logits: list of N tensors. Tensor i is a vector whose length is the
@@ -398,9 +390,6 @@ class my_RPNOutputs(object):
         gt_objectness_logits = torch.stack(
             [resample(label) for label in gt_objectness_logits], dim=0
         )
-
-        for i in range(self.num_images):
-            self.gt_objectness_logits[i].scatter_(0, background_indexes[i], 0)
 
         # Log the number of positive/negative anchors per-image that's used in training
         num_pos_anchors = (gt_objectness_logits == 1).sum().item()

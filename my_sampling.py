@@ -58,4 +58,9 @@ def subsample_labels(labels, num_samples, positive_fraction, bg_label):
     bg_idx = background[perm2]
     neg_idx = negative[perm3]
 
+    # print(num_pos)
+    # print(num_bg)
+    # print(num_neg)
+    # print()
+
     return pos_idx, torch.cat((bg_idx, neg_idx))
