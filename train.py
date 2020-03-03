@@ -63,8 +63,6 @@ cfg.MODEL.FPN.NORM = "GN"
 cfg.MODEL.BACKBONE.FREEZE_AT = 0
 cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 
-cfg.INPUT.MIN_SIZE_TEST = 1024
-
 cfg.INPUT.CROP.ENABLED = True
 cfg.INPUT.CROP.SIZE = [0.8, 0.8]
 
@@ -79,6 +77,7 @@ cfg.OUTPUT_DIR = config.project_dir+'outputs/'
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
 
 cfg.INPUT.MIN_SIZE_TRAIN = config.INPUT_MIN_SIZE_TRAIN
+cfg.INPUT.MIN_SIZE_TEST = config.INPUT_MIN_SIZE_TRAIN[-1]
 
 cfg.SOLVER.STEPS = config.SOLVER_STEPS
 cfg.SOLVER.MAX_ITER = config.SOLVER_MAX_ITER
