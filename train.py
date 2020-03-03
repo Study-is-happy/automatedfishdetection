@@ -109,7 +109,6 @@ if config.train_update:
 else:
     cfg.DATASETS.TRAIN = ['train/']
 
-
 for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
     DatasetCatalog.register(datasets_dir, lambda datasets_dir=datasets_dir: get_dicts(
         config.project_dir+datasets_dir))
