@@ -400,7 +400,6 @@ class my_RPNOutputs(object):
         )
 
         for i in range(self.num_images):
-            gt_objectness_logits[i].scatter_(0, background_indexes[i], 0)
             self.gt_objectness_logits[i].scatter_(0, background_indexes[i], 0)
 
         # Log the number of positive/negative anchors per-image that's used in training
