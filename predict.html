@@ -592,7 +592,7 @@ nResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+    annotation["bbox"][1] = norm((boxDiv.offsetTop - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -661,7 +661,7 @@ sResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+    annotation["bbox"][3] = norm((boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -732,7 +732,7 @@ wResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
+    annotation["bbox"][0] = norm((boxDiv.offsetLeft - img.offsetLeft) / img.width, 0, 1)
   }
 }
 
@@ -801,7 +801,7 @@ eResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
+    annotation["bbox"][2] = norm((boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width, 0, 1)
   }
 }
 
@@ -871,8 +871,8 @@ nwResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
-    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+    annotation["bbox"][0] = norm((boxDiv.offsetLeft - img.offsetLeft) / img.width, 0, 1)
+    annotation["bbox"][1] = norm((boxDiv.offsetTop - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -942,8 +942,8 @@ seResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
-    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+    annotation["bbox"][2] = norm((boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width, 0, 1)
+    annotation["bbox"][3] = norm((boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -1013,8 +1013,8 @@ neResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][2] = (boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width
-    annotation["bbox"][1] = (boxDiv.offsetTop - img.offsetTop) / img.height
+    annotation["bbox"][2] = norm((boxDiv.offsetLeft + boxDiv.offsetWidth - img.offsetLeft) / img.width, 0, 1)
+    annotation["bbox"][1] = norm((boxDiv.offsetTop - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -1084,8 +1084,8 @@ swResizerDiv.onmousedown = function(event) {
 
     resizerEnd()
 
-    annotation["bbox"][0] = (boxDiv.offsetLeft - img.offsetLeft) / img.width
-    annotation["bbox"][3] = (boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height
+    annotation["bbox"][0] = norm((boxDiv.offsetLeft - img.offsetLeft) / img.width, 0, 1)
+    annotation["bbox"][3] = norm((boxDiv.offsetTop + boxDiv.offsetHeight - img.offsetTop) / img.height, 0, 1)
   }
 }
 
@@ -1142,7 +1142,7 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/annotations/3205.json")
+  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 

@@ -57,17 +57,13 @@ def rel_to_abs(bbox, image_width, image_height):
     bbox[3] *= image_height
 
 
-def norm_bbox(bbox, image_width, image_height):
+def norm_bbox(bbox):
 
     for i in range(4):
         if bbox[i] < 0:
             bbox[i] = 0
-        if i == 0 or i == 2:
-            if bbox[i] > image_width:
-                bbox[i] = image_width
-        else:
-            if bbox[i] > image_height:
-                bbox[i] = image_height
+        elif bbox[i] > 1:
+            bbox[i] = 1
 
 
 def calc_timer(edge_timer, corner_timer):
