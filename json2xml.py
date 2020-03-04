@@ -1,88 +1,134 @@
 from xml.dom import minidom
 import json
+import os
 
+import util
+import config
 
-xml_document = minidom.Document()
+with open(config.project_dir+'update/instances.json') as update_instances_file:
+    update_instances = json.load(update_instances_file)
 
-annotation_node = xml_document.createElement('annotation')
-xml_document.appendChild(annotation_node)
+for image_id, instance in update_instances.items():
 
-folder_node = xml_document.createElement('folder')
-annotation_node.appendChild(folder_node)
-folder_node_text = xml_document.createTextNode(images_dir)
-folder_node.appendChild(folder_node_text)
+    xml_file_path = config.project_dir+'voc_format/'+image_id+'.xml'
 
-filename_node = xml_document.createElement('filename')
-annotation_node.appendChild(filename_node)
-filename_node_text = xml_document.createTextNode(image_name+'.jpg')
-filename_node.appendChild(filename_node_text)
+    width = instance['width']
+    height = instance['height']
 
-size_node = xml_document.createElement('size')
-annotation_node.appendChild(size_node)
+    xml_document = minidom.Document()
 
-width_node = xml_document.createElement('width')
-size_node.appendChild(width_node)
-width_node_text = xml_document.createTextNode(str(width))
-width_node.appendChild(width_node_text)
+    annotation_node = xml_document.createElement('annotation')
+    xml_document.appendChild(annotation_node)
 
-height_node = xml_document.createElement('height')
-size_node.appendChild(height_node)
-height_node_text = xml_document.createTextNode(str(height))
-height_node.appendChild(height_node_text)
+    folder_node = xml_document.createElement('folder')
+    annotation_node.appendChild(folder_node)
+    folder_node_text = xml_document.createTextNode('fish')
+    folder_node.appendChild(folder_node_text)
 
-for bbox in bboxes:
+    filename_node = xml_document.createElement('filename')
+    annotation_node.appendChild(filename_node)
+    filename_node_text = xml_document.createTextNode(image_id+'.jpg')
+    filename_node.appendChild(filename_node_text)
 
-object_node = xml_document.createElement('object')
-annotation_node.appendChild(object_node)
+    path_node = xml_document.createElement('path')
+    annotation_node.appendChild(path_node)
+    path_node_text = xml_document.createTextNode(
+        '\\\\yqhz\\xietongzuoye\\fish\\'+image_id+'.jpg')
+    path_node.appendChild(path_node_text)
 
-name_node = xml_document.createElement('name')
-object_node.appendChild(name_node)
-name_node_text = xml_document.createTextNode(bbox.label)
-name_node.appendChild(name_node_text)
+    source_node = xml_document.createElement('source')
+    annotation_node.appendChild(source_node)
 
-pose_node = xml_document.createElement('pose')
-object_node.appendChild(pose_node)
-pose_node_text = xml_document.createTextNode(bbox.pose)
-pose_node.appendChild(pose_node_text)
+    database_node = xml_document.createElement('database')
+    source_node.appendChild(database_node)
+    database_node_text = xml_document.createTextNode('Unknown')
+    database_node.appendChild(database_node_text)
 
-truncated_node = xml_document.createElement('truncated')
-object_node.appendChild(truncated_node)
-truncated_node_text = xml_document.createTextNode(str(bbox.truncated))
-truncated_node.appendChild(truncated_node_text)
+    size_node = xml_document.createElement('size')
+    annotation_node.appendChild(size_node)
 
-difficult_node = xml_document.createElement('difficult')
-object_node.appendChild(difficult_node)
-difficult_node_text = xml_document.createTextNode(str(bbox.difficult))
-difficult_node.appendChild(difficult_node_text)
+    width_node = xml_document.createElement('width')
+    size_node.appendChild(width_node)
+    width_node_text = xml_document.createTextNode(
+        str(width))
+    width_node.appendChild(width_node_text)
 
-temp_node = xml_document.createElement('temp')
-object_node.appendChild(temp_node)
-temp_node_text = xml_document.createTextNode(str(bbox.temp))
-temp_node.appendChild(temp_node_text)
+    height_node = xml_document.createElement('height')
+    size_node.appendChild(height_node)
+    height_node_text = xml_document.createTextNode(
+        str(height))
+    height_node.appendChild(height_node_text)
 
-bndbox_node = xml_document.createElement('bndbox')
-object_node.appendChild(bndbox_node)
+    depth_node = xml_document.createElement('depth')
+    size_node.appendChild(depth_node)
+    depth_node_text = xml_document.createTextNode(
+        str(3))
+    depth_node.appendChild(depth_node_text)
 
-xmin_node = xml_document.createElement('xmin')
-bndbox_node.appendChild(xmin_node)
-xmin_node_text = xml_document.createTextNode(str(bbox.xmin))
-xmin_node.appendChild(xmin_node_text)
+    segmented_node = xml_document.createElement('segmented')
+    annotation_node.appendChild(segmented_node)
+    segmented_node_text = xml_document.createTextNode('0')
+    segmented_node.appendChild(segmented_node_text)
 
-ymin_node = xml_document.createElement('ymin')
-bndbox_node.appendChild(ymin_node)
-ymin_node_text = xml_document.createTextNode(str(bbox.ymin))
-ymin_node.appendChild(ymin_node_text)
+    for annotation in instance['annotations']:
 
-xmax_node = xml_document.createElement('xmax')
-bndbox_node.appendChild(xmax_node)
-xmax_node_text = xml_document.createTextNode(str(bbox.xmax))
-xmax_node.appendChild(xmax_node_text)
+        object_node = xml_document.createElement('object')
+        annotation_node.appendChild(object_node)
 
-ymax_node = xml_document.createElement('ymax')
-bndbox_node.appendChild(ymax_node)
-ymax_node_text = xml_document.createTextNode(str(bbox.ymax))
-ymax_node.appendChild(ymax_node_text)
+        name_node = xml_document.createElement('name')
+        object_node.appendChild(name_node)
 
-with open(annotations_dir+image_name+'.xml', 'w', encoding='utf-8') as annotation_file:
-xml_document.writexml(
-    annotation_file, addindent='\t', newl='\n', encoding='UTF-8')
+        if annotation['category_id'] == -1:
+            name_text = 'unknown'
+        else:
+            name_text = config.categories[annotation['category_id']]
+
+        name_node_text = xml_document.createTextNode(name_text)
+        name_node.appendChild(name_node_text)
+
+        pose_node = xml_document.createElement('pose')
+        object_node.appendChild(pose_node)
+        pose_node_text = xml_document.createTextNode('Unspecified')
+        pose_node.appendChild(pose_node_text)
+
+        truncated_node = xml_document.createElement('truncated')
+        object_node.appendChild(truncated_node)
+        truncated_node_text = xml_document.createTextNode('0')
+        truncated_node.appendChild(truncated_node_text)
+
+        difficult_node = xml_document.createElement('difficult')
+        object_node.appendChild(difficult_node)
+        difficult_node_text = xml_document.createTextNode(
+            str(annotation['difficult']))
+        difficult_node.appendChild(difficult_node_text)
+
+        bndbox_node = xml_document.createElement('bndbox')
+        object_node.appendChild(bndbox_node)
+
+        bbox = annotation['bbox']
+        util.rel_to_abs(bbox, width, height)
+        util.norm_abs_bbox(bbox)
+
+        xmin_node = xml_document.createElement('xmin')
+        bndbox_node.appendChild(xmin_node)
+        xmin_node_text = xml_document.createTextNode(str(bbox[0]))
+        xmin_node.appendChild(xmin_node_text)
+
+        ymin_node = xml_document.createElement('ymin')
+        bndbox_node.appendChild(ymin_node)
+        ymin_node_text = xml_document.createTextNode(str(bbox[1]))
+        ymin_node.appendChild(ymin_node_text)
+
+        xmax_node = xml_document.createElement('xmax')
+        bndbox_node.appendChild(xmax_node)
+        xmax_node_text = xml_document.createTextNode(str(bbox[2]))
+        xmax_node.appendChild(xmax_node_text)
+
+        ymax_node = xml_document.createElement('ymax')
+        bndbox_node.appendChild(ymax_node)
+        ymax_node_text = xml_document.createTextNode(str(bbox[3]))
+        ymax_node.appendChild(ymax_node_text)
+
+    with open(xml_file_path, 'w', encoding='utf-8') as xml_file:
+        xml_document.writexml(
+            xml_file, addindent='\t', newl='\n', encoding='UTF-8')

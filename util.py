@@ -41,6 +41,12 @@ def get_bboxes_iou(bbox1, bbox2):
     return 0
 
 
+def norm_abs_bbox(bbox):
+    for i in range(4):
+        if bbox[i] < 1:
+            bbox[i] = 1
+
+
 def abs_to_rel(bbox, image_width, image_height):
 
     bbox[0] /= image_width
@@ -57,7 +63,7 @@ def rel_to_abs(bbox, image_width, image_height):
     bbox[3] *= image_height
 
 
-def norm_bbox(bbox):
+def norm_rel_bbox(bbox):
 
     for i in range(4):
         if bbox[i] < 0:
