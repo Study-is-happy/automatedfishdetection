@@ -6,7 +6,7 @@ import util
 print_results = {'fish': 0, 'starfish': 0, 'sponge': 0, 'background': 0}
 easy_annotation_indexes = [9]
 
-with open(config.project_dir+'pmfs/instances.json') as gt_instances_file:
+with open(config.project_dir+'gt/instances.json') as gt_instances_file:
     gt_instances = json.load(gt_instances_file)
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
