@@ -1,4 +1,4 @@
-ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com
+ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com
 
 cat << EOF | sudo tee --append /etc/modprobe.d/blacklist.conf
 blacklist vga16fb
@@ -56,25 +56,25 @@ cd ..
 python init.py
 
 # upload update_instances to ec2
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
 
 # upload update.zip to ec2
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com:~/fish_detection/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com:~/fish_detection/
 
 # unzip update
 unzip update.zip
 
 # download metrics.json to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/metrics.json ~/datasets/fish_detection/outputs/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/metrics.json ~/datasets/fish_detection/outputs/
 
 # download model_.pth to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_0033999.pth ~/datasets/fish_detection/outputs/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_0033999.pth ~/datasets/fish_detection/outputs/
 
 # zip predict
 zip -r predict.zip predict/
 
 # download predict.zip to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-135-195-27.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-221-233-243.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
 
 # nohup
 nohup python train.py > nohup.out 2>&1 &
