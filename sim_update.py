@@ -28,36 +28,47 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
 
                     predict_bbox = predict_annotation['bbox']
 
-                    gt_instance = gt_instances[image_id]
+                    width = predict_annotation['width']
+                    height = predict_annotation['height']
 
                     if image_id not in update_instances:
                         update_instances[image_id] = {
-                            'width': gt_instance['width'], 'height': gt_instance['height'], 'annotations': []}
+                            'width': width, 'height': height, 'annotations': []}
 
                     update_bboxes = update_instances[image_id]['annotations']
 
-                    best_iou = 0.1
-                    best_gt_bbox = None
+                    if image_id in gt_instances:
 
-                    for gt_bbox in gt_instance['annotations']:
-                        iou = util.get_bboxes_iou(
-                            predict_bbox, gt_bbox['bbox'])
-                        if iou > best_iou:
-                            best_iou = iou
-                            best_gt_bbox = gt_bbox
+                        gt_instance = gt_instances[image_id]
 
-                    if best_gt_bbox == None:
+                        best_iou = 0.1
+                        best_gt_bbox = None
+
+                        for gt_bbox in gt_instance['annotations']:
+                            iou = util.get_bboxes_iou(
+                                predict_bbox, gt_bbox['bbox'])
+                            if iou > best_iou:
+                                best_iou = iou
+                                best_gt_bbox = gt_bbox
+
+                        if best_gt_bbox == None:
+                            category_id = config.categories.index('background')
+                            update_bboxes.append({'category_id': category_id,
+                                                  'bbox': predict_bbox, 'difficult': 1})
+                            print_results[config.categories[category_id]] += 1
+                        else:
+                            for update_bbox in update_bboxes:
+                                if update_bbox['bbox'] == best_gt_bbox['bbox']:
+                                    break
+                            else:
+                                update_bboxes.append(best_gt_bbox)
+                                print_results[config.categories[best_gt_bbox['category_id']]] += 1
+
+                    else:
                         category_id = config.categories.index('background')
                         update_bboxes.append({'category_id': category_id,
                                               'bbox': predict_bbox, 'difficult': 1})
                         print_results[config.categories[category_id]] += 1
-                    else:
-                        for update_bbox in update_bboxes:
-                            if update_bbox['bbox'] == best_gt_bbox['bbox']:
-                                break
-                        else:
-                            update_bboxes.append(best_gt_bbox)
-                            print_results[config.categories[best_gt_bbox['category_id']]] += 1
 
 util.write_json_file(
     update_instances, config.project_dir+'update/instances.json')

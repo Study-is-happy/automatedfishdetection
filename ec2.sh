@@ -60,7 +60,6 @@ scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detectio
 
 # upload update.zip to ec2
 scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-3-21-97-15.us-east-2.compute.amazonaws.com:~/fish_detection/
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/gt.zip ubuntu@ec2-3-21-97-15.us-east-2.compute.amazonaws.com:~/fish_detection/
 
 # unzip update
 unzip update.zip
