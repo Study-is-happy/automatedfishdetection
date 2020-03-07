@@ -16,7 +16,7 @@ import config
 
 # src_images_file_path = src_dataset_dir+'down_images.txt'
 
-src_dataset_dir = config.project_dir+'pacstorm_annotatons_1/'
+src_dataset_dir = config.project_dir+'finish/'
 
 src_images_dir = src_dataset_dir+'images/'
 
@@ -24,7 +24,7 @@ src_annotations_dir = src_dataset_dir+'annotations/'
 
 src_images_file_path = src_dataset_dir+'images.txt'
 
-des_dataset_dir = config.project_dir+'gt/'
+des_dataset_dir = config.project_dir+'update_pro/'
 
 ###########################################################################
 
@@ -61,7 +61,7 @@ with open(src_images_file_path) as image_ids:
 
         for object_node in object_nodes:
 
-            category = object_node.find('name').text
+            category = object_node.find('name').text.lower()
 
             if category in config.categories:
 

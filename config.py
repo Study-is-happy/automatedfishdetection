@@ -20,8 +20,8 @@ categories = ['fish', 'starfish', 'sponge', 'background']
 
 num_categories = len(categories)-1
 
-SOLVER_STEPS = (30000, 36000)
-SOLVER_MAX_ITER = 40000
+SOLVER_STEPS = (60000, 72000)
+SOLVER_MAX_ITER = 80000
 
 train_update = True
 

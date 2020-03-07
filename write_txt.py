@@ -2,7 +2,7 @@ import os
 
 import config
 
-dataset_dir = config.project_dir+'pacstorm/'
+dataset_dir = config.project_dir+'update_pro/'
 
 with open(dataset_dir+'images.txt', 'w') as image_ids_file:
     for annotation_file_name in os.listdir(dataset_dir+'annotations/'):
