@@ -1,11 +1,11 @@
-## Requirements
+### Requirements
 - python
 - matplotlib
 
-## Installation
+### Installation
 pip install matplotlib
 
-## Visualize Dataset
+### Visualize Dataset
 Open visualize_voc.py, and set the dataset directory.
 Then run:
 ```
