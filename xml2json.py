@@ -16,7 +16,7 @@ import config
 
 # src_images_file_path = src_dataset_dir+'down_images.txt'
 
-src_dataset_dir = config.project_dir+'finish/'
+src_dataset_dir = config.project_dir+'pro/'
 
 src_images_dir = src_dataset_dir+'images/'
 
@@ -24,7 +24,7 @@ src_annotations_dir = src_dataset_dir+'annotations/'
 
 src_images_file_path = src_dataset_dir+'images.txt'
 
-des_dataset_dir = config.project_dir+'update_pro/'
+des_dataset_dir = config.project_dir+'update/'
 
 ###########################################################################
 
