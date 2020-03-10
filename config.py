@@ -35,4 +35,4 @@ MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.3
 CUSTOM_IGNORE_PROB = 0.5
 CUSTOM_CLS_LOSS_FACTOR = 1.0
 
-MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_0067999.pth'
+MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_0059999.pth'
