@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'update/'
+dataset_dir = config.project_dir+'predict/'
 
 ###########################################################################
 
@@ -44,6 +44,8 @@ for image_id, instance in instances_dict.items():
 
     current_axis = plt.gca()
 
+    # test_exist = False
+
     for annotation in instance['annotations']:
 
         bbox = annotation['bbox']
@@ -52,6 +54,8 @@ for image_id, instance in instances_dict.items():
 
         if 'score' in annotation:
             linestyle = 'dashed'
+            # if annotation['category_id'] == 0:
+            #     test_exist = True
             # plt.text(bbox[0]*width, bbox[1]*height, format(
             #     annotation['score'], '0.2f'), color=color, size=30)
         else:
@@ -63,4 +67,7 @@ for image_id, instance in instances_dict.items():
         plt.text(bbox[0]*width, bbox[1]*height-3,
                  config.categories[annotation['category_id']], color='white', size=30, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
+    # if test_exist:
     plt.show()
+    # else:
+    #     plt.close()
