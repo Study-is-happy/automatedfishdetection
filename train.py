@@ -51,8 +51,6 @@ cfg = get_cfg()
 cfg.merge_from_file(
     'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
 
-cfg.DATASETS.TEST = ['test/']
-
 cfg.MODEL.PROPOSAL_GENERATOR.NAME = 'my_RPN'
 cfg.MODEL.RESNETS.NORM = "GN"
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
@@ -92,10 +90,12 @@ cfg.CUSTOM_CLS_LOSS_FACTOR = config.CUSTOM_CLS_LOSS_FACTOR
 if config.train_update:
 
     cfg.DATASETS.TRAIN = ['update/']
+    cfg.DATASETS.TEST = ['gt/']
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
 else:
     cfg.DATASETS.TRAIN = ['train/']
+    cfg.DATASETS.TEST = ['test/']
 
 for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
     DatasetCatalog.register(datasets_dir, lambda datasets_dir=datasets_dir: get_dicts(
