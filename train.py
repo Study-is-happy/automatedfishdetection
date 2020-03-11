@@ -60,6 +60,9 @@ cfg.MODEL.ROI_BOX_HEAD.FC = 1
 cfg.MODEL.FPN.NORM = "GN"
 cfg.MODEL.BACKBONE.FREEZE_AT = 0
 cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
+cfg.MODEL.RPN.POSITIVE_FRACTION = 0.7
+cfg.MODEL.RPN.IOU_THRESHOLDS = [0.3, 0.5]
+cfg.MODEL.RPN.NMS_THRESH = 0.5
 
 cfg.INPUT.CROP.ENABLED = True
 cfg.INPUT.CROP.SIZE = [0.8, 0.8]
@@ -67,21 +70,18 @@ cfg.INPUT.CROP.SIZE = [0.8, 0.8]
 cfg.SOLVER.IMS_PER_BATCH = 2
 # cfg.SOLVER.BASE_LR = 0.0025
 cfg.SOLVER.BASE_LR = 0.005
-
 cfg.SOLVER.WARMUP_ITERS = 1000
+cfg.SOLVER.STEPS = (30000, 36000)
+cfg.SOLVER.MAX_ITER = 40000
 cfg.SOLVER.CHECKPOINT_PERIOD = 4000
 cfg.TEST.EVAL_PERIOD = cfg.SOLVER.CHECKPOINT_PERIOD
 
 cfg.OUTPUT_DIR = config.project_dir+'outputs/'
 
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
-cfg.MODEL.RPN.POSITIVE_FRACTION = config.MODEL_RPN_POSITIVE_FRACTION
 
 cfg.INPUT.MIN_SIZE_TRAIN = config.INPUT_MIN_SIZE_TRAIN
 cfg.INPUT.MIN_SIZE_TEST = config.INPUT_MIN_SIZE_TRAIN[-1]
-
-cfg.SOLVER.STEPS = config.SOLVER_STEPS
-cfg.SOLVER.MAX_ITER = config.SOLVER_MAX_ITER
 
 cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = config.MODEL_ROI_HEADS_SCORE_THRESH_TEST
 cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = config.MODEL_ROI_HEADS_NMS_THRESH_TEST
@@ -103,6 +103,8 @@ for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
     DatasetCatalog.register(datasets_dir, lambda datasets_dir=datasets_dir: get_dicts(
         config.project_dir+datasets_dir))
     MetadataCatalog.get(datasets_dir).set(thing_classes=config.categories[:-1])
+
+print(cfg)
 
 
 class Trainer(DefaultTrainer):

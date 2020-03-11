@@ -1,6 +1,6 @@
 # TODO
 
-remote = False
+remote = True
 
 ###########################################################################
 
@@ -22,15 +22,13 @@ num_categories = len(categories)-1
 
 train_update = True
 
-SOLVER_STEPS = (60000, 72000)
-SOLVER_MAX_ITER = 80000
+SOLVER_STEPS = (30000, 36000)
+SOLVER_MAX_ITER = 40000
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
-MODEL_RPN_POSITIVE_FRACTION = 0.7
-
-MODEL_ROI_HEADS_SCORE_THRESH_TEST = 0.7
-MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.3
+MODEL_ROI_HEADS_SCORE_THRESH_TEST = 0.05
+MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.5
 
 CUSTOM_IGNORE_PROB = 0.5
 CUSTOM_CLS_LOSS_FACTOR = 1.0
