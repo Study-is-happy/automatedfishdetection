@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'predict/'
+dataset_dir = config.project_dir+'update/'
 
 ###########################################################################
 
@@ -21,15 +21,19 @@ with open(instances_file_path) as instances_file:
 
     instances_dict = json.load(instances_file)
 
-for image_id, instance in instances_dict.items():
+for image_id in sorted(instances_dict):
 
     print(image_id)
+
+    instance = instances_dict[image_id]
 
     # if image_id != '20100922.163718.01228':
     #     continue
 
     # if len(instance['annotations']) < 20:
     #     continue
+
+    instance = instances_dict[image_id]
 
     image = mpimg.imread(images_dir+image_id+'.jpg')
 

@@ -1,6 +1,6 @@
 # TODO
 
-remote = True
+remote = False
 
 ###########################################################################
 
@@ -20,10 +20,10 @@ categories = ['fish', 'starfish', 'sponge', 'background']
 
 num_categories = len(categories)-1
 
+train_update = True
+
 SOLVER_STEPS = (60000, 72000)
 SOLVER_MAX_ITER = 80000
-
-train_update = True
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
