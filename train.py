@@ -108,9 +108,9 @@ print(cfg)
 
 class Trainer(DefaultTrainer):
 
-    # @classmethod
-    # def build_train_loader(cls, cfg):
-    #     return build_detection_train_loader(cfg, DatasetMapper(cfg, True))
+    @classmethod
+    def build_train_loader(cls, cfg):
+        return build_detection_train_loader(cfg, DatasetMapper(cfg, True))
 
     @classmethod
     def build_evaluator(cls, cfg, dataset_name):
