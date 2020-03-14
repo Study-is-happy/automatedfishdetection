@@ -10,7 +10,7 @@ with open(config.project_dir+'update/instances.json') as update_instances_file:
 
 for image_id, instance in update_instances.items():
 
-    xml_file_path = config.project_dir+'voc_format/'+image_id+'.xml'
+    xml_file_path = config.project_dir+'pro/annotations/'+image_id+'.xml'
 
     width = instance['width']
     height = instance['height']

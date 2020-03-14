@@ -3,7 +3,7 @@ import os
 
 import config
 
-annotations_dir = config.project_dir+'pro (copy)/'
+annotations_dir = config.project_dir+'pro/annotations (copy)/'
 
 for annotation_file_name in os.listdir(annotations_dir):
 
