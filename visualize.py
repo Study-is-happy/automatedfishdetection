@@ -48,7 +48,7 @@ for image_id in sorted(instances_dict):
 
     current_axis = plt.gca()
 
-    # test_exist = False
+    test_exist = False
 
     for annotation in instance['annotations']:
 
@@ -58,20 +58,20 @@ for image_id in sorted(instances_dict):
 
         if 'score' in annotation:
             linestyle = 'dashed'
-            # if annotation['category_id'] == 0:
-            #     test_exist = True
-            # plt.text(bbox[0]*width, bbox[1]*height, format(
-            #     annotation['score'], '0.2f'), color=color, size=30)
+            if annotation['category_id'] == 0:
+                test_exist = True
+            plt.text(bbox[0]*width, bbox[1]*height, format(
+                annotation['score'], '0.2f'), color=color, size=30)
         else:
             linestyle = '-'
 
         current_axis.add_patch(plt.Rectangle(
             (bbox[0]*width, bbox[1]*height), (bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height, color=color, fill=False, linewidth=3, linestyle=linestyle))
 
-        plt.text(bbox[0]*width, bbox[1]*height-3,
-                 config.categories[annotation['category_id']], color='white', size=30, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
+        # plt.text(bbox[0]*width, bbox[1]*height-3,
+        #          config.categories[annotation['category_id']], color='white', size=30, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
-    # if test_exist:
-    plt.show()
-    # else:
-    #     plt.close()
+    if test_exist:
+        plt.show()
+    else:
+        plt.close()

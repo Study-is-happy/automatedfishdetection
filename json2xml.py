@@ -1,4 +1,5 @@
 from xml.dom import minidom
+import shutil
 import json
 import os
 
@@ -9,6 +10,9 @@ with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
 for image_id, instance in update_instances.items():
+
+    shutil.copy(config.project_dir+'/update/images/'+image_id +
+                '.jpg', config.project_dir+'pro/images/')
 
     xml_file_path = config.project_dir+'pro/annotations/'+image_id+'.xml'
 
