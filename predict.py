@@ -19,12 +19,12 @@ cfg = get_cfg()
 cfg.merge_from_file(
     'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
 
-cfg.MODEL.RESNETS.NORM = "GN"
+cfg.MODEL.RESNETS.NORM = 'GN'
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
-cfg.MODEL.ROI_BOX_HEAD.NORM = "GN"
+cfg.MODEL.ROI_BOX_HEAD.NORM = 'GN'
 cfg.MODEL.ROI_BOX_HEAD.NUM_CONV = 4
 cfg.MODEL.ROI_BOX_HEAD.FC = 1
-cfg.MODEL.FPN.NORM = "GN"
+cfg.MODEL.FPN.NORM = 'GN'
 cfg.MODEL.BACKBONE.FREEZE_AT = 0
 cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 

@@ -10,7 +10,7 @@ aws_secret_access_key = 'YOcYOzoM93DaljBo93BRxgzN9cCBrYf6cRVSYS3s'
 if remote:
     project_dir = '/home/ubuntu/fish_detection/'
 
-    INPUT_MIN_SIZE_TRAIN = (512, 640, 768, 896)
+    INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 else:
     project_dir = '/home/zhiyongzhang/datasets/fish_detection/'
 
