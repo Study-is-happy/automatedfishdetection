@@ -60,7 +60,7 @@ cfg.MODEL.ROI_BOX_HEAD.FC = 1
 cfg.MODEL.FPN.NORM = 'GN'
 cfg.MODEL.BACKBONE.FREEZE_AT = 0
 cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
-cfg.MODEL.RPN.POSITIVE_FRACTION = 0.7
+cfg.MODEL.RPN.POSITIVE_FRACTION = 0.5
 
 cfg.INPUT.CROP.ENABLED = True
 cfg.INPUT.CROP.SIZE = [0.8, 0.8]
@@ -93,9 +93,14 @@ if config.train_update:
     cfg.CUSTOM_IGNORE_PROB = 0.5
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
+# else:
+#     cfg.DATASETS.TRAIN = ['train/']
+#     cfg.DATASETS.TEST = ['test/']
+#     cfg.CUSTOM_IGNORE_PROB = 1.0
+
 else:
-    cfg.DATASETS.TRAIN = ['train/']
-    cfg.DATASETS.TEST = ['test/']
+    cfg.DATASETS.TRAIN = ['update/']
+    cfg.DATASETS.TEST = ['gt/']
     cfg.CUSTOM_IGNORE_PROB = 1.0
 
 for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:

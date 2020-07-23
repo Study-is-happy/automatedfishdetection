@@ -41,6 +41,33 @@ def get_bboxes_iou(bbox1, bbox2):
     return 0
 
 
+def get_bbox1_intersection(bbox1, bbox2):
+
+    width1 = bbox1[2]-bbox1[0]
+
+    width2 = bbox2[2]-bbox2[0]
+
+    overlap_width = width1+width2 - (max(bbox1[2], bbox2[2]) -
+                                     min(bbox1[0], bbox2[0]))
+
+    height1 = bbox1[3]-bbox1[1]
+
+    height2 = bbox2[3]-bbox2[1]
+
+    overlap_height = height1+height2 - (max(bbox1[3], bbox2[3]) -
+                                        min(bbox1[1], bbox2[1]))
+
+    if overlap_width > 0 and overlap_height > 0:
+
+        area1 = width1*height1
+
+        overlap_area = overlap_width*overlap_height
+
+        return overlap_area/area1
+
+    return 0
+
+
 def norm_abs_bbox(bbox):
     for i in range(4):
         if bbox[i] < 1:

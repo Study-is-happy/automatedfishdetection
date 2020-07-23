@@ -102,4 +102,7 @@ class Evaluator():
         result['recall'] = {'fish': np.sum(self.tp_list[0])/self.npos_list[0],
                             'starfish': np.sum(self.tp_list[1])/self.npos_list[1],
                             'sponge': np.sum(self.tp_list[2])/self.npos_list[2]}
+        result['precision'] = {'fish': np.sum(self.tp_list[0])/len(self.tp_list[0]),
+                               'starfish': np.sum(self.tp_list[1])/len(self.tp_list[1]),
+                               'sponge': np.sum(self.tp_list[2])/len(self.tp_list[2])}
         return result

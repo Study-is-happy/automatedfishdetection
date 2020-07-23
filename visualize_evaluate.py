@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'update/'
+dataset_dir = config.project_dir+'evaluate_gt/'
 
 ###########################################################################
 
@@ -21,7 +21,7 @@ with open(instances_file_path) as instances_file:
 
     instances_dict = json.load(instances_file)
 
-for image_id in sorted(instances_dict):
+for image_id in instances_dict:
 
     print(image_id)
 
@@ -30,8 +30,8 @@ for image_id in sorted(instances_dict):
     # if image_id != '20100922.163718.01228':
     #     continue
 
-    if len(instance['annotations']) < 20:
-        continue
+    # if len(instance['annotations']) < 20:
+    #     continue
 
     instance = instances_dict[image_id]
 
@@ -48,16 +48,24 @@ for image_id in sorted(instances_dict):
 
     current_axis = plt.gca()
 
+    exist_miss = False
+
     for annotation in instance['annotations']:
 
         bbox = annotation['bbox']
 
         color = colors[annotation['category_id']]
 
+        if annotation['detected']:
+            linestyle = '-'
+        else:
+            exist_miss = True
+            linestyle = 'dashed'
+
         current_axis.add_patch(plt.Rectangle(
-            (bbox[0]*width, bbox[1]*height), (bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height, color=color, fill=False, linewidth=3))
+            (bbox[0]*width, bbox[1]*height), (bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height, color=color, fill=False, linewidth=3, linestyle=linestyle))
 
-        plt.text(bbox[0]*width, bbox[1]*height-3,
-                 config.categories[annotation['category_id']], color='white', size=30, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
-
-    plt.show()
+    if exist_miss:
+        plt.show()
+    else:
+        plt.close()
