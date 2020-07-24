@@ -97,7 +97,8 @@ if config.train_update:
 else:
     # cfg.DATASETS.TRAIN = ['init_train/']
     # cfg.DATASETS.TEST = ['init_test/']
-    cfg.DATASETS.TRAIN = ['update/']
+    # cfg.DATASETS.TRAIN = ['update.zip/']
+    cfg.DATASETS.TRAIN = ['update_no_background.zip/']
     cfg.DATASETS.TEST = ['init/']
     cfg.CUSTOM_IGNORE_PROB = 1.0
 
