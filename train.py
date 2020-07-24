@@ -98,7 +98,7 @@ else:
     # cfg.DATASETS.TRAIN = ['train/']
     # cfg.DATASETS.TEST = ['test/']
     cfg.DATASETS.TRAIN = ['update/']
-    cfg.DATASETS.TEST = ['gt/']
+    cfg.DATASETS.TEST = ['train/', 'test/']
     cfg.CUSTOM_IGNORE_PROB = 1.0
 
 
