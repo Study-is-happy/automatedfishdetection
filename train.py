@@ -95,10 +95,10 @@ if config.train_update:
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
 else:
-    cfg.DATASETS.TRAIN = ['train/']
-    cfg.DATASETS.TEST = ['test/']
-    # cfg.DATASETS.TRAIN = ['update/']
-    # cfg.DATASETS.TEST = ['gt/']
+    # cfg.DATASETS.TRAIN = ['train/']
+    # cfg.DATASETS.TEST = ['test/']
+    cfg.DATASETS.TRAIN = ['update/']
+    cfg.DATASETS.TEST = ['gt/']
     cfg.CUSTOM_IGNORE_PROB = 1.0
 
 
