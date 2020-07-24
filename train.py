@@ -70,7 +70,8 @@ cfg.SOLVER.BASE_LR = 0.0025
 cfg.SOLVER.WARMUP_ITERS = 1000
 cfg.SOLVER.STEPS = (60000, 72000)
 cfg.SOLVER.MAX_ITER = 80000
-cfg.SOLVER.CHECKPOINT_PERIOD = 4000
+# cfg.SOLVER.CHECKPOINT_PERIOD = 4000
+cfg.SOLVER.CHECKPOINT_PERIOD = 2000
 
 cfg.CUSTOM_CLS_LOSS_FACTOR = 1.0
 
@@ -93,15 +94,13 @@ if config.train_update:
     cfg.CUSTOM_IGNORE_PROB = 0.5
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
-# else:
-#     cfg.DATASETS.TRAIN = ['train/']
-#     cfg.DATASETS.TEST = ['test/']
-#     cfg.CUSTOM_IGNORE_PROB = 1.0
-
 else:
-    cfg.DATASETS.TRAIN = ['update/']
-    cfg.DATASETS.TEST = ['gt/']
+    cfg.DATASETS.TRAIN = ['train/']
+    cfg.DATASETS.TEST = ['test/']
+    # cfg.DATASETS.TRAIN = ['update/']
+    # cfg.DATASETS.TEST = ['gt/']
     cfg.CUSTOM_IGNORE_PROB = 1.0
+
 
 for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
     DatasetCatalog.register(datasets_dir, lambda datasets_dir=datasets_dir: get_dicts(
