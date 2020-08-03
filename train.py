@@ -70,15 +70,15 @@ cfg.SOLVER.BASE_LR = 0.0025
 cfg.SOLVER.WARMUP_ITERS = 1000
 cfg.SOLVER.STEPS = (60000, 72000)
 cfg.SOLVER.MAX_ITER = 80000
-# cfg.SOLVER.CHECKPOINT_PERIOD = 4000
-cfg.SOLVER.CHECKPOINT_PERIOD = 10000
+cfg.SOLVER.CHECKPOINT_PERIOD = 4000
+# cfg.SOLVER.CHECKPOINT_PERIOD = 10000
 
 cfg.CUSTOM_CLS_LOSS_FACTOR = 1.0
 
 cfg.OUTPUT_DIR = config.project_dir+'outputs/'
 
-# cfg.TEST.EVAL_PERIOD = cfg.SOLVER.CHECKPOINT_PERIOD
-cfg.TEST.EVAL_PERIOD = 2000
+cfg.TEST.EVAL_PERIOD = cfg.SOLVER.CHECKPOINT_PERIOD
+# cfg.TEST.EVAL_PERIOD = 2000
 
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
 
@@ -96,12 +96,11 @@ if config.train_update:
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
 else:
-    # cfg.DATASETS.TRAIN = ['init_train/']
-    # cfg.DATASETS.TEST = ['init_test/']
+    cfg.DATASETS.TRAIN = ['init_train/']
+    cfg.DATASETS.TEST = ['init_test/']
     # cfg.DATASETS.TRAIN = ['update/']
-    cfg.DATASETS.TRAIN = ['update_no_background/']
-    cfg.DATASETS.TEST = ['init/']
-    cfg.CUSTOM_IGNORE_PROB = 1.0
+    # cfg.DATASETS.TRAIN = ['update_no_background/']
+    # cfg.DATASETS.TEST = ['init/']
 
 
 for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:

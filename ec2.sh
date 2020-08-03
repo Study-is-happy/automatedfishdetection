@@ -1,4 +1,4 @@
-ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com
+ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com
 
 # cat << EOF | sudo tee --append /etc/modprobe.d/blacklist.conf
 # blacklist vga16fb
@@ -29,7 +29,7 @@ ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-218-69-214
 # virtualenv venv
 # cd venv
 # source bin/activate
-pip install numpy
+# pip install numpy
 pip install torch==1.3.1 torchvision==0.4.2
 pip install opencv-python
 pip install Pillow==6.1
@@ -48,28 +48,28 @@ cd ..
 python init.py
 
 # upload update_instances to ec2
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update/instances.json ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/update/instances.json
 
 # upload update.zip to ec2
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/update.zip ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/
 
 # unzip update
 unzip update.zip
 
 # upload model.pth to ec2
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/outputs/model_5.pth ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ~/datasets/fish_detection/outputs/model_0.pth ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/
 
 # download metrics.json to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/metrics.json ~/datasets/fish_detection/outputs/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/metrics.json ~/datasets/fish_detection/outputs/
 
  # download model.pth to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_0079999.pth ~/datasets/fish_detection/outputs/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/outputs/model_0079999.pth ~/datasets/fish_detection/outputs/
 
 # zip predict
 zip -r predict.zip predict/
 
 # download predict.zip to local
-scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-18-218-69-214.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
+scp -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-128-171-163.us-east-2.compute.amazonaws.com:~/fish_detection/predict.zip ~/datasets/fish_detection/
 
 # nohup
 nohup python train.py > nohup.out 2>&1 &
