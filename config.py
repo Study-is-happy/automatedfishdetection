@@ -20,7 +20,7 @@ categories = ['fish', 'starfish', 'sponge', 'background']
 
 num_categories = len(categories)-1
 
-train_update = False
+train_update = True
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
