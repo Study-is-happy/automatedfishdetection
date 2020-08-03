@@ -51,7 +51,7 @@ cfg = get_cfg()
 cfg.merge_from_file(
     'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
 
-cfg.MODEL.PROPOSAL_GENERATOR.NAME = 'my_RPN'
+# cfg.MODEL.PROPOSAL_GENERATOR.NAME = 'my_RPN'
 cfg.MODEL.RESNETS.NORM = 'GN'
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
 cfg.MODEL.ROI_BOX_HEAD.NORM = 'GN'
@@ -71,14 +71,12 @@ cfg.SOLVER.WARMUP_ITERS = 1000
 cfg.SOLVER.STEPS = (60000, 72000)
 cfg.SOLVER.MAX_ITER = 80000
 cfg.SOLVER.CHECKPOINT_PERIOD = 4000
-# cfg.SOLVER.CHECKPOINT_PERIOD = 10000
 
 cfg.CUSTOM_CLS_LOSS_FACTOR = 1.0
 
 cfg.OUTPUT_DIR = config.project_dir+'outputs/'
 
 cfg.TEST.EVAL_PERIOD = cfg.SOLVER.CHECKPOINT_PERIOD
-# cfg.TEST.EVAL_PERIOD = 2000
 
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
 
