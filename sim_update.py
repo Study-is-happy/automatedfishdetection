@@ -41,7 +41,7 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
 
                         gt_instance = gt_instances[image_id]
 
-                        best_iou = 0.1
+                        best_iou = 0.3
                         best_gt_bbox = None
 
                         for gt_bbox in gt_instance['annotations']:
