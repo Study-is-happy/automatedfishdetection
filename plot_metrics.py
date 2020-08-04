@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 import config
 
-metrics_path = config.project_dir+'outputs/metrics.json'
+metrics_with_background = config.project_dir + \
+    'outputs/metrics_with_background.json'
 metrics_no_background = config.project_dir+'outputs/metrics_no_background.json'
 
 
@@ -44,7 +45,7 @@ def get_metrics_arrays(metrics_path):
 
 
 iteration_array, precision_arrays, recall_arrays = get_metrics_arrays(
-    metrics_path)
+    metrics_with_background)
 iteration_array_no_background, precision_no_background_arrays, recall_no_background_arrays = get_metrics_arrays(
     metrics_no_background)
 
