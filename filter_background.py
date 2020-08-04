@@ -7,11 +7,11 @@ import util
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'gt/'
+dataset_dir = config.project_dir+'update_no_background/'
 
 ###########################################################################
 
-instances_file_path = dataset_dir+'final_instances.json'
+instances_file_path = dataset_dir+'instances.json'
 
 with open(instances_file_path) as instances_file:
     instances = json.load(instances_file)
