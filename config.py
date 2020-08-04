@@ -22,7 +22,7 @@ num_categories = len(categories)-1
 
 train_update = True
 
-MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_1.pth'
+MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
 MODEL_ROI_HEADS_SCORE_THRESH_TEST = 0.7
 MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.7
