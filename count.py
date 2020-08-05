@@ -5,7 +5,7 @@ import config
 
 # TODO: Set the path
 
-instances_file_path = config.project_dir+'update/instances.json'
+instances_file_path = config.project_dir+'gt/instances.json'
 
 ###########################################################################
 
