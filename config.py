@@ -1,6 +1,6 @@
 # TODO
 
-remote = True
+remote = False
 
 ###########################################################################
 
@@ -17,6 +17,13 @@ else:
     INPUT_MIN_SIZE_TRAIN = (128,)
 
 categories = ['fish', 'starfish', 'sponge', 'background']
+lynker_categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
+                     'poacher_unid', 'sandpaper_skate', 'slender_sole', 'flatfish_unid', 'roundfish_unid',
+                     'english_sole', 'sharpchin_rockfish', 'lingcod', 'yellowtail_rockfish', 'spotted_ratfish',
+                     'longnose_skate', 'shortspine_thornyhead', 'darkblotched_rockfish', 'arrowtooth_flounder', 'petrale_sole',
+                     'rosethorn_rockfish', 'pacific_ocean_perch', 'thornydead_unid', 'thornyhead_unid', 'fish_unid',
+                     'sablefish',
+                     'background']
 
 num_categories = len(categories)-1
 
