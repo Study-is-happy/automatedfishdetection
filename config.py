@@ -12,7 +12,7 @@ if remote:
 
     INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 else:
-    project_dir = '/home/zhiyongzhang/datasets/fish_detection/'
+    project_dir = '/data/fish_detection/'
 
     INPUT_MIN_SIZE_TRAIN = (128,)
 
@@ -24,10 +24,12 @@ lynker_categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 're
                      'rosethorn_rockfish', 'pacific_ocean_perch', 'thornydead_unid', 'thornyhead_unid', 'fish_unid',
                      'sablefish',
                      'background']
+                     
+seagate_categories = []                 
 
 num_categories = len(categories)-1
 
-train_update = True
+train_update = False
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0.pth'
 
