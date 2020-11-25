@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-src_dataset_dir = '/media/zhiyongzhang/Seagate Desktop Drive/AUV_images_fcts/'
+src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/RL-16_06/'
 
 des_dataset_dir = config.project_dir+'seagate/'
 
