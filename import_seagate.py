@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/RL-16_06/'
+src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/'
 
 des_dataset_dir = config.project_dir+'seagate/'
 
@@ -26,23 +26,8 @@ else:
 
 categories = set()
 
-
-def traverse_dir(dir_path):
-    for root_path, dirs, files in os.walk(dir_path):
-
-        for dir_name in dirs:
-            if 'backup' not in dir_name:
-                traverse_dir(os.path.join(root_path, dir_name))
-
-        for file_name in files:
-            if file_name.endswith('fct'):
-                convert_fct_file(os.path.join(root_path, file_name))
-
-
-test_count = 0
-
-
 def convert_fct_file(file_path):
+
     with open(file_path) as annotation_file:
 
         for annotation_line in annotation_file.readlines():
@@ -51,8 +36,9 @@ def convert_fct_file(file_path):
                 annotation_line = annotation_line.split(',')
 
                 if len(annotation_line) < 18:
+                    pass
                     # print(file_path)
-                    print(annotation_line)
+                    # print(annotation_line)
 
                 elif annotation_line[13] != '':
 
@@ -63,10 +49,12 @@ def convert_fct_file(file_path):
                             'width': int(annotation_line[7]), 'height': int(annotation_line[8]), 'annotations': []}
 
                     instance = instances[image_id]
+                    
+                    category = annotation_line[10]
 
-                    annotation = {'category_id': annotation_line[10]}
+                    annotation = {'category_id': config.seagate_categories.index(category)}
 
-                    categories.add(annotation_line[10])
+                    categories.add(category)
 
                     annotation['bbox'] = [float(annotation_line[13]), float(annotation_line[14]),
                                           float(annotation_line[13]), float(annotation_line[14])]
@@ -76,12 +64,15 @@ def convert_fct_file(file_path):
 
                     instance['annotations'].append(annotation)
 
-                    global test_count
-                    test_count += 1
-                    print(test_count)
+for root_path, dir_list, file_list in os.walk(src_dataset_dir):
+    
+    if 'backup' not in root_path:
+    
+        print(root_path)
 
-
-traverse_dir(src_dataset_dir)
+        for file_name in file_list:
+            if file_name.endswith('fct'):
+                convert_fct_file(os.path.join(root_path, file_name))                    
 
 print(categories)
 util.write_json_file(instances, des_instances_file_path)

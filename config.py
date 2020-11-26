@@ -25,7 +25,7 @@ lynker_categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 're
                      'sablefish',
                      'background']
                      
-seagate_categories = []                 
+seagate_categories = ['Corals', 'Sponges', 'Invertebrates', 'Roundfish', 'Skates/Sharks', 'Rockfish', 'Flatfish', 'Other', 'Skates']                 
 
 num_categories = len(categories)-1
 
