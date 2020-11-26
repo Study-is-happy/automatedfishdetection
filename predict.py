@@ -156,6 +156,3 @@ with open(config.project_dir+'predict/annotation_ids.csv', 'a') as annotation_id
         annotation_ids_file.write(str(i) + '\n')
 
 print(print_results)
-
-# if config.remote:
-#     os.system('sudo poweroff')

@@ -126,6 +126,3 @@ if config.train_update:
     checkpoint = trainer.checkpointer._load_file(cfg.MODEL.WEIGHTS)
     trainer.checkpointer._load_model(checkpoint)
 trainer.train()
-
-if config.remote:
-    os.system('sudo poweroff')
