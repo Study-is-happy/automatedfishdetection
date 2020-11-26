@@ -6,17 +6,20 @@ aws_secret_access_key = 'YOcYOzoM93DaljBo93BRxgzN9cCBrYf6cRVSYS3s'
 
 INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
-categories = ['fish', 'starfish', 'sponge', 'background']
-lynker_categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
-                     'poacher_unid', 'sandpaper_skate', 'slender_sole', 'flatfish_unid', 'roundfish_unid',
-                     'english_sole', 'sharpchin_rockfish', 'lingcod', 'yellowtail_rockfish', 'spotted_ratfish',
-                     'longnose_skate', 'shortspine_thornyhead', 'darkblotched_rockfish', 'arrowtooth_flounder', 'petrale_sole',
-                     'rosethorn_rockfish', 'pacific_ocean_perch', 'thornydead_unid', 'thornyhead_unid', 'fish_unid',
-                     'sablefish',
-                     'background']
+# categories = ['fish', 'starfish', 'sponge', 'background']
+# categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
+#                      'poacher_unid', 'sandpaper_skate', 'slender_sole', 'flatfish_unid', 'roundfish_unid',
+#                      'english_sole', 'sharpchin_rockfish', 'lingcod', 'yellowtail_rockfish', 'spotted_ratfish',
+#                      'longnose_skate', 'shortspine_thornyhead', 'darkblotched_rockfish', 'arrowtooth_flounder', 'petrale_sole',
+#                      'rosethorn_rockfish', 'pacific_ocean_perch', 'thornydead_unid', 'thornyhead_unid', 'fish_unid',
+#                      'sablefish',
+#                      'background']
 
-seagate_categories = ['Corals', 'Sponges', 'Invertebrates', 'Roundfish',
-                      'Skates/Sharks', 'Rockfish', 'Flatfish', 'Other', 'Skates']
+categories = ['Corals', 'Sponges', 'Invertebrates', 'Roundfish',
+              'Skates/Sharks', 'Rockfish', 'Flatfish', 'Other', 'Skates']
+
+colors = ['red', 'orange', 'yellow', 'green',
+          'blue', 'purple', 'pink', 'black', 'white']
 
 num_categories = len(categories)-1
 

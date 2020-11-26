@@ -15,8 +15,6 @@ images_dir = dataset_dir+'images/'
 
 instances_file_path = dataset_dir+'instances.json'
 
-colors = ['red', 'orange', 'white', 'grey']
-
 with open(instances_file_path) as instances_file:
 
     instances_dict = json.load(instances_file)
@@ -30,10 +28,10 @@ for image_id in sorted(instances_dict):
     # if image_id != '20100922.163718.01228':
     #     continue
 
+    instance = instances_dict[image_id]
+
     # if len(instance['annotations']) < 20:
     #     continue
-
-    instance = instances_dict[image_id]
 
     image = mpimg.imread(images_dir+image_id+'.jpg')
 
@@ -52,7 +50,7 @@ for image_id in sorted(instances_dict):
 
         bbox = annotation['bbox']
 
-        color = colors[annotation['category_id']]
+        color = config.colors[annotation['category_id']]
 
         current_axis.add_patch(plt.Rectangle(
             (bbox[0]*width, bbox[1]*height), (bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height, color=color, fill=False, linewidth=3))
