@@ -18,8 +18,8 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 categories = ['Corals', 'Sponges', 'Invertebrates', 'Roundfish',
               'Skates/Sharks', 'Rockfish', 'Flatfish', 'Other', 'Skates']
 
-colors = ['red', 'orange', 'yellow', 'green',
-          'blue', 'purple', 'pink', 'black', 'white']
+colors = ['purple', 'white', 'orange', 'blue',
+          'green', 'red', 'pink', 'black', 'yellow']
 
 num_categories = len(categories)-1
 

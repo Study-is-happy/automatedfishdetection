@@ -16,6 +16,8 @@ des_dataset_dir = config.project_dir+'seagate/'
 
 des_instances_file_path = des_dataset_dir+'instances.json'
 
+init_box_size = 30
+
 instances = {}
 
 categories = set()
@@ -60,8 +62,8 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                                 categories.add(category)
 
-                                annotation['bbox'] = [float(annotation_line[13]), instance['height']-float(annotation_line[14]),
-                                                      float(annotation_line[13]), instance['height']-float(annotation_line[14])]
+                                annotation['bbox'] = [float(annotation_line[13])-init_box_size, instance['height']-float(annotation_line[14])-init_box_size,
+                                                      float(annotation_line[13])+init_box_size, instance['height']-float(annotation_line[14])+init_box_size]
 
                                 util.abs_to_rel(
                                     annotation['bbox'], instance['width'], instance['height'])
