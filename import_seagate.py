@@ -60,8 +60,8 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                                 categories.add(category)
 
-                                annotation['bbox'] = [float(annotation_line[13]), float(annotation_line[14]),
-                                                      float(annotation_line[13]), float(annotation_line[14])]
+                                annotation['bbox'] = [float(annotation_line[13]), instance['height']-float(annotation_line[14]),
+                                                      float(annotation_line[13]), instance['height']-float(annotation_line[14])]
 
                                 util.abs_to_rel(
                                     annotation['bbox'], instance['width'], instance['height'])
