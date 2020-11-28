@@ -48,6 +48,8 @@
           <select id="categorySelect">
             <option value="" disabled>Choose Species</option>
           </select>
+          <button id="zoomInButton" type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
+          <button id="zoomOutButton" type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
         </div>
         <div id="progressContainer">
           <div id="progressDiv" align="center"></div>
@@ -56,10 +58,6 @@
           <tr>
             <td>
               <button id="prevButton" type="button" class="button" onclick="prev()">Prev</button>
-            </td>
-            <td align="center">
-              <button type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
-              <button type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
             </td>
             <td align="right" id="nextButtonTd">
               <button id="nextButton" type="button" class="button">Next</button>
@@ -74,10 +72,27 @@
         <table border="5" bordercolor="red">
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/fish1.png" alt="fish1" width="120" height="120" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background1.png" alt="background1" width="120" height="120" />
             </td>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/fish2.png" alt="fish2" width="120" height="120" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background2.png" alt="background2" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background3.png" alt="background3" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background4.png" alt="background4" width="120" height="120" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background5.png" alt="background5" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background6.png" alt="background6" width="120" height="120" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/background7.png" alt="background6" width="120" height="120" />
             </td>
           </tr>
         </table>
@@ -188,10 +203,10 @@ categorySelect.onchange = function() {
 
   checkSelect = true
 
-  if (categorySelect.value == categories.length - 1) {
-    boxDiv.style.borderStyle = "solid"
-    checkBox = true
-  }
+  // if (categorySelect.value == categories.length - 1) {
+  //   boxDiv.style.borderStyle = "solid"
+  //   checkBox = true
+  // }
 
   checkNext()
 }
@@ -1080,7 +1095,8 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  // xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  xhr.open("GET", dataSrc + "predict/annotations/0.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
@@ -1211,6 +1227,18 @@ window.onload = function() {
 #categorySelect {
   font-size: 20px;
   position: absolute;
+}
+
+#zoomInButton {
+  position: absolute;
+  right: 12px;
+  bottom: 68px;
+}
+
+#zoomOutButton {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
 }
 
 #progressContainer {

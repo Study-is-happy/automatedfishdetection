@@ -48,6 +48,8 @@
           <select id="categorySelect">
             <option value="" disabled>Choose Species</option>
           </select>
+          <button id="zoomInButton" type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
+          <button id="zoomOutButton" type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
         </div>
         <div id="progressContainer">
           <div id="progressDiv" align="center"></div>
@@ -56,10 +58,6 @@
           <tr>
             <td>
               <button id="prevButton" type="button" class="button" onclick="prev()">Prev</button>
-            </td>
-            <td align="center">
-              <button type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
-              <button type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
             </td>
             <td align="right" id="nextButtonTd">
               <button id="nextButton" type="button" class="button">Next</button>
@@ -1142,7 +1140,8 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  // xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  xhr.open("GET", dataSrc + "predict/annotations/0.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
@@ -1273,6 +1272,18 @@ window.onload = function() {
 #categorySelect {
   font-size: 20px;
   position: absolute;
+}
+
+#zoomInButton {
+  position: absolute;
+  right: 12px;
+  bottom: 68px;
+}
+
+#zoomOutButton {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
 }
 
 #progressContainer {
