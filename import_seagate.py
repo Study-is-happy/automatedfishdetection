@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import PIL.Image
 
 import util
 import config
@@ -16,17 +17,23 @@ des_dataset_dir = config.project_dir+'seagate/'
 
 des_instances_file_path = des_dataset_dir+'instances.json'
 
-init_box_size = 30
+init_box_size = 40
 
 instances = {}
 
 categories = set()
 
+
+def is_port_dir(root_path):
+
+    parent_dir_name, dir_name = os.path.split(root_path)
+
+    return (dir_name == 'port_rectified') and ('backup' not in parent_dir_name)
+
+
 for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
-    if 'backup' not in root_path:
-
-        # print(root_path)
+    if is_port_dir(root_path):
 
         for file_name in file_list:
 
@@ -70,15 +77,27 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                                 instance['annotations'].append(annotation)
 
+print(categories)
+util.write_json_file(instances, des_instances_file_path)
+
+des_images_dir = des_dataset_dir+'images/'
+des_empty_images_dir = des_dataset_dir+'empty_images/'
 
 for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
-    for file_name in file_list:
-        split_file_name = os.path.splitext(file_name)
-        if split_file_name[0] in instances:
-            if split_file_name[1] == '.jpg':
-                shutil.copy(os.path.join(root_path, file_name),
-                            des_dataset_dir+'images/')
+    if is_port_dir(root_path):
 
-print(categories)
-util.write_json_file(instances, des_instances_file_path)
+        for file_name in file_list:
+            image_id, extension = os.path.splitext(file_name)
+            file_path = os.path.join(root_path, file_name)
+            if extension == '.jpg':
+                if image_id in instances:
+                    shutil.copy(file_path, des_images_dir)
+                else:
+                    shutil.copy(file_path, des_empty_images_dir)
+            elif extension == '.tif':
+                image = PIL.Image.open(file_path)
+                if image_id in instances:
+                    image.save(des_images_dir+image_id+'.jpg', "JPEG")
+                else:
+                    image.save(des_empty_images_dir+image_id+'.jpg', "JPEG")

@@ -19,6 +19,6 @@ with open(instances_file_path) as instances_file:
         print_results['images'] += 1
 
         for annotation in instance['annotations']:
-            print_results[config.seagate_categories[annotation['category_id']]] += 1
+            print_results[config.categories[annotation['category_id']]] += 1
 
 print(print_results)
