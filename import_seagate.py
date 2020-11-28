@@ -82,24 +82,24 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 print(categories)
 util.write_json_file(instances, des_instances_file_path)
 
-des_images_dir = des_dataset_dir+'images/'
-des_empty_images_dir = des_dataset_dir+'empty_images/'
+# des_images_dir = des_dataset_dir+'images/'
+# des_empty_images_dir = des_dataset_dir+'empty_images/'
 
-for root_path, dir_list, file_list in os.walk(src_dataset_dir):
+# for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
-    if is_port_dir(root_path):
+#     if is_port_dir(root_path):
 
-        for file_name in file_list:
-            image_id, extension = os.path.splitext(file_name)
-            file_path = os.path.join(root_path, file_name)
-            if extension == '.jpg':
-                if image_id in instances:
-                    shutil.copy(file_path, des_images_dir)
-                else:
-                    shutil.copy(file_path, des_empty_images_dir)
-            elif extension == '.tif':
-                image = PIL.Image.open(file_path)
-                if image_id in instances:
-                    image.save(des_images_dir+image_id+'.jpg', "JPEG")
-                else:
-                    image.save(des_empty_images_dir+image_id+'.jpg', "JPEG")
+#         for file_name in file_list:
+#             image_id, extension = os.path.splitext(file_name)
+#             file_path = os.path.join(root_path, file_name)
+#             if extension == '.jpg':
+#                 if image_id in instances:
+#                     shutil.copy(file_path, des_images_dir)
+#                 else:
+#                     shutil.copy(file_path, des_empty_images_dir)
+#             elif extension == '.tif':
+#                 image = PIL.Image.open(file_path)
+#                 if image_id in instances:
+#                     image.save(des_images_dir+image_id+'.jpg', "JPEG")
+#                 else:
+#                     image.save(des_empty_images_dir+image_id+'.jpg', "JPEG")
