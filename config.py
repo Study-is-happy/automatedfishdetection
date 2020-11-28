@@ -6,7 +6,7 @@ aws_secret_access_key = 'YOcYOzoM93DaljBo93BRxgzN9cCBrYf6cRVSYS3s'
 
 INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
-# categories = ['fish', 'starfish', 'sponge', 'background']
+categories = ['fish', 'starfish', 'sponge', 'background']
 # categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
 #                      'poacher_unid', 'sandpaper_skate', 'slender_sole', 'flatfish_unid', 'roundfish_unid',
 #                      'english_sole', 'sharpchin_rockfish', 'lingcod', 'yellowtail_rockfish', 'spotted_ratfish',
@@ -17,7 +17,7 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
 #               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-categories = ['rockfish']
+# categories = ['rockfish']
 
 # colors = ['purple', 'white', 'orange', 'blue',
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']
