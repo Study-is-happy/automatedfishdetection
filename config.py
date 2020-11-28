@@ -1,4 +1,4 @@
-project_dir = '/data/fish_detection/seagate/'
+project_dir = '/data/fish_detection/pacstorm_pmfs/'
 # project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
 aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'

@@ -8,8 +8,8 @@ from detectron2.engine import DefaultTrainer
 from detectron2.structures import BoxMode
 from detectron2.utils.logger import setup_logger
 
-from my_rpn import my_RPN
-from my_dataset_mapper import DatasetMapper
+from my_detectron2.my_rpn import my_RPN
+from my_detectron2.my_dataset_mapper import DatasetMapper
 from evaluator import Evaluator
 
 import util
