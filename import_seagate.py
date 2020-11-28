@@ -8,7 +8,7 @@ import config
 
 # TODO: Set the dirs
 
-src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/'
+src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/RL-16_06/'
 # src_dataset_dir = '/home/zhiyongzhang/datasets/seagate/'
 
 des_dataset_dir = config.project_dir+'seagate/'
@@ -95,11 +95,11 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
             if extension == '.jpg':
                 if image_id in instances:
                     shutil.copy(file_path, des_images_dir)
-                else:
-                    shutil.copy(file_path, des_empty_images_dir)
+                # else:
+                #     shutil.copy(file_path, des_empty_images_dir)
             elif extension == '.tif':
                 image = PIL.Image.open(file_path)
                 if image_id in instances:
                     image.save(des_images_dir+image_id+'.jpg', "JPEG")
-                else:
-                    image.save(des_empty_images_dir+image_id+'.jpg', "JPEG")
+                # else:
+                #     image.save(des_empty_images_dir+image_id+'.jpg', "JPEG")
