@@ -12,9 +12,19 @@ results_path = config.project_dir+'results/results2_20.csv'
 ###########################################################################
 
 gt_indexes = [9]
+
 iou_threshold = 0.85
 abs_timer_threshold = 15
 approve_rate = 0.8
+
+# iou_threshold = 0.6
+# abs_timer_threshold = 0
+# approve_rate = 0.5
+
+
+def calc_timer(edge_timer, corner_timer):
+    return edge_timer + corner_timer*1.5
+
 
 print_results = {'approve': 0, 'reject': 0}
 
@@ -101,7 +111,7 @@ with open(results_path) as results_file:
 
                         approved_gt_indexes.append(index)
 
-                        gt_timer = util.calc_timer(
+                        gt_timer = calc_timer(
                             result_annotation['edge_timer'], result_annotation['corner_timer'])
 
                         for unchecked_index in unchecked_indexes:
@@ -112,7 +122,7 @@ with open(results_path) as results_file:
 
                             if result_annotation['category_id'] != len(config.categories)-1:
 
-                                result_timer = util.calc_timer(
+                                result_timer = calc_timer(
                                     result_annotation['edge_timer'], result_annotation['corner_timer'])
                                 if result_timer < min(abs_timer_threshold, gt_timer):
                                     approve = False

@@ -1,5 +1,5 @@
-project_dir = '/data/fish_detection/seagate/'
-# project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
+# project_dir = '/data/fish_detection/seagate/'
+project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
 aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'
 aws_secret_access_key = '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'
