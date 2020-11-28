@@ -11,7 +11,7 @@ from detectron2.modeling.box_regression import Box2BoxTransform
 from detectron2.modeling.matcher import Matcher
 from detectron2.modeling.proposal_generator.build import PROPOSAL_GENERATOR_REGISTRY
 from detectron2.modeling.proposal_generator.rpn_outputs import RPNOutputs, find_top_rpn_proposals
-from my_rpn_outputs import my_RPNOutputs, my_find_top_rpn_proposals
+from my_detectron2.my_rpn_outputs import my_RPNOutputs, my_find_top_rpn_proposals
 
 from detectron2.modeling.proposal_generator.rpn import build_rpn_head
 
