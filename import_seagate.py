@@ -75,6 +75,8 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
                                 util.abs_to_rel(
                                     annotation['bbox'], instance['width'], instance['height'])
 
+                                util.norm_rel_bbox(annotation['bbox'])
+
                                 instance['annotations'].append(annotation)
 
 print(categories)
