@@ -8,7 +8,7 @@ from PIL import Image
 
 from detectron2.data import transforms as T
 
-import my_detection_utils as utils
+import my_detectron2.my_detection_utils as utils
 
 """
 This file contains the default mapping that's applied to "dataset dicts".
