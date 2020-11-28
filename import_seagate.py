@@ -53,31 +53,33 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                             elif annotation_line[13] != '':
 
-                                image_id = os.path.splitext(
-                                    annotation_line[3])[0]
-
-                                if image_id not in instances:
-                                    instances[image_id] = {
-                                        'width': int(annotation_line[7]), 'height': int(annotation_line[8]), 'annotations': []}
-
-                                instance = instances[image_id]
-
                                 category = annotation_line[10]
-
-                                annotation = {
-                                    'category_id': config.categories.index(category)}
 
                                 categories.add(category)
 
-                                annotation['bbox'] = [float(annotation_line[13])-init_box_size, instance['height']-float(annotation_line[14])-init_box_size,
-                                                      float(annotation_line[13])+init_box_size, instance['height']-float(annotation_line[14])+init_box_size]
+                                if category in config.categories:
 
-                                util.abs_to_rel(
-                                    annotation['bbox'], instance['width'], instance['height'])
+                                    image_id = os.path.splitext(
+                                        annotation_line[3])[0]
 
-                                util.norm_rel_bbox(annotation['bbox'])
+                                    if image_id not in instances:
+                                        instances[image_id] = {
+                                            'width': int(annotation_line[7]), 'height': int(annotation_line[8]), 'annotations': []}
 
-                                instance['annotations'].append(annotation)
+                                    instance = instances[image_id]
+
+                                    annotation = {
+                                        'category_id': config.categories.index(category)}
+
+                                    annotation['bbox'] = [float(annotation_line[13])-init_box_size, instance['height']-float(annotation_line[14])-init_box_size,
+                                                          float(annotation_line[13])+init_box_size, instance['height']-float(annotation_line[14])+init_box_size]
+
+                                    util.abs_to_rel(
+                                        annotation['bbox'], instance['width'], instance['height'])
+
+                                    util.norm_rel_bbox(annotation['bbox'])
+
+                                    instance['annotations'].append(annotation)
 
 print(categories)
 util.write_json_file(instances, des_instances_file_path)
