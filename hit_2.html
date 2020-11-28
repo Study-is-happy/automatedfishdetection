@@ -46,7 +46,7 @@
             </div>
           </div>
           <select id="categorySelect">
-            <option value="" disabled>Choose Species</option>
+            <!-- <option value="" disabled>Choose Species</option> -->
           </select>
           <button id="zoomInButton" type="button" class="button" onclick="zoomIn()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_in.png" alt="zoom_in" width="32" height="32" /></button>
           <button id="zoomOutButton" type="button" class="button" onclick="zoomOut()"><img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/zoom_out.png" alt="zoom_out" width="32" height="32" /></button>
@@ -110,7 +110,7 @@ const categories = [
   { "name": "rockfish", "color": "red" }
 ]
 
-const tutorialModalTexts = ["Step1: Choose Species", "Step2: Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Step3: Some objects overlap, labeling the unlabeled one"]
+const tutorialModalTexts = ["Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Some objects overlap, labeling the unlabeled one"]
 
 const workspaceWidth = window.innerHeight - 150
 
@@ -173,7 +173,7 @@ userAgentInput.value = navigator.userAgent
 
 function nextTutorialModal() {
   tutorialModalText.innerHTML = tutorialModalTexts[tutorialIndex]
-  tutorialModalVideoSource.src = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/tutorial_step" + (tutorialIndex + 1) + ".mp4"
+  tutorialModalVideoSource.src = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/tutorial_step" + (tutorialIndex + 2) + ".mp4"
   tutorialModalVideo.load()
   if (tutorialIndex === tutorialModalTexts.length - 1) {
     tutorialModalButton.innerHTML = "Finish"
@@ -291,6 +291,8 @@ function display() {
       categorySelect.style.opacity = 1
       boxDiv.style.opacity = 1
     }
+    categorySelect.value = "0";
+    categorySelect.onchange();
   } else {
     boxDiv.style.borderStyle = "solid"
     boxDiv.style.borderColor = categories[categorySelect.value]["color"]
