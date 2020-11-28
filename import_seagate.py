@@ -53,7 +53,7 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                             elif annotation_line[13] != '':
 
-                                category = annotation_line[10]
+                                category = annotation_line[10].lower()
 
                                 categories.add(category)
 
