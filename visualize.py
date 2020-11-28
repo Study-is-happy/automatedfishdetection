@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'seagate/'
+dataset_dir = config.project_dir+'raw/'
 
 ###########################################################################
 
@@ -44,12 +44,7 @@ for image_id in sorted(instances_dict):
 
     current_axis = plt.gca()
 
-    exist_category = False
-
     for annotation in instance['annotations']:
-
-        if config.categories[annotation['category_id']] == 'Skates/Sharks':
-            exist_category = True
 
         bbox = annotation['bbox']
 
@@ -61,7 +56,4 @@ for image_id in sorted(instances_dict):
         plt.text(bbox[0]*width, bbox[1]*height-3,
                  config.categories[annotation['category_id']], color='white', size=30, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
-    if exist_category:
-        plt.show()
-    else:
-        plt.close()
+    plt.show()
