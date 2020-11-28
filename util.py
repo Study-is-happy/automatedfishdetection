@@ -103,14 +103,9 @@ def calc_timer(edge_timer, corner_timer):
     return edge_timer + corner_timer*1.5
 
 
-def easy_annotation_generator(instances):
+def easy_gt_annotation_generator(instances):
     while True:
-
         for image_id, instance in instances.items():
-            width = instance['width']
-            height = instance['height']
             for annotation in instance['annotations']:
-
-                if annotation['difficult'] == 0:
-                    yield {'image_id': image_id, 'width': width, 'height': height, 'category_id': annotation['category_id'], 'score': 1,
-                           'bbox': annotation['bbox']}
+                yield {'image_id': image_id, 'width': instance['width'], 'height': instance['height'], 'category_id': annotation['category_id'], 'score': 1,
+                       'bbox': annotation['bbox']}

@@ -43,7 +43,7 @@ with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
 with open(config.project_dir+'easy/instances.json') as easy_instances_file:
-    easy_annotation_generator = util.easy_annotation_generator(
+    easy_gt_annotation_generator = util.easy_gt_annotation_generator(
         json.load(easy_instances_file))
 
 cache_annotations = []
@@ -131,11 +131,11 @@ for image_file_name in os.listdir(images_dir):
                 current_annotations = cache_annotations[:predict_per_file]
 
                 for gt_index in gt_indexes:
-                    easy_annotation = next(easy_annotation_generator)
-                    shutil.copy(config.project_dir+'easy/images/'+easy_annotation['image_id']+'.jpg',
+                    easy_gt_annotation = next(easy_gt_annotation_generator)
+                    shutil.copy(config.project_dir+'easy/images/'+easy_gt_annotation['image_id']+'.jpg',
                                 config.project_dir+'predict/images/')
                     current_annotations.insert(
-                        gt_index, easy_annotation)
+                        gt_index, easy_gt_annotation)
 
                 util.write_json_file(
                     current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
