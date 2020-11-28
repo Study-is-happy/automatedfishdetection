@@ -5,11 +5,9 @@ import util
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
-    # gt_instances = json.load(update_instances_file)
 
 with open(config.project_dir+'fake_gt/instances.json') as gt_instances_file:
     gt_instances = json.load(gt_instances_file)
-    # update_instances = json.load(gt_instances_file)
 
 n_pos_list = []
 n_true_pos_list = []
