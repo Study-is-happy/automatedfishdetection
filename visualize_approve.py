@@ -14,8 +14,6 @@ results_approve_path = config.project_dir + \
 
 ###########################################################################
 
-colors = ['red', 'orange', 'white', 'grey']
-
 predict_dir = config.project_dir+'predict/'
 
 with open(results_approve_path) as results_approve_file:
@@ -63,8 +61,8 @@ with open(results_approve_path) as results_approve_file:
 
             height = image.shape[0]
 
-            predict_color = colors[predict_annotation['category_id']]
-            result_color = colors[result_annotation['category_id']]
+            predict_color = config.colors[predict_annotation['category_id']]
+            result_color = config.colors[result_annotation['category_id']]
 
             predict_bbox = predict_annotation['bbox']
             result_bbox = result_annotation['bbox']

@@ -15,8 +15,6 @@ images_dir = dataset_dir+'images/'
 
 instances_file_path = dataset_dir+'instances.json'
 
-colors = ['red', 'orange', 'white', 'grey']
-
 with open(instances_file_path) as instances_file:
 
     instances_dict = json.load(instances_file)
@@ -54,7 +52,7 @@ for image_id in instances_dict:
 
         bbox = annotation['bbox']
 
-        color = colors[annotation['category_id']]
+        color = config.colors[annotation['category_id']]
 
         if 'score' in annotation:
             linestyle = 'dashed'
