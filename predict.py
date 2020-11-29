@@ -42,7 +42,7 @@ predictor = DefaultPredictor(cfg)
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
-with open(config.project_dir+'easy/instances.json') as easy_instances_file:
+with open(config.project_dir+'easy_gt/instances.json') as easy_instances_file:
     easy_gt_annotation_generator = util.easy_gt_annotation_generator(
         json.load(easy_instances_file))
 
@@ -132,7 +132,7 @@ for image_file_name in os.listdir(images_dir):
 
                 for gt_index in gt_indexes:
                     easy_gt_annotation = next(easy_gt_annotation_generator)
-                    shutil.copy(config.project_dir+'easy/images/'+easy_gt_annotation['image_id']+'.jpg',
+                    shutil.copy(config.project_dir+'gt_easy/images/'+easy_gt_annotation['image_id']+'.jpg',
                                 config.project_dir+'predict/images/')
                     current_annotations.insert(
                         gt_index, easy_gt_annotation)
