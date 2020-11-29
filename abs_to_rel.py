@@ -5,7 +5,7 @@ import util
 
 # TODO: Set the dir
 
-dataset_dir = config.project_dir+'samson_easy_gt/'
+dataset_dir = config.project_dir+'easy_gt/'
 
 ###########################################################################
 
