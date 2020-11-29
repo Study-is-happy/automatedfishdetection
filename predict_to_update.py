@@ -3,7 +3,7 @@ import json
 import config
 import util
 
-easy_annotation_indexes = [9]
+easy_gt_annotation_indexes = [9]
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
@@ -18,7 +18,7 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
             predict_annotations = json.load(predict_annotations_file)
 
             for index, predict_annotation in enumerate(predict_annotations):
-                if index not in easy_annotation_indexes:
+                if index not in easy_gt_annotation_indexes:
 
                     image_id = predict_annotation['image_id']
 

@@ -4,7 +4,7 @@ import config
 import util
 
 print_results = {'fish': 0, 'starfish': 0, 'sponge': 0, 'background': 0}
-easy_annotation_indexes = [9]
+easy_gt_annotation_indexes = [9]
 
 with open(config.project_dir+'gt/instances.json') as gt_instances_file:
     gt_instances = json.load(gt_instances_file)
@@ -22,7 +22,7 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
             predict_annotations = json.load(predict_annotations_file)
 
             for index, predict_annotation in enumerate(predict_annotations):
-                if index not in easy_annotation_indexes:
+                if index not in easy_gt_annotation_indexes:
 
                     image_id = predict_annotation['image_id']
 

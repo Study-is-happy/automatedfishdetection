@@ -18,9 +18,9 @@ predict_per_file = annotation_per_file-len(gt_indexes)
 with open(config.project_dir+'predict/annotations/cache.json') as cache_annotations_file:
     cache_annotations = json.load(cache_annotations_file)
 
-with open(config.project_dir+'easy/instances.json') as easy_instances_file:
-    easy_annotation_generator = util.easy_annotation_generator(
-        json.load(easy_instances_file))
+with open(config.project_dir+'easy_gt/instances.json') as easy_gt_instances_file:
+    easy_gt_annotation_generator = util.easy_gt_annotation_generator(
+        json.load(easy_gt_instances_file))
 
 with open(config.project_dir+'predict/annotation_ids.csv') as annotation_ids_file:
     annotation_id = int(annotation_ids_file.readlines()[-1])+1
@@ -59,9 +59,9 @@ with open(results_approve_path) as results_approve_file:
             current_annotations = cache_annotations[:predict_per_file]
 
             for gt_index in gt_indexes:
-                easy_annotation = next(easy_annotation_generator)
+                easy_gt_annotation = next(easy_gt_annotation_generator)
                 current_annotations.insert(
-                    gt_index, easy_annotation)
+                    gt_index, easy_gt_annotation)
 
             util.write_json_file(
                 current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
