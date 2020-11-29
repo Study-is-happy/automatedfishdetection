@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'raw/'
+dataset_dir = config.project_dir+'samson_easy_gt/'
 
 ###########################################################################
 
