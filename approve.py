@@ -7,11 +7,9 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/results2_20.csv'
+results_path = config.project_dir+'results/results_rockfish_1.csv'
 
 ###########################################################################
-
-gt_indexes = [9]
 
 iou_threshold = 0.85
 abs_timer_threshold = 15
@@ -20,6 +18,8 @@ approve_rate = 0.8
 # iou_threshold = 0.6
 # abs_timer_threshold = 0
 # approve_rate = 0.5
+
+gt_indexes = [9]
 
 
 def calc_timer(edge_timer, corner_timer):
@@ -86,12 +86,12 @@ with open(results_path) as results_file:
                     gt_bbox = gt_annotation['bbox']
                     result_bbox = result_annotation['bbox']
 
-                    gt_width = gt_bbox[2]-gt_bbox[0]
-                    gt_height = gt_bbox[3]-gt_bbox[1]
-
-                    if util.get_bboxes_iou(result_bbox, gt_bbox) < iou_threshold:
+                    if util.get_bboxes_iou(gt_bbox, result_bbox) < iou_threshold:
                         approve = False
-                        reject_reasons.add('Bounding box not fitting well')
+                        reject_reasons.add('Bounding box not fitting tightly')
+
+                    # gt_width = gt_bbox[2]-gt_bbox[0]
+                    # gt_height = gt_bbox[3]-gt_bbox[1]
 
                     # if result_bbox[0]-gt_bbox[0] > gt_width*inside_threshold \
                     #         or result_bbox[1]-gt_bbox[1] > gt_height*inside_threshold \
