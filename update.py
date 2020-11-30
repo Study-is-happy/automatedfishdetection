@@ -6,12 +6,9 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/results1_1_approve.csv'
+results_path = config.project_dir+'results/rockfish_results_1_approve.csv'
 
 ###########################################################################
-
-print_results = {'fish': 0, 'starfish': 0, 'sponge': 0, 'background': 0}
-
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
@@ -41,9 +38,6 @@ with open(results_path) as results_file:
             else:
                 update_annotations.append({
                     'category_id': result_annotation['category_id'], 'bbox': result_annotation['bbox'], 'difficult': 1})
-                print_results[config.categories[result_annotation['category_id']]] += 1
 
 util.write_json_file(
     update_instances, config.project_dir+'update/instances.json')
-
-print(print_results)
