@@ -1073,16 +1073,22 @@ function checkNext() {
   }
 }
 
-function modifyGtBbox(bbox) {
-  bboxWidth = bbox[2] - bbox[0]
-  bboxHeight = bbox[3] - bbox[1]
-  bbox[0] -= bboxWidth * 0.18
+function modifyGtBbox(gt_annotation) {
+
+  bbox = gt_annotation["bbox"]
+  width = gt_annotation["width"]
+  height = gt_annotation["height"]
+
+  center_x = (bbox[0] + bbox[2])/2
+  center_y = (bbox[1] + bbox[3])/2
+
+  bbox[0] = center_x-40/width
   bbox[0] = norm(bbox[0], 0, 1)
-  bbox[1] -= bboxHeight * 0.18
+  bbox[1] = center_y-40/height
   bbox[1] = norm(bbox[1], 0, 1)
-  bbox[2] += bboxWidth * 0.18
+  bbox[2] = center_x+40/width
   bbox[2] = norm(bbox[2], 0, 1)
-  bbox[3] += bboxHeight * 0.18
+  bbox[3] = center_y+40/height
   bbox[3] = norm(bbox[3], 0, 1)
 }
 
@@ -1096,15 +1102,15 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  // xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
-  xhr.open("GET", dataSrc + "predict/annotations/1.json")
+  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  // xhr.open("GET", dataSrc + "predict/annotations/0.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
       annotations = JSON.parse(xhr.response)
 
       gtIndexes.forEach(function(gtIndex) {
-        modifyGtBbox(annotations[gtIndex]["bbox"])
+        modifyGtBbox(annotations[gtIndex])
       })
 
       annotations.forEach(function(annotation) {
