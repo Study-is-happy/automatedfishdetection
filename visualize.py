@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'easy_gt/'
+dataset_dir = config.project_dir+'update/'
 
 ###########################################################################
 
