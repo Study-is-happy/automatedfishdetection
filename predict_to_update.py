@@ -30,7 +30,7 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
 
                     category_id = config.categories.index('background')
                     update_bboxes.append({'category_id': -1,
-                                          'bbox': predict_annotation['bbox'], 'difficult': 1})
+                                          'bbox': predict_annotation['bbox']})
 
 util.write_json_file(
     update_instances, config.project_dir+'update/instances.json')

@@ -36,8 +36,6 @@ def get_dicts(datasets_dir):
 
         for annotation in instance['annotations']:
 
-            del annotation['difficult']
-
             util.rel_to_abs(annotation['bbox'],
                             instance['width'], instance['height'])
             annotation['bbox_mode'] = BoxMode.XYXY_ABS

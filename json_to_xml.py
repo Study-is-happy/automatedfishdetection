@@ -100,12 +100,6 @@ for image_id, instance in update_instances.items():
         truncated_node_text = xml_document.createTextNode('0')
         truncated_node.appendChild(truncated_node_text)
 
-        difficult_node = xml_document.createElement('difficult')
-        object_node.appendChild(difficult_node)
-        difficult_node_text = xml_document.createTextNode(
-            str(annotation['difficult']))
-        difficult_node.appendChild(difficult_node_text)
-
         bndbox_node = xml_document.createElement('bndbox')
         object_node.appendChild(bndbox_node)
 

@@ -73,9 +73,6 @@ for annotation_file_name in os.listdir(src_annotations_dir):
 
             # annotation['difficult'] = int(
             #     object_node.find('difficult').text)
-            annotation['difficult'] = 1
-
-            # annotation['temp'] = 0
 
             instance['annotations'].append(annotation)
 

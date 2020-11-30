@@ -8,7 +8,7 @@ import util
 # TODO: Set the path
 
 results_approve_path = config.project_dir + \
-    'results/rockfish_results_1_approve.csv'
+    'results/rockfish_results_2_approve.csv'
 
 ###########################################################################
 
