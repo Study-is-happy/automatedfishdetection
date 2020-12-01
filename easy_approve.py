@@ -31,7 +31,7 @@ print_results = {'approve': 0, 'reject': 0}
 results_approve_path_parts = os.path.splitext(results_path)
 
 results_approve_path = results_approve_path_parts[0] + \
-    '_approve'+results_approve_path_parts[1]
+    '_easy_approve'+results_approve_path_parts[1]
 
 with open(results_path) as results_file:
 
