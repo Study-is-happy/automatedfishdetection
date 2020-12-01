@@ -6,7 +6,7 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/rockfish_results_3_approve.csv'
+results_path = config.project_dir+'results/rockfish_results_4_approve.csv'
 
 ###########################################################################
 
