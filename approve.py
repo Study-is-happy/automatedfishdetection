@@ -11,13 +11,11 @@ results_path = config.project_dir+'results/rockfish_results_7.csv'
 
 ###########################################################################
 
-iou_threshold = 0.8
+# iou_threshold = 0.7
+inside_threshold = 0.1
+outside_threshold = 0.14
 abs_timer_threshold = 10
-approve_rate = 0.8
-
-# iou_threshold = 0.6
-# abs_timer_threshold = 0
-# approve_rate = 0.5
+approve_rate = 0.7
 
 gt_indexes = [9]
 
@@ -86,26 +84,26 @@ with open(results_path) as results_file:
                     gt_bbox = gt_annotation['bbox']
                     result_bbox = result_annotation['bbox']
 
-                    if util.get_bboxes_iou(gt_bbox, result_bbox) < iou_threshold:
-                        approve = False
-                        reject_reasons.add('Bounding box not fitting tightly')
-
-                    # gt_width = gt_bbox[2]-gt_bbox[0]
-                    # gt_height = gt_bbox[3]-gt_bbox[1]
-
-                    # if result_bbox[0]-gt_bbox[0] > gt_width*inside_threshold \
-                    #         or result_bbox[1]-gt_bbox[1] > gt_height*inside_threshold \
-                    #         or gt_bbox[2]-result_bbox[2] > gt_width*inside_threshold \
-                    #         or gt_bbox[3]-result_bbox[3] > gt_height*inside_threshold:
-                    #     approve = False
-                    #     reject_reasons.add('Bounding box smaller than object')
-
-                    # if gt_bbox[0]-result_bbox[0] > gt_width*outside_threshold \
-                    #         or gt_bbox[1]-result_bbox[1] > gt_height*outside_threshold \
-                    #         or result_bbox[2]-gt_bbox[2] > gt_width*outside_threshold \
-                    #         or result_bbox[3]-gt_bbox[3] > gt_height*outside_threshold:
+                    # if util.get_bboxes_iou(gt_bbox, result_bbox) < iou_threshold:
                     #     approve = False
                     #     reject_reasons.add('Bounding box not fitting tightly')
+
+                    gt_width = gt_bbox[2]-gt_bbox[0]
+                    gt_height = gt_bbox[3]-gt_bbox[1]
+
+                    if result_bbox[0]-gt_bbox[0] > gt_width*inside_threshold \
+                            or result_bbox[1]-gt_bbox[1] > gt_height*inside_threshold \
+                            or gt_bbox[2]-result_bbox[2] > gt_width*inside_threshold \
+                            or gt_bbox[3]-result_bbox[3] > gt_height*inside_threshold:
+                        approve = False
+                        reject_reasons.add('Bounding box smaller than object')
+
+                    if gt_bbox[0]-result_bbox[0] > gt_width*outside_threshold \
+                            or gt_bbox[1]-result_bbox[1] > gt_height*outside_threshold \
+                            or result_bbox[2]-gt_bbox[2] > gt_width*outside_threshold \
+                            or result_bbox[3]-gt_bbox[3] > gt_height*outside_threshold:
+                        approve = False
+                        reject_reasons.add('Bounding box not fitting tightly')
 
                     if approve:
 

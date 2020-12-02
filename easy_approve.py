@@ -11,10 +11,6 @@ results_path = config.project_dir+'results/rockfish_results_7.csv'
 
 ###########################################################################
 
-# iou_threshold = 0.85
-# abs_timer_threshold = 15
-# approve_rate = 0.8
-
 iou_threshold = 0.6
 abs_timer_threshold = 0
 approve_rate = 0.5

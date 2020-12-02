@@ -16,6 +16,8 @@ results_approve_path = config.project_dir + \
 
 predict_dir = config.project_dir+'predict/'
 
+gt_indexes = [9]
+
 with open(results_approve_path) as results_approve_file:
 
     results = csv.reader(results_approve_file)
@@ -43,6 +45,9 @@ with open(results_approve_path) as results_approve_file:
         approved_gt_indexes = json.loads(result[-2])
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
+        
+            if index not in gt_indexes:
+                continue
 
             if index in conf_indexes+approved_gt_indexes:
                 judge_color = 'green'
@@ -66,6 +71,8 @@ with open(results_approve_path) as results_approve_file:
 
             predict_bbox = predict_annotation['bbox']
             result_bbox = result_annotation['bbox']
+            
+            iou = util.get_bboxes_iou(predict_bbox, result_bbox)
 
             util.rel_to_abs(predict_bbox, width, height)
             util.rel_to_abs(result_bbox, width, height)
@@ -107,7 +114,7 @@ with open(results_approve_path) as results_approve_file:
                 (result_bbox[0], result_bbox[1]), result_bbox[2]-result_bbox[0], result_bbox[3]-result_bbox[1], color=result_color, fill=False, linewidth=3))
 
             text = 'edge timer: ' + str(result_annotation['edge_timer']/10) + 's\ncorner timer: '+str(
-                result_annotation['corner_timer']/10)+'s\nconfidence: '+format(predict_annotation['score'], '0.2f')
+                result_annotation['corner_timer']/10) + 's\nconfidence: ' + format(predict_annotation['score'], '0.2f') + '\nIOU: ' + format(iou, '0.2f')
 
             plt.text(0, 0, text, ha='left', va='top',
                      fontdict={'color': judge_color, 'size': 30}, bbox={'edgecolor': judge_color, 'facecolor': 'white'})
