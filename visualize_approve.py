@@ -46,7 +46,7 @@ with open(results_approve_path) as results_approve_file:
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
         
-            if index not in gt_indexes:
+            if result[-6] == 'x' or index not in gt_indexes:
                 continue
 
             if index in conf_indexes+approved_gt_indexes:
@@ -118,8 +118,5 @@ with open(results_approve_path) as results_approve_file:
 
             plt.text(0, 0, text, ha='left', va='top',
                      fontdict={'color': judge_color, 'size': 30}, bbox={'edgecolor': judge_color, 'facecolor': 'white'})
-
-            plt.text(xmin-offsetLeft, ymin-offsetTop, judge_text,
-                     fontdict={'color': judge_color, 'size': 40}, bbox={'edgecolor': judge_color, 'facecolor': 'white'})
 
             plt.show()
