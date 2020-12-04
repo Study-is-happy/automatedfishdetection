@@ -91,19 +91,30 @@ with open(results_path) as results_file:
                     gt_width = gt_bbox[2]-gt_bbox[0]
                     gt_height = gt_bbox[3]-gt_bbox[1]
 
-                    if result_bbox[0]-gt_bbox[0] > gt_width*inside_threshold \
-                            or result_bbox[1]-gt_bbox[1] > gt_height*inside_threshold \
-                            or gt_bbox[2]-result_bbox[2] > gt_width*inside_threshold \
-                            or gt_bbox[3]-result_bbox[3] > gt_height*inside_threshold:
-                        approve = False
-                        reject_reasons.add('Bounding box smaller than object')
+                    inside_check_list = np.array([result_bbox[0]-gt_bbox[0] >
+                                                  gt_width*inside_threshold,
+                                                  result_bbox[1]-gt_bbox[1] >
+                                                  gt_height*inside_threshold,
+                                                  gt_bbox[2]-result_bbox[2] >
+                                                  gt_width*inside_threshold,
+                                                  t_bbox[3]-result_bbox[3] >
+                                                  gt_height*inside_threshold,
+                                                  gt_bbox[0]-result_bbox[0] >
+                                                  gt_width*outside_threshold,
+                                                  gt_bbox[1]-result_bbox[1] >
+                                                  gt_height*outside_threshold,
+                                                  result_bbox[2]-gt_bbox[2] >
+                                                  gt_width*outside_threshold,
+                                                  result_bbox[3]-gt_bbox[3] >
+                                                  gt_height*outside_threshold])
 
-                    if gt_bbox[0]-result_bbox[0] > gt_width*outside_threshold \
-                            or gt_bbox[1]-result_bbox[1] > gt_height*outside_threshold \
-                            or result_bbox[2]-gt_bbox[2] > gt_width*outside_threshold \
-                            or result_bbox[3]-gt_bbox[3] > gt_height*outside_threshold:
+                    print(np.count_nonzero(inside_check_list))
+
+                    if np.count_nonzero(inside_check_list) < 7:
                         approve = False
-                        reject_reasons.add('Bounding box not fitting tightly')
+                        reject_reasons.add('Bad bounding box')
+
+                    outside_check_list = np.array([])
 
                     if approve:
 
