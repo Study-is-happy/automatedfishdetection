@@ -1,6 +1,7 @@
 import csv
 import json
 import os
+import numpy as np
 
 import util
 import config
@@ -91,30 +92,40 @@ with open(results_path) as results_file:
                     gt_width = gt_bbox[2]-gt_bbox[0]
                     gt_height = gt_bbox[3]-gt_bbox[1]
 
-                    inside_check_list = np.array([result_bbox[0]-gt_bbox[0] >
-                                                  gt_width*inside_threshold,
-                                                  result_bbox[1]-gt_bbox[1] >
-                                                  gt_height*inside_threshold,
-                                                  gt_bbox[2]-result_bbox[2] >
-                                                  gt_width*inside_threshold,
-                                                  t_bbox[3]-result_bbox[3] >
-                                                  gt_height*inside_threshold,
-                                                  gt_bbox[0]-result_bbox[0] >
-                                                  gt_width*outside_threshold,
-                                                  gt_bbox[1]-result_bbox[1] >
-                                                  gt_height*outside_threshold,
-                                                  result_bbox[2]-gt_bbox[2] >
-                                                  gt_width*outside_threshold,
-                                                  result_bbox[3]-gt_bbox[3] >
-                                                  gt_height*outside_threshold])
+                    good_bbox = True
 
-                    print(np.count_nonzero(inside_check_list))
+                    good_inside_count = np.count_nonzero([result_bbox[0]-gt_bbox[0] <
+                                                          gt_width*inside_threshold,
+                                                          result_bbox[1]-gt_bbox[1] <
+                                                          gt_height*inside_threshold,
+                                                          gt_bbox[2]-result_bbox[2] <
+                                                          gt_width*inside_threshold,
+                                                          gt_bbox[3]-result_bbox[3] <
+                                                          gt_height*inside_threshold])
 
-                    if np.count_nonzero(inside_check_list) < 7:
+                    if good_inside_count < 3:
+                        good_bbox = False
+                        reject_reasons.add('Bounding box smaller than object')
+
+                    good_outside_count = np.count_nonzero([gt_bbox[0]-result_bbox[0] <
+                                                           gt_width*outside_threshold,
+                                                           gt_bbox[1]-result_bbox[1] <
+                                                           gt_height*outside_threshold,
+                                                           result_bbox[2]-gt_bbox[2] <
+                                                           gt_width*outside_threshold,
+                                                           result_bbox[3]-gt_bbox[3] <
+                                                           gt_height*outside_threshold])
+
+                    if good_outside_count < 3:
+                        good_bbox = False
+                        reject_reasons.add('Bounding box not fitting tightly')
+
+                    if good_bbox:
+                        if good_inside_count+good_outside_count < 7:
+                            approve = False
+                            reject_reasons.add('Bad bounding box')
+                    else:
                         approve = False
-                        reject_reasons.add('Bad bounding box')
-
-                    outside_check_list = np.array([])
 
                     if approve:
 
