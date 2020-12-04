@@ -114,7 +114,7 @@ with open(results_approve_path) as results_approve_file:
                 (result_bbox[0], result_bbox[1]), result_bbox[2]-result_bbox[0], result_bbox[3]-result_bbox[1], color=result_color, fill=False, linewidth=3))
 
             text = 'edge timer: ' + str(result_annotation['edge_timer']/10) + 's\ncorner timer: '+str(
-                result_annotation['corner_timer']/10) + 's\nconfidence: ' + format(predict_annotation['score'], '0.2f') + '\nIOU: ' + format(iou, '0.2f')
+                result_annotation['corner_timer']/10) + '\nIOU: ' + format(iou, '0.2f')
 
             plt.text(0, 0, text, ha='left', va='top',
                      fontdict={'color': judge_color, 'size': 30}, bbox={'edgecolor': judge_color, 'facecolor': 'white'})
