@@ -28,8 +28,7 @@ with open(config.project_dir+'predict/annotation_ids.csv') as annotations_file_n
 
                     update_bboxes = update_instances[image_id]['annotations']
 
-                    category_id = config.categories.index('background')
-                    update_bboxes.append({'category_id': -1,
+                    update_bboxes.append({'category_id': predict_annotation['category_id'],
                                           'bbox': predict_annotation['bbox']})
 
 util.write_json_file(
