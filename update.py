@@ -6,7 +6,7 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/rockfish_results_5_approve.csv'
+results_path = config.project_dir+'results/rockfish_results_1_approve.csv'
 
 ###########################################################################
 
@@ -32,12 +32,12 @@ with open(results_path) as results_file:
 
             update_annotations = update_instances[image_id]['annotations']
 
-            for update_annotation in update_annotations:
-                if util.get_bboxes_iou(update_annotation['bbox'], result_annotation['bbox']) > 0.5:
-                    break
-            else:
-                update_annotations.append({
-                    'category_id': result_annotation['category_id'], 'bbox': result_annotation['bbox']})
+            # for update_annotation in update_annotations:
+            #     if util.get_bboxes_iou(update_annotation['bbox'], result_annotation['bbox']) > 0.5:
+            #         break
+            # else:
+            update_annotations.append({
+                'category_id': result_annotation['category_id'], 'bbox': result_annotation['bbox']})
 
 util.write_json_file(
     update_instances, config.project_dir+'update/instances.json')
