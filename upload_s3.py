@@ -14,3 +14,6 @@ for root, dirs, files in os.walk(config.project_dir+'predict/'):
         full_file_path = os.path.join(root, file)
         s3_bucket.upload_file(full_file_path, 'zhiyongzhang/' + os.path.relpath(
             full_file_path, config.project_dir), ExtraArgs={'ACL': 'public-read'})
+
+
+# print(len(s3_bucket.objects.filter(Prefix="zhiyongzhang/predict/")))
