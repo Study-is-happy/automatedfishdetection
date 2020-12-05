@@ -30,7 +30,7 @@ with open(results_approve_path) as results_approve_file:
 
         print(result[-9])
 
-        # if result[-9] == '2':
+        # if result[-9] != '2201':
         #     continue
 
         result_annotations = json.loads(result[-8])
@@ -46,6 +46,9 @@ with open(results_approve_path) as results_approve_file:
 
             if result[-6] == 'x' or index not in gt_indexes:
                 continue
+
+            # if result_annotation['image_id'] != '20161027.175242.00310_rect_color':
+            #     continue
 
             if index in conf_indexes+approved_gt_indexes:
                 judge_color = 'green'

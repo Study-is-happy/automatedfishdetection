@@ -1,19 +1,20 @@
 import csv
 import json
 import os
+import numpy as np
 
 import util
 import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/rockfish_results_7.csv'
+results_path = config.project_dir+'results/rockfish_results_1.csv'
 
 ###########################################################################
 
-iou_threshold = 0.6
-abs_timer_threshold = 0
-approve_rate = 0.5
+iou_threshold = 0.7
+abs_timer_threshold = 20
+approve_rate = 0.7
 
 gt_indexes = [9]
 
@@ -27,7 +28,7 @@ print_results = {'approve': 0, 'reject': 0}
 results_approve_path_parts = os.path.splitext(results_path)
 
 results_approve_path = results_approve_path_parts[0] + \
-    '_easy_approve'+results_approve_path_parts[1]
+    '_approve'+results_approve_path_parts[1]
 
 with open(results_path) as results_file:
 
@@ -82,26 +83,15 @@ with open(results_path) as results_file:
                     gt_bbox = gt_annotation['bbox']
                     result_bbox = result_annotation['bbox']
 
-                    if util.get_bboxes_iou(gt_bbox, result_bbox) < iou_threshold:
+                    if gt_annotation['image_id'] == '20161027.175242.00310_rect_color':
+                        if util.get_bboxes_iou(gt_bbox, result_bbox) < 0.53:
+                            approve = False
+                            reject_reasons.add(
+                                'Bounding box not fitting tightly')
+
+                    elif util.get_bboxes_iou(gt_bbox, result_bbox) < iou_threshold:
                         approve = False
                         reject_reasons.add('Bounding box not fitting tightly')
-
-                    # gt_width = gt_bbox[2]-gt_bbox[0]
-                    # gt_height = gt_bbox[3]-gt_bbox[1]
-
-                    # if result_bbox[0]-gt_bbox[0] > gt_width*inside_threshold \
-                    #         or result_bbox[1]-gt_bbox[1] > gt_height*inside_threshold \
-                    #         or gt_bbox[2]-result_bbox[2] > gt_width*inside_threshold \
-                    #         or gt_bbox[3]-result_bbox[3] > gt_height*inside_threshold:
-                    #     approve = False
-                    #     reject_reasons.add('Bounding box smaller than object')
-
-                    # if gt_bbox[0]-result_bbox[0] > gt_width*outside_threshold \
-                    #         or gt_bbox[1]-result_bbox[1] > gt_height*outside_threshold \
-                    #         or result_bbox[2]-gt_bbox[2] > gt_width*outside_threshold \
-                    #         or result_bbox[3]-gt_bbox[3] > gt_height*outside_threshold:
-                    #     approve = False
-                    #     reject_reasons.add('Bounding box not fitting tightly')
 
                     if approve:
 
