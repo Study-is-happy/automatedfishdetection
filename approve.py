@@ -8,14 +8,14 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/rockfish_results_7.csv'
+results_path = config.project_dir+'results/rockfish_results_1.csv'
 
 ###########################################################################
 
 # iou_threshold = 0.7
 inside_threshold = 0.1
 outside_threshold = 0.14
-abs_timer_threshold = 10
+abs_timer_threshold = 20
 approve_rate = 0.7
 
 gt_indexes = [9]
