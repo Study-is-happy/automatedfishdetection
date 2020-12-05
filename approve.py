@@ -14,7 +14,13 @@ results_path = config.project_dir+'results/rockfish_results_1.csv'
 
 # iou_threshold = 0.7
 inside_threshold = 0.1
-outside_threshold = 0.14
+extra_inside_threshold = 0.12
+
+outside_threshold = 0.12
+extra_outside_threshold = 0.14
+
+extra_threshold_count = 1
+
 abs_timer_threshold = 20
 approve_rate = 0.7
 
@@ -92,38 +98,40 @@ with open(results_path) as results_file:
                     gt_width = gt_bbox[2]-gt_bbox[0]
                     gt_height = gt_bbox[3]-gt_bbox[1]
 
-                    good_bbox = True
+                    inside_good_list = np.array([result_bbox[0]-gt_bbox[0] <
+                                                 gt_width*inside_threshold,
+                                                 result_bbox[1]-gt_bbox[1] <
+                                                 gt_height*inside_threshold,
+                                                 gt_bbox[2]-result_bbox[2] <
+                                                 gt_width*inside_threshold,
+                                                 gt_bbox[3]-result_bbox[3] <
+                                                 gt_height*inside_threshold])
 
-                    good_inside_count = np.count_nonzero([result_bbox[0]-gt_bbox[0] <
-                                                          gt_width*inside_threshold,
-                                                          result_bbox[1]-gt_bbox[1] <
-                                                          gt_height*inside_threshold,
-                                                          gt_bbox[2]-result_bbox[2] <
-                                                          gt_width*inside_threshold,
-                                                          gt_bbox[3]-result_bbox[3] <
-                                                          gt_height*inside_threshold])
+                    if np.count_nonzero(inside_good_list) >= 4-extra_threshold_count:
+                        for coord_index in np.where(inside_good_list == 0)[0]:
+                            if result_bbox[coord_index]-gt_bbox[coord_index] > gt_width*extra_inside_threshold:
+                                approve = False
+                                reject_reasons.add(
+                                    'Bounding box smaller than object')
+                    else:
+                        approve = False
 
-                    if good_inside_count < 3:
-                        good_bbox = False
-                        reject_reasons.add('Bounding box smaller than object')
+                    outside_good_list = np.array([gt_bbox[0]-result_bbox[0] <
+                                                  gt_width*outside_threshold,
+                                                  gt_bbox[1]-result_bbox[1] <
+                                                  gt_height*outside_threshold,
+                                                  result_bbox[2]-gt_bbox[2] <
+                                                  gt_width*outside_threshold,
+                                                  result_bbox[3]-gt_bbox[3] <
+                                                  gt_height*outside_threshold])
 
-                    good_outside_count = np.count_nonzero([gt_bbox[0]-result_bbox[0] <
-                                                           gt_width*outside_threshold,
-                                                           gt_bbox[1]-result_bbox[1] <
-                                                           gt_height*outside_threshold,
-                                                           result_bbox[2]-gt_bbox[2] <
-                                                           gt_width*outside_threshold,
-                                                           result_bbox[3]-gt_bbox[3] <
-                                                           gt_height*outside_threshold])
+                    if np.count_nonzero(outside_good_list) >= 4-extra_threshold_count:
+                        for coord_index in np.where(outside_good_list == 0)[0]:
+                            if result_bbox[coord_index]-gt_bbox[coord_index] > gt_width*extra_outside_threshold:
+                                approve = False
+                                reject_reasons.add(
+                                    'Bounding box not fitting tightly')
 
-                    if good_outside_count < 3:
-                        good_bbox = False
-                        reject_reasons.add('Bounding box not fitting tightly')
-
-                    if good_bbox:
-                        if good_inside_count+good_outside_count < 7:
-                            approve = False
-                            reject_reasons.add('Bad bounding box')
                     else:
                         approve = False
 

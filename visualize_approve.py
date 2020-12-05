@@ -10,7 +10,7 @@ import util
 # TODO: Set the path
 
 results_approve_path = config.project_dir + \
-    'results/rockfish_results_7_approve.csv'
+    'results/rockfish_results_1_approve.csv'
 
 ###########################################################################
 
@@ -30,9 +30,7 @@ with open(results_approve_path) as results_approve_file:
 
         print(result[-9])
 
-        # if result[-9] == '400':
-        #     here = True
-        # if not here:
+        # if result[-9] == '2':
         #     continue
 
         result_annotations = json.loads(result[-8])
@@ -45,7 +43,7 @@ with open(results_approve_path) as results_approve_file:
         approved_gt_indexes = json.loads(result[-2])
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
-        
+
             if result[-6] == 'x' or index not in gt_indexes:
                 continue
 
@@ -71,7 +69,7 @@ with open(results_approve_path) as results_approve_file:
 
             predict_bbox = predict_annotation['bbox']
             result_bbox = result_annotation['bbox']
-            
+
             iou = util.get_bboxes_iou(predict_bbox, result_bbox)
 
             util.rel_to_abs(predict_bbox, width, height)
