@@ -32,7 +32,7 @@ ssh -i ~/venv/automatedfishdetection/Study-is-happy.pem ubuntu@ec2-3-15-189-172.
 # pip install numpy
 pip install torch==1.3.1 torchvision==0.4.2
 pip install opencv-python
-pip install Pillow==6.1
+pip install Pillow==6.2
 pip install 'git+https://github.com/facebookresearch/fvcore'
 pip install cython; pip install 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 
