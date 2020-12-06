@@ -7,11 +7,12 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'easy_gt/'
+dataset_dir = config.project_dir+'update/'
 
 ###########################################################################
 
-images_dir = dataset_dir+'images/'
+# images_dir = dataset_dir+'images/'
+images_dir = config.project_dir+'raw/'+'images/'
 
 instances_file_path = dataset_dir+'instances.json'
 
@@ -28,8 +29,8 @@ for image_id in sorted(instances_dict):
     # if image_id != '20100922.163718.01228':
     #     continue
 
-    # if len(instance['annotations']) < 20:
-    #     continue
+    if len(instance['annotations']) < 20:
+        continue
 
     image = mpimg.imread(images_dir+image_id+'.jpg')
 
