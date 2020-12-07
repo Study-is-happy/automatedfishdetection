@@ -6,13 +6,12 @@ import config
 
 # TODO: Set the path
 
-results_path = config.project_dir+'results/rockfish_results_2_approve.csv'
+results_path = config.project_dir+'results/rockfish_results_1_approve.csv'
 
 ###########################################################################
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
-
 
 with open(results_path) as results_file:
     results = csv.reader(results_file)

@@ -24,14 +24,12 @@ with open(results_approve_path) as results_approve_file:
 
     headers = next(results)
 
-    here = False
-
     for result in results:
 
-        print(result[-9])
-
-        # if result[-9] != '2201':
+        # if result[-9] != '2234':
         #     continue
+
+        print(result[-9])
 
         result_annotations = json.loads(result[-8])
 
