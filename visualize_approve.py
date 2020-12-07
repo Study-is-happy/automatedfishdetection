@@ -7,12 +7,8 @@ import os
 import config
 import util
 
-# TODO: Set the path
-
-results_approve_path = config.project_dir + \
-    'results/rockfish_results_2_approve.csv'
-
-###########################################################################
+results_approve_path = config.project_dir + 'results/rockfish_results_' + \
+    str(config.iteration_count)+'_approve.csv'
 
 predict_dir = config.project_dir+'predict/'
 
@@ -26,7 +22,7 @@ with open(results_approve_path) as results_approve_file:
 
     for result in results:
 
-        # if result[-9] != '2234':
+        # if result[-9] != '12616':
         #     continue
 
         print(result[-9])

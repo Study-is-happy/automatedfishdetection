@@ -5,12 +5,8 @@ import os
 import config
 import util
 
-# TODO: Set the path
-
-results_approve_path = config.project_dir + \
-    'results/rockfish_results_2_approve.csv'
-
-###########################################################################
+results_approve_path = config.project_dir + 'results/rockfish_results_' + \
+    str(config.iteration_count)+'_approve.csv'
 
 annotation_per_file = 10
 gt_indexes = [9]

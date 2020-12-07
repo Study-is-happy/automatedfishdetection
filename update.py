@@ -4,16 +4,13 @@ import json
 import util
 import config
 
-# TODO: Set the path
-
-results_path = config.project_dir+'results/rockfish_results_2_approve.csv'
-
-###########################################################################
+results_approve_path = config.project_dir+'results/rockfish_results_' + \
+    str(config.iteration_count)+'_approve.csv'
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
-with open(results_path) as results_file:
+with open(results_approve_path) as results_file:
     results = csv.reader(results_file)
     next(results)
     for result in results:
@@ -31,12 +28,12 @@ with open(results_path) as results_file:
 
             update_annotations = update_instances[image_id]['annotations']
 
-            # for update_annotation in update_annotations:
-            #     if util.get_bboxes_iou(update_annotation['bbox'], result_annotation['bbox']) > 0.5:
-            #         break
-            # else:
-            update_annotations.append({
-                'category_id': result_annotation['category_id'], 'bbox': result_annotation['bbox']})
+            for update_annotation in update_annotations:
+                if util.get_bboxes_iou(update_annotation['bbox'], result_annotation['bbox']) > 0.5:
+                    break
+            else:
+                update_annotations.append({
+                    'category_id': result_annotation['category_id'], 'bbox': result_annotation['bbox']})
 
 util.write_json_file(
     update_instances, config.project_dir+'update/instances.json')

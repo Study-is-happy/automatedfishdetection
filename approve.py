@@ -6,11 +6,8 @@ import numpy as np
 import util
 import config
 
-# TODO: Set the path
-
-results_path = config.project_dir+'results/rockfish_results_2.csv'
-
-###########################################################################
+results_path = config.project_dir+'results/rockfish_results_' + \
+    str(config.iteration_count)+'.csv'
 
 iou_threshold = 0.7
 abs_timer_threshold = 15
@@ -108,9 +105,6 @@ with open(results_path) as results_file:
                                     if result_timer < min(abs_timer_threshold, gt_timer):
                                         approve = False
                                         reject_reasons.add('Bad bounding box')
-                                    if util.get_bboxes_iou(predict_annotation['bbox'], result_annotation['bbox']) == 0:
-                                        approve = False
-                                        reject_reasons.add('Bad bounding box')
 
                                     exist_annotations_file_path = config.project_dir + \
                                         'predict/exist_annotations/' + \
@@ -163,11 +157,14 @@ with open(results_path) as results_file:
                 result[-1] = reject_indexes
 
             else:
-                result[-5] = 'Getting empty results'
+                result[-5] = 'Getting empty results, might be something wrong with MTurk'
                 result[-4] = []
                 result[-3] = []
                 result[-2] = []
-                result[-1] = list(range(annotation_per_file))
+                all_indexes = list(range(annotation_per_file))
+                for gt_index in gt_indexes:
+                    all_indexes.remove(gt_index)
+                result[-1] = all_indexes
                 print_results['empty'] += 1
 
             writer.writerow(result)
