@@ -167,7 +167,7 @@ with open(results_path) as results_file:
                 result[-4] = []
                 result[-3] = []
                 result[-2] = []
-                result[-1] = range(result_length)
+                result[-1] = list(range(annotation_per_file))
                 print_results['empty'] += 1
 
             writer.writerow(result)
