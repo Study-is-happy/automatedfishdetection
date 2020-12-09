@@ -8,7 +8,7 @@ import util
 
 src_images_dir = config.project_dir+'train/images/'
 
-des_dataset_dir = config.project_dir+'update/'
+des_dataset_dir = config.project_dir+'easy_gt/'
 
 ###########################################################################
 
