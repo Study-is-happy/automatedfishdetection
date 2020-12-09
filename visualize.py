@@ -29,8 +29,8 @@ for image_id in sorted(instances_dict):
     # if image_id != '20100922.163718.01228':
     #     continue
 
-    if len(instance['annotations']) < 20:
-        continue
+    # if len(instance['annotations']) < 20:
+    #     continue
 
     image = mpimg.imread(images_dir+image_id+'.jpg')
 
