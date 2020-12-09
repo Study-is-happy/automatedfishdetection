@@ -6,8 +6,11 @@ import numpy as np
 import util
 import config
 
-results_path = config.project_dir+'results/rockfish_results_' + \
+results_path = config.project_dir+'results/results_' + \
     str(config.iteration_count)+'.csv'
+
+results_approve_path = config.project_dir+'results/results_' + \
+    str(config.iteration_count)+'_approve.csv'
 
 iou_threshold = 0.7
 abs_timer_threshold = 15
@@ -22,11 +25,6 @@ def calc_timer(edge_timer, corner_timer):
 
 
 print_results = {'approve': 0, 'reject': 0, 'empty': 0}
-
-results_approve_path_parts = os.path.splitext(results_path)
-
-results_approve_path = results_approve_path_parts[0] + \
-    '_approve'+results_approve_path_parts[1]
 
 with open(results_path) as results_file:
 

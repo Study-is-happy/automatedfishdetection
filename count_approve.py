@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the name list
 
-results_name_list = ['rockfish_results_1']
+results_name_list = ['results_1']
 
 ###########################################################################
 

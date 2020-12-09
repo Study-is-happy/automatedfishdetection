@@ -1,7 +1,7 @@
-project_dir = '/data/fish_detection/seagate/'
+project_dir = '/data/fish_detection/seagate/sponges/'
 # project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
-iteration_count = 6
+iteration_count = 1
 
 aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'
 aws_secret_access_key = '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'
@@ -19,7 +19,7 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
 #               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-categories = ['rockfish', 'background']
+categories = ['sponges', 'background']
 
 # colors = ['purple', 'white', 'orange', 'blue',
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']

@@ -4,7 +4,7 @@ import json
 import util
 import config
 
-results_approve_path = config.project_dir+'results/rockfish_results_' + \
+results_approve_path = config.project_dir+'results/results_' + \
     str(config.iteration_count)+'_approve.csv'
 
 with open(config.project_dir+'update/instances.json') as update_instances_file:
