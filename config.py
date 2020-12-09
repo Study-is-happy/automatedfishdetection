@@ -1,4 +1,4 @@
-project_dir = '/data/fish_detection/seagate/sponges/'
+project_dir = '/data/automatedfishdetection/seagate/sponges/'
 # project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
 iteration_count = 1

@@ -11,8 +11,7 @@ dataset_dir = config.project_dir+'update/'
 
 ###########################################################################
 
-# images_dir = dataset_dir+'images/'
-images_dir = config.project_dir+'raw/'+'images/'
+images_dir = dataset_dir+'images/'
 
 instances_file_path = dataset_dir+'instances.json'
 

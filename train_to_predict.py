@@ -9,10 +9,10 @@ annotation_per_file = 10
 gt_indexes = [9]
 predict_per_file = annotation_per_file-len(gt_indexes)
 
-shutil.copy(config.project_dir+'raw/instances.json',
+shutil.copy(config.project_dir+'train/instances.json',
             config.project_dir+'predict/')
 
-with open(config.project_dir+'raw/instances.json') as train_instances_file:
+with open(config.project_dir+'train/instances.json') as train_instances_file:
     train_instances = json.load(train_instances_file)
 
 with open(config.project_dir+'easy_gt/instances.json') as easy_gt_instances_file:
@@ -30,7 +30,7 @@ for image_id, instance in train_instances.items():
         cache_annotations.append({'image_id': image_id, 'width': width, 'height': height, 'category_id': annotation['category_id'], 'score': 1,
                                   'bbox': annotation['bbox']})
 
-    shutil.copy(config.project_dir+'raw/images/'+image_id+'.jpg',
+    shutil.copy(config.project_dir+'train/images/'+image_id+'.jpg',
                 config.project_dir+'predict/images/')
 
     while len(cache_annotations) >= predict_per_file:

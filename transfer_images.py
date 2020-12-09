@@ -6,7 +6,7 @@ import util
 
 # TODO: Set the dirs
 
-src_images_dir = config.project_dir+'raw/images/'
+src_images_dir = config.project_dir+'train/images/'
 
 des_dataset_dir = config.project_dir+'update/'
 
