@@ -18,7 +18,7 @@ with open(results_approve_path) as results_approve_file:
 
     results = csv.reader(results_approve_file)
 
-    headers = next(results)
+    next(results)
 
     for result in results:
 

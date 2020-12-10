@@ -67,9 +67,9 @@
       </td>
       <td>
         <div class="instructionText">
-          <font color="red">sponges</font>
+          <font color="black">corals</font>
         </div>
-        <table border="5" bordercolor="red">
+        <table border="5" bordercolor="black">
           <tr>
             <td>
               <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_1.png" alt="rockfish_1" width="120" height="120" />
@@ -106,7 +106,7 @@
 const dataSrc = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/"
 
 const categories = [
-  { "name": "sponges", "color": "red" }
+  { "name": "corals", "color": "black" }
 ]
 
 const tutorialModalTexts = ["Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Some objects overlap, labeling the unlabeled one"]
@@ -1102,8 +1102,8 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
-  // xhr.open("GET", dataSrc + "predict/annotations/0.json")
+  // xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
+  xhr.open("GET", dataSrc + "predict/annotations/0.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
