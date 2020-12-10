@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the name list
 
-results_name_list = ['results_1']
+results_name_list = ['results_1.csv']
 
 ###########################################################################
 
@@ -15,7 +15,7 @@ print_results = {'approve': 0, 'reject': 0}
 
 for results_name in results_name_list:
     results_approve_path = config.project_dir + \
-        'results/'+results_name+'_approve.csv'
+        'results_approve/' + results_name
 
     with open(results_approve_path) as results_approve_file:
 

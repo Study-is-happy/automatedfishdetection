@@ -5,8 +5,8 @@ import os
 import config
 import util
 
-results_approve_path = config.project_dir+'results/results_' + \
-    str(config.iteration_count)+'_approve.csv'
+results_approve_path = config.project_dir + \
+    'results_approve/' + config.results_name
 
 with open(config.project_dir+'predict/annotations/cache.json') as cache_annotations_file:
     cache_annotations = json.load(cache_annotations_file)

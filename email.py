@@ -28,3 +28,8 @@ email.close()
 email.logout()
 
 for results_path in os.listdir(config.project_dir + 'results/'):
+    with open(results_approve_path) as results_approve_file:
+
+        results = csv.reader(results_approve_file)
+
+        next(results)

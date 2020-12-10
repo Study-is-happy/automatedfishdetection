@@ -6,11 +6,10 @@ import numpy as np
 import util
 import config
 
-results_path = config.project_dir+'results/results_' + \
-    str(config.iteration_count)+'.csv'
+results_path = config.project_dir+'results/' + config.results_name
 
-results_approve_path = config.project_dir+'results/results_' + \
-    str(config.iteration_count)+'_approve.csv'
+results_approve_path = config.project_dir + \
+    'results_approve/' + config.results_name
 
 iou_threshold = 0.7
 abs_timer_threshold = 15

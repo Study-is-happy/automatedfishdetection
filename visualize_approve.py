@@ -7,8 +7,8 @@ import os
 import config
 import util
 
-results_approve_path = config.project_dir + 'results/results_' + \
-    str(config.iteration_count)+'_approve.csv'
+results_approve_path = config.project_dir + \
+    'results_approve/' + config.results_name
 
 predict_dir = config.project_dir+'predict/'
 

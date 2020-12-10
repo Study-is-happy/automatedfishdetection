@@ -1,7 +1,7 @@
 project_dir = '/data/automatedfishdetection/seagate/rockfish/'
 # project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
-iteration_count = 1
+results_name = 'results_1.csv'
 
 aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'
 aws_secret_access_key = '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'
