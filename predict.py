@@ -9,10 +9,6 @@ import config
 import util
 import reset_predict
 
-annotation_per_file = 10
-gt_indexes = [9]
-predict_per_file = annotation_per_file-len(gt_indexes)
-
 print_results = {'fish': 0, 'starfish': 0, 'sponge': 0}
 
 cfg = get_cfg()
@@ -126,11 +122,11 @@ for image_file_name in os.listdir(images_dir):
                                                     'bbox': annotation['bbox']})
                 print_results[config.categories[annotation['category_id']]] += 1
 
-            while len(cache_annotations) >= predict_per_file:
+            while len(cache_annotations) >= config.predict_per_file:
 
-                current_annotations = cache_annotations[:predict_per_file]
+                current_annotations = cache_annotations[:config.predict_per_file]
 
-                for gt_index in gt_indexes:
+                for gt_index in config.gt_indexes:
                     easy_gt_annotation = next(easy_gt_annotation_generator)
                     shutil.copy(config.project_dir+'gt_easy/images/'+easy_gt_annotation['image_id']+'.jpg',
                                 config.project_dir+'predict/images/')
@@ -140,7 +136,7 @@ for image_file_name in os.listdir(images_dir):
                 util.write_json_file(
                     current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
 
-                cache_annotations = cache_annotations[predict_per_file:]
+                cache_annotations = cache_annotations[config.predict_per_file:]
 
                 annotation_id += 1
 

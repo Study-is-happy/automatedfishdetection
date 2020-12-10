@@ -16,9 +16,6 @@ iou_threshold = 0.7
 abs_timer_threshold = 15
 approve_rate = 0.7
 
-annotation_per_file = 10
-gt_indexes = [9]
-
 
 def calc_timer(edge_timer, corner_timer):
     return edge_timer + corner_timer*1.5
@@ -63,11 +60,11 @@ with open(results_path) as results_file:
 
             result_length = len(result_annotations)
 
-            if result_length == annotation_per_file:
+            if result_length == config.annotation_per_file:
 
                 for index in range(result_length):
 
-                    if index in gt_indexes:
+                    if index in config.gt_indexes:
 
                         gt_annotation = predict_annotations[index]
                         result_annotation = result_annotations[index]
@@ -159,8 +156,8 @@ with open(results_path) as results_file:
                 result[-4] = []
                 result[-3] = []
                 result[-2] = []
-                all_indexes = list(range(annotation_per_file))
-                for gt_index in gt_indexes:
+                all_indexes = list(range(config.annotation_per_file))
+                for gt_index in config.gt_indexes:
                     all_indexes.remove(gt_index)
                 result[-1] = all_indexes
                 print_results['empty'] += 1

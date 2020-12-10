@@ -12,8 +12,6 @@ results_approve_path = config.project_dir + 'results/results_' + \
 
 predict_dir = config.project_dir+'predict/'
 
-gt_indexes = [9]
-
 with open(results_approve_path) as results_approve_file:
 
     results = csv.reader(results_approve_file)
@@ -38,7 +36,7 @@ with open(results_approve_path) as results_approve_file:
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
 
-            if result[-6] == 'x' or index not in gt_indexes:
+            if result[-6] == 'x' or index not in config.gt_indexes:
                 continue
 
             # if result_annotation['image_id'] != '20161027.175242.00310_rect_color':

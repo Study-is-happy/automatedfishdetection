@@ -5,10 +5,6 @@ import config
 import util
 import reset_predict
 
-annotation_per_file = 10
-gt_indexes = [9]
-predict_per_file = annotation_per_file-len(gt_indexes)
-
 shutil.copy(config.project_dir+'train/instances.json',
             config.project_dir+'predict/')
 
@@ -33,11 +29,11 @@ for image_id, instance in train_instances.items():
     shutil.copy(config.project_dir+'train/images/'+image_id+'.jpg',
                 config.project_dir+'predict/images/')
 
-    while len(cache_annotations) >= predict_per_file:
+    while len(cache_annotations) >= config.predict_per_file:
 
-        current_annotations = cache_annotations[:predict_per_file]
+        current_annotations = cache_annotations[:config.predict_per_file]
 
-        for gt_index in gt_indexes:
+        for gt_index in config.gt_indexes:
             easy_gt_annotation = next(easy_gt_annotation_generator)
             shutil.copy(config.project_dir+'easy_gt/images/'+easy_gt_annotation['image_id']+'.jpg',
                         config.project_dir+'predict/images/')
@@ -47,7 +43,7 @@ for image_id, instance in train_instances.items():
         util.write_json_file(
             current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
 
-        cache_annotations = cache_annotations[predict_per_file:]
+        cache_annotations = cache_annotations[config.predict_per_file:]
 
         annotation_id += 1
 

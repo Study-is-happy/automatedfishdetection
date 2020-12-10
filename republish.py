@@ -8,10 +8,6 @@ import util
 results_approve_path = config.project_dir+'results/results_' + \
     str(config.iteration_count)+'_approve.csv'
 
-annotation_per_file = 10
-gt_indexes = [9]
-predict_per_file = annotation_per_file-len(gt_indexes)
-
 with open(config.project_dir+'predict/annotations/cache.json') as cache_annotations_file:
     cache_annotations = json.load(cache_annotations_file)
 
@@ -51,11 +47,11 @@ with open(results_approve_path) as results_approve_file:
         for index in not_conf_indexes+reject_indexes:
             cache_annotations.append(predict_annotations[index])
 
-        while len(cache_annotations) >= predict_per_file:
+        while len(cache_annotations) >= config.predict_per_file:
 
-            current_annotations = cache_annotations[:predict_per_file]
+            current_annotations = cache_annotations[:config.predict_per_file]
 
-            for gt_index in gt_indexes:
+            for gt_index in config.gt_indexes:
                 easy_gt_annotation = next(easy_gt_annotation_generator)
                 current_annotations.insert(
                     gt_index, easy_gt_annotation)
@@ -63,7 +59,7 @@ with open(results_approve_path) as results_approve_file:
             util.write_json_file(
                 current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
 
-            cache_annotations = cache_annotations[predict_per_file:]
+            cache_annotations = cache_annotations[config.predict_per_file:]
 
             annotation_id += 1
 
