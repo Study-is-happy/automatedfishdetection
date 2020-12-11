@@ -33,7 +33,8 @@ _, receive_email_id_list = imap.search(
     'SINCE "07-Dec-2020"' +
     ')')
 
-receive_email_id_list = receive_email_id_list[0].decode('utf-8').split()
+receive_email_id_list = receive_email_id_list[0].decode(
+    'utf-8').split()
 hit_id_list = []
 receive_email_list = []
 
@@ -61,33 +62,41 @@ for index, hit_id in enumerate(hit_id_list):
 
             for result in results:
                 if result[0] == hit_id:
-                    result[-5] = ''
-                    result[-6] = ''
-                    email_result_list.append(result)
+                    receive_email = receive_email_list[index]
+                    email_result_list.append({'assignment_id': result[14],
+                                              'annotations': json.loads(result[-8]),
+                                              'email_id': receive_email_id_list[index],
+                                              'email_message_id': receive_email['Message-ID'],
+                                              'email_subject': receive_email['Subject'],
+                                              'email_from': receive_email['From'],
+                                              'approve': None,
+                                              'email_text': '',
+                                              'image_file_path': None})
                     found = True
                     break
         if found:
             break
-    else:
-        del receive_email_id_list[index]
-        del receive_email_list[index]
 
 if len(email_result_list) == 0:
     imap.logout()
     sys.exit()
 
-window_size = 800
+canvas_size = 800
 current_index = 0
 window = tk.Tk()
-canvas = tk.Canvas(window, width=window_size, height=window_size)
-canvas.grid(row=0, columnspan=4)
+canvas = tk.Canvas(window, width=canvas_size, height=canvas_size)
+canvas.grid(rowspan=2, columnspan=4)
+reply_email_label = tk.Label(window, text='Reply email:')
+reply_email_label.grid(row=0, column=4)
 progressbar_style = tkinter.ttk.Style()
 progressbar_style.theme_use('default')
 progressbar_style.configure("TProgressbar", thickness=30, background='green')
 progressbar = tkinter.ttk.Progressbar(
-    mode='determinate', style='TProgressbar', value=current_index/len(email_result_list)*100, length=window_size)
-progressbar.grid(row=1, columnspan=4)
+    mode='determinate', style='TProgressbar', value=current_index/len(email_result_list)*100, length=canvas_size)
+progressbar.grid(row=2, columnspan=4)
+name_var = tk.StringVar()
 orig_highlightbackground = '#d9d9d9'
+
 # reject_options = [
 #     "Jan",
 #     "Feb",
@@ -101,16 +110,16 @@ def read_and_display():
 
     canvas.delete('all')
 
-    result = email_result_list[current_index]
+    email_result = email_result_list[current_index]
 
     approve_button.config(highlightbackground=orig_highlightbackground)
     reject_button.config(highlightbackground=orig_highlightbackground)
 
-    if result[-5] == '' and result[-6] == '':
+    if email_result['approve'] is None:
         next_button.config(state='disabled')
     else:
         next_button.config(state='normal')
-        if result[-6] == 'x':
+        if email_result['approve']:
             approve_button.config(highlightbackground='green')
         else:
             reject_button.config(highlightbackground='red')
@@ -120,13 +129,13 @@ def read_and_display():
     else:
         previous_button.config(state='disabled')
 
-    annotations = json.loads(result[-8])
+    annotations = email_result['annotations']
     gt_annotation = annotations[config.gt_indexes[0]]
 
     image_width = gt_annotation['width']
     image_height = gt_annotation['height']
 
-    bbox = gt_annotation['bbox']
+    bbox = np.copy(gt_annotation['bbox'])
     util.rel_to_abs(bbox, image_width, image_height)
 
     image = cv2.imread(config.project_dir + 'update/images/' +
@@ -150,14 +159,22 @@ def read_and_display():
 
     image = image[offset_top:offset_bottom, offset_left:offset_right, :]
 
-    cv2.imwrite('/tmp/' + result[14] + '.jpg', image)
+    if email_result['image_file_path'] is None:
+        email_result['image_file_path'] = '/tmp/' + \
+            email_result['assignment_id'] + '.jpg'
+        cv2.imwrite(email_result['image_file_path'], image)
 
-    image = cv2.resize(image, (window_size, window_size))
+    image = cv2.resize(image, (canvas_size, canvas_size))
 
     canvas.ref_image = PIL.ImageTk.PhotoImage(
         image=PIL.Image.fromarray(np.flip(image, axis=-1)))
 
     canvas.create_image(0, 0, anchor='nw', image=canvas.ref_image)
+
+    input_text = tk.Text(window, width=40)
+    input_text.grid(row=1, column=4)
+    input_text.insert(tk.INSERT, email_result['email_text'])
+    input_text.config(state='disabled')
 
     # optio_menu = tk.OptionMenu(canvas, option_variable, *reject_options)
 
@@ -174,12 +191,11 @@ def reply():
 
     imap.select()
 
-    for result, receive_email_id, receive_email in zip(email_result_list, receive_email_id_list, receive_email_list):
+    for email_result in email_result_list:
 
-        assignment_id = result[14]
+        assignment_id = email_result['assignment_id']
 
-        if result[-6] == 'x':
-            reply_email_text = 'assignment id: ' + assignment_id + ': approve'
+        if email_result['approve']:
             assignment_status = s3_client.get_assignment(
                 AssignmentId=assignment_id)['Assignment']['AssignmentStatus']
             if (assignment_status != 'Approved'):
@@ -189,8 +205,8 @@ def reply():
                     OverrideRejection=True
                 )
 
-        elif result[-5] != '':
-            reply_email_text = 'assignment id: ' + assignment_id + ': reject'
+        elif email_result['approve'] == False:
+            pass
             # s3_client.approve_assignment(
             #     AssignmentId=assignment_id,
             #     RequesterFeedback='',
@@ -200,29 +216,27 @@ def reply():
         else:
             continue
 
-        imap.store(receive_email_id, '+FLAGS', '\\Answered \\SEEN')
+        imap.store(email_result['email_id'], '+FLAGS', '\\Answered \\SEEN')
 
         reply_email = email.mime.multipart.MIMEMultipart()
 
-        reply_email['References'] = reply_email['In-Reply-To'] = receive_email['Message-ID']
-        reply_email['Subject'] = 'Re: ' + receive_email['Subject']
+        reply_email['References'] = reply_email['In-Reply-To'] = email_result['email_message_id']
+        reply_email['Subject'] = 'Re: ' + email_result['email_subject']
         reply_email['From'] = 'Field Robotics Lab'
-        reply_email['To'] = receive_email['From']
+        reply_email['To'] = email_result['email_from']
 
-        reply_email.attach(email.mime.text.MIMEText(reply_email_text))
+        reply_email.attach(email.mime.text.MIMEText(
+            email_result['email_text']))
 
-        image_file_name = assignment_id+'.jpg'
-        image_file_path = '/tmp/'+image_file_name
-
-        with open(image_file_path, 'rb') as image_file:
+        with open(email_result['image_file_path'], 'rb') as image_file:
 
             mime_image = email.mime.image.MIMEImage(image_file.read())
             reply_email.attach(mime_image)
 
-        smtp.sendmail(config.email_address,
-                      receive_email['From'], reply_email.as_bytes())
+        # smtp.sendmail(config.email_address,
+        #               email_result['email_from'], reply_email.as_bytes())
 
-        os.remove(image_file_path)
+        os.remove(email_result['image_file_path'])
 
     imap.close()
     imap.logout()
@@ -262,17 +276,17 @@ def previous():
 
 
 def approve():
-    result = email_result_list[current_index]
-    result[-6] = 'x'
-    result[-5] = ''
+    email_result = email_result_list[current_index]
+    email_result['approve'] = True
+    email_result['email_text'] = 'Your task is approved! Thank you for your contribution! Apologize for the wrong rejection.'
 
     next()
 
 
 def reject():
-    result = email_result_list[current_index]
-    result[-6] = ''
-    result[-5] = 'We checked again, the bounding box is bad'
+    email_result = email_result_list[current_index]
+    email_result['approve'] = False
+    email_result['email_text'] = 'We are sorry that this label does not meet the requirement. '
 
     next()
 
@@ -280,22 +294,22 @@ def reject():
 previous_button = tk.Button(window, text='<- Previous',
                             command=previous, width=15, height=4, borderwidth=10)
 
-previous_button.grid(row=2, column=0, sticky='W')
+previous_button.grid(row=3, column=0, sticky='W')
 
 approve_button = tk.Button(window, text='Approve',
                            command=approve, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground="green")
 
-approve_button.grid(row=2, column=1, sticky='E')
+approve_button.grid(row=3, column=1, sticky='E')
 
 reject_button = tk.Button(window, text='Reject',
                           command=reject, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground="red")
 
-reject_button.grid(row=2, column=2, sticky='W')
+reject_button.grid(row=3, column=2, sticky='W')
 
 next_button = tk.Button(window, text='Next ->', command=next,
                         width=15, height=4, borderwidth=10)
 
-next_button.grid(row=2, column=3, sticky='E')
+next_button.grid(row=3, column=3, sticky='E')
 
 window.protocol("WM_DELETE_WINDOW", on_closing)
 
