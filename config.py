@@ -6,6 +6,9 @@ results_name = 'results_1.csv'
 aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'
 aws_secret_access_key = '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'
 
+email_address = 'isec.neufr@gmail.com'
+email_password = 'HSingh1!'
+
 INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
 # categories = ['fish', 'starfish', 'sponge', 'background']
