@@ -23,7 +23,7 @@ for image_file_name in os.listdir(crop_images_dir):
                         black_border, height-black_border))
     # shorter_edge = min(width, height)
     # ratio = 512/shorter_edge
-    # image = image.resize((int(width*ratio), int(height*ratio)))
+    # image = image.resize((util.get_rint(width*ratio), util.get_rint(height*ratio)))
     image.save(image_file_path, "JPEG")
 
 crop_instances_file_path = crop_dir+'instances.json'

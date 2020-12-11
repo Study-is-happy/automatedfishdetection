@@ -1,5 +1,6 @@
 import os
 import json
+import numpy as np
 
 
 def write_json_file(obj, json_file_path):
@@ -70,6 +71,10 @@ def norm_rel_bbox(bbox):
             bbox[i] = 0
         elif bbox[i] > 1:
             bbox[i] = 1
+
+
+def get_rint(num):
+    return np.rint(num).astype(int)
 
 
 def easy_gt_annotation_generator(instances):

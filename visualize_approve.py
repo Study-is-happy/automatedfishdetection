@@ -77,10 +77,10 @@ with open(results_approve_path) as results_approve_file:
 
             offsetWidth = (xmax-xmin)*1.6
             offsetHeight = (ymax-ymin)*1.6
-            offsetLeft = int(max(0, xmin-offsetWidth/2))
-            offsetTop = int(max(0, ymin-offsetHeight/2))
-            offsetRight = int(min(width, xmax+offsetWidth/2))
-            offsetBottom = int(min(height, ymax+offsetHeight/2))
+            offsetLeft = util.get_rint(max(0, xmin-offsetWidth/2))
+            offsetTop = util.get_rint(max(0, ymin-offsetHeight/2))
+            offsetRight = util.get_rint(min(width, xmax+offsetWidth/2))
+            offsetBottom = util.get_rint(min(height, ymax+offsetHeight/2))
 
             image = image[offsetTop:offsetBottom, offsetLeft:offsetRight, :]
 
