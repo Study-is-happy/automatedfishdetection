@@ -1,4 +1,4 @@
-project_dir = '/data/automatedfishdetection/seagate/rockfish/'
+project_dir = '/data/automatedfishdetection/seagate/rockfish_train/'
 # project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
 
 results_name = 'results_1.csv'
