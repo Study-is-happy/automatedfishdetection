@@ -87,13 +87,13 @@ cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = config.MODEL_ROI_HEADS_NMS_THRESH_TEST
 if config.train_update:
 
     cfg.DATASETS.TRAIN = ['update/']
-    cfg.DATASETS.TEST = ['gt/']
+    cfg.DATASETS.TEST = ['east_gt/']
     cfg.CUSTOM_IGNORE_PROB = 0.5
     cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
 
 else:
-    cfg.DATASETS.TRAIN = ['init_train/']
-    cfg.DATASETS.TEST = ['init_test/']
+    cfg.DATASETS.TRAIN = ['train/']
+    cfg.DATASETS.TEST = ['east_gt/']
     # cfg.DATASETS.TRAIN = ['update/']
     # cfg.DATASETS.TRAIN = ['update_no_background/']
     # cfg.DATASETS.TEST = ['init/']
