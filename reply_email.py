@@ -27,10 +27,9 @@ imap.select(readonly=True)
 _, receive_email_id_list = imap.search(
     None, '(' +
     'SUBJECT "[Amazon Mechanical Turk] Regarding Amazon Mechanical Turk HIT" ' +
-    # 'FROM "<mturk-noreply@amazon.com>" ' +
-    'FROM "Zhiyong Zhang" ' +
-    # 'UNANSWERED ' +
-    'SINCE "07-Dec-2020"' +
+    'FROM "<mturk-noreply@amazon.com>" ' +
+    'UNANSWERED ' +
+    'SINCE "12-Dec-2020"' +
     ')')
 
 receive_email_id_list = receive_email_id_list[0].decode(
@@ -63,15 +62,17 @@ for index, hit_id in enumerate(hit_id_list):
             for result in results:
                 if result[0] == hit_id:
                     receive_email = receive_email_list[index]
-                    email_result_list.append({'assignment_id': result[14],
+                    email_result_list.append({'hit_id': hit_id,
+                                              'assignment_id': result[14],
                                               'annotations': json.loads(result[-8]),
                                               'email_id': receive_email_id_list[index],
                                               'email_message_id': receive_email['Message-ID'],
                                               'email_subject': receive_email['Subject'],
-                                              'email_from': receive_email['From'],
+                                              'email_from': receive_email['Reply-To'],
                                               'approve': None,
                                               'email_text': '',
-                                              'image_file_path': None})
+                                              'reject_option': '',
+                                              'confirm': False})
                     found = True
                     break
         if found:
@@ -82,28 +83,67 @@ if len(email_result_list) == 0:
     sys.exit()
 
 canvas_size = 800
+email_size = 40
 current_index = 0
 window = tk.Tk()
 canvas = tk.Canvas(window, width=canvas_size, height=canvas_size)
-canvas.grid(rowspan=2, columnspan=4)
+canvas.grid(rowspan=4, columnspan=4)
 reply_email_label = tk.Label(window, text='Reply email:')
 reply_email_label.grid(row=0, column=4)
 progressbar_style = tkinter.ttk.Style()
 progressbar_style.theme_use('default')
-progressbar_style.configure("TProgressbar", thickness=30, background='green')
+progressbar_style.configure('TProgressbar', thickness=30, background='green')
 progressbar = tkinter.ttk.Progressbar(
     mode='determinate', style='TProgressbar', value=current_index/len(email_result_list)*100, length=canvas_size)
-progressbar.grid(row=2, columnspan=4)
+progressbar.grid(row=4, columnspan=4)
 name_var = tk.StringVar()
 orig_highlightbackground = '#d9d9d9'
 
-# reject_options = [
-#     "Jan",
-#     "Feb",
-#     "Mar"
-# ]
-# option_variable = tk.StringVar(canvas)
-# option_variable.set(reject_options[0])
+input_text = tk.Text(window, width=email_size)
+input_text.grid(row=1, column=4)
+
+option_var = tk.StringVar(window)
+
+
+def update_input_text(email_result):
+
+    input_text.config(state='normal')
+    input_text.delete(1.0, tk.END)
+    input_text.insert(
+        tk.INSERT, email_result['email_text'].format(email_result['reject_option']))
+    input_text.config(state='disabled')
+
+
+def update_input_text_options(email_result):
+
+    update_input_text(email_result)
+
+    option_menu['menu'].delete(0, 'end')
+
+    option_var.set('')
+    options = []
+
+    if email_result['approve'] == False:
+        option_var.set('Choose reject reason:')
+        options = [
+            'The bounding box is not fitting tightly.',
+            'The bounding box is too small.'
+        ]
+
+    for option in options:
+        option_menu['menu'].add_command(
+            label=option, command=tk._setit(option_var, option, choose_option))
+
+
+def choose_option(option):
+    email_result = email_result_list[current_index]
+    email_result['reject_option'] = option
+    update_input_text(email_result)
+
+
+option_menu = tk.OptionMenu(
+    window, option_var, [])
+option_menu.grid(row=2, column=4)
 
 
 def read_and_display():
@@ -112,10 +152,12 @@ def read_and_display():
 
     email_result = email_result_list[current_index]
 
+    window.title(email_result['email_from'])
+
     approve_button.config(highlightbackground=orig_highlightbackground)
     reject_button.config(highlightbackground=orig_highlightbackground)
 
-    if email_result['approve'] is None:
+    if not email_result['confirm']:
         next_button.config(state='disabled')
     else:
         next_button.config(state='normal')
@@ -131,6 +173,7 @@ def read_and_display():
 
     annotations = email_result['annotations']
     gt_annotation = annotations[config.gt_indexes[0]]
+    print(gt_annotation['image_id'])
 
     image_width = gt_annotation['width']
     image_height = gt_annotation['height']
@@ -159,10 +202,7 @@ def read_and_display():
 
     image = image[offset_top:offset_bottom, offset_left:offset_right, :]
 
-    if email_result['image_file_path'] is None:
-        email_result['image_file_path'] = '/tmp/' + \
-            email_result['assignment_id'] + '.jpg'
-        cv2.imwrite(email_result['image_file_path'], image)
+    cv2.imwrite('/tmp/' + email_result['assignment_id'] + '.jpg', image)
 
     image = cv2.resize(image, (canvas_size, canvas_size))
 
@@ -171,12 +211,7 @@ def read_and_display():
 
     canvas.create_image(0, 0, anchor='nw', image=canvas.ref_image)
 
-    input_text = tk.Text(window, width=40)
-    input_text.grid(row=1, column=4)
-    input_text.insert(tk.INSERT, email_result['email_text'])
-    input_text.config(state='disabled')
-
-    # optio_menu = tk.OptionMenu(canvas, option_variable, *reject_options)
+    update_input_text_options(email_result)
 
 
 def reply():
@@ -193,50 +228,45 @@ def reply():
 
     for email_result in email_result_list:
 
-        assignment_id = email_result['assignment_id']
+        if email_result['confirm']:
 
-        if email_result['approve']:
-            assignment_status = s3_client.get_assignment(
-                AssignmentId=assignment_id)['Assignment']['AssignmentStatus']
-            if (assignment_status != 'Approved'):
+            assignment_id = email_result['assignment_id']
+
+            if email_result['approve']:
+                assignment_status = s3_client.get_assignment(
+                    AssignmentId=assignment_id)['Assignment']['AssignmentStatus']
+                if (assignment_status != 'Approved'):
+                    s3_client.approve_assignment(
+                        AssignmentId=assignment_id,
+                        RequesterFeedback='Approved, thank you for your contribution!',
+                        OverrideRejection=True
+                    )
+
+            else:
                 s3_client.approve_assignment(
                     AssignmentId=assignment_id,
-                    RequesterFeedback='Approved, thank you for your contribution!',
-                    OverrideRejection=True
+                    RequesterFeedback=email_result['reject_option'],
+                    OverrideRejection=False
                 )
 
-        elif email_result['approve'] == False:
-            pass
-            # s3_client.approve_assignment(
-            #     AssignmentId=assignment_id,
-            #     RequesterFeedback='',
-            #     OverrideRejection=False
-            # )
+            imap.store(email_result['email_id'], '+FLAGS', '\\Answered \\SEEN')
 
-        else:
-            continue
+            reply_email = email.mime.multipart.MIMEMultipart()
 
-        imap.store(email_result['email_id'], '+FLAGS', '\\Answered \\SEEN')
+            reply_email['References'] = reply_email['In-Reply-To'] = email_result['email_message_id']
+            reply_email['Subject'] = 'Re: ' + email_result['email_subject']
+            reply_email['From'] = config.email_name
+            reply_email['To'] = email_result['email_from']
 
-        reply_email = email.mime.multipart.MIMEMultipart()
+            reply_email_text = 'Hello '+email_result['email_from'].split()[0]+',\n\n'+email_result['email_text'].format(
+                email_result['reject_option'])+'\n\nBest,\n'+config.email_name
 
-        reply_email['References'] = reply_email['In-Reply-To'] = email_result['email_message_id']
-        reply_email['Subject'] = 'Re: ' + email_result['email_subject']
-        reply_email['From'] = 'Field Robotics Lab'
-        reply_email['To'] = email_result['email_from']
+            reply_email.attach(email.mime.text.MIMEText(reply_email_text))
 
-        reply_email.attach(email.mime.text.MIMEText(
-            email_result['email_text']))
+            with open('/tmp/'+assignment_id+'.jpg', 'rb') as image_file:
 
-        with open(email_result['image_file_path'], 'rb') as image_file:
-
-            mime_image = email.mime.image.MIMEImage(image_file.read())
-            reply_email.attach(mime_image)
-
-        # smtp.sendmail(config.email_address,
-        #               email_result['email_from'], reply_email.as_bytes())
-
-        os.remove(email_result['image_file_path'])
+                mime_image = email.mime.image.MIMEImage(image_file.read())
+                reply_email.attach(mime_image)
 
     imap.close()
     imap.logout()
@@ -244,7 +274,7 @@ def reply():
 
 
 def on_closing():
-    if tkinter.messagebox.askokcancel("Reply", "Do you want to reply?"):
+    if tkinter.messagebox.askokcancel('Reply', 'Do you want to reply?'):
         threading.Thread(target=reply).start()
 
     else:
@@ -276,42 +306,65 @@ def previous():
 
 
 def approve():
+    reject_button.config(highlightbackground=orig_highlightbackground)
+    approve_button.config(highlightbackground='green')
     email_result = email_result_list[current_index]
     email_result['approve'] = True
-    email_result['email_text'] = 'Your task is approved! Thank you for your contribution! Apologize for the wrong rejection.'
-
-    next()
+    email_result['email_text'] = '\tThank you for working on our tasks! The attached image was flagged by our program for being outside range of acceptable labelling. However, after reviewing this image, it appears your labelling was rejected in error. We have updated the status of the batch of images which were rejected because of this to “accepted.” We appreciate you taking the time to work on our tasks, and thank you for your understanding in this matter, as we are still fine-tuning the rejection parameters.'
+    email_result['reject_option'] = ''
+    update_input_text_options(email_result)
 
 
 def reject():
+    approve_button.config(highlightbackground=orig_highlightbackground)
+    reject_button.config(highlightbackground='red')
     email_result = email_result_list[current_index]
     email_result['approve'] = False
-    email_result['email_text'] = 'We are sorry that this label does not meet the requirement. '
+    email_result['email_text'] = '\tThank you for working on our tasks! The attached image was flagged by our program for being outside range of acceptable labelling. After reviewing this image, it appears your labelling was rejected for the following reason:' + \
+        '\n\n{}\n\n' + \
+        '\tUnfortunately, we believe this labelling does not meet our requirements. We apologize for our strict rejection parameters, our use case requires very precise labelling. We appreciate you taking the time to work on our tasks and hope you will consider working on more in the future, as we are continuing to fine-tune our rejection parameters.'
+    email_result['reject_option'] = ''
+    update_input_text_options(email_result)
 
+
+def confirm():
+    email_result = email_result_list[current_index]
+    if email_result['approve'] is None:
+        tkinter.messagebox.showwarning(message='Approve or reject!')
+        return
+    if email_result['approve'] == False and email_result['reject_option'] == '':
+        tkinter.messagebox.showwarning(message='Choose reject reason!')
+        return
+    email_result['confirm'] = True
     next()
 
 
 previous_button = tk.Button(window, text='<- Previous',
                             command=previous, width=15, height=4, borderwidth=10)
 
-previous_button.grid(row=3, column=0, sticky='W')
+previous_button.grid(row=5, column=0, sticky='W')
 
 approve_button = tk.Button(window, text='Approve',
-                           command=approve, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground="green")
+                           command=approve, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground='green')
 
-approve_button.grid(row=3, column=1, sticky='E')
+approve_button.grid(row=5, column=1, sticky='E')
 
 reject_button = tk.Button(window, text='Reject',
-                          command=reject, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground="red")
+                          command=reject, width=15, height=4, borderwidth=10, highlightthickness=10, activebackground='red')
 
-reject_button.grid(row=3, column=2, sticky='W')
+reject_button.grid(row=5, column=2, sticky='W')
 
 next_button = tk.Button(window, text='Next ->', command=next,
                         width=15, height=4, borderwidth=10)
 
-next_button.grid(row=3, column=3, sticky='E')
+next_button.grid(row=5, column=3, sticky='E')
 
-window.protocol("WM_DELETE_WINDOW", on_closing)
+confirm_button = tk.Button(window, text='Confirm',
+                           command=confirm, width=15, height=4, borderwidth=10, highlightthickness=10)
+
+confirm_button.grid(row=3, column=4)
+
+window.protocol('WM_DELETE_WINDOW', on_closing)
 
 read_and_display()
 

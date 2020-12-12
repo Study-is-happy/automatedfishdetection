@@ -8,6 +8,7 @@ aws_secret_access_key = 'YOcYOzoM93DaljBo93BRxgzN9cCBrYf6cRVSYS3s'
 
 email_address = 'isec.neufr@gmail.com'
 email_password = 'HSingh1!'
+email_name = 'Field Robotics Lab'
 
 INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
