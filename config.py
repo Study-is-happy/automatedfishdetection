@@ -1,5 +1,4 @@
-project_dir = '/data/automatedfishdetection/seagate/rockfish_train/'
-# project_dir = '/home/zhiyongzhang/datasets/fish_detection/seagate/'
+project_dir = '/data/automatedfishdetection/seagate/corals/'
 
 results_name = 'results_1.csv'
 
@@ -23,11 +22,11 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
 #               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-categories = ['rockfish', 'background']
+categories = ['corals', 'background']
 
 # colors = ['purple', 'white', 'orange', 'blue',
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']
-colors = ['red']
+colors = ['red', 'grey']
 
 num_categories = len(categories)-1
 
