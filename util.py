@@ -77,9 +77,15 @@ def get_rint(num):
     return np.rint(num).astype(int)
 
 
+def easy_gt_index_generator():
+    while True:
+        for index in range(5, 10):
+            yield index
+
+
 def easy_gt_annotation_generator(instances):
     while True:
         for image_id, instance in instances.items():
             for annotation in instance['annotations']:
-                yield {'image_id': image_id, 'width': instance['width'], 'height': instance['height'], 'category_id': annotation['category_id'], 'score': 1,
+                yield {'image_id': image_id, 'width': instance['width'], 'height': instance['height'], 'category_id': annotation['category_id'], 'iou': annotation['iou'], 'score': 1,
                        'bbox': annotation['bbox']}

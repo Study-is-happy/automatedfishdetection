@@ -15,6 +15,8 @@ with open(config.project_dir+'easy_gt/instances.json') as easy_gt_instances_file
     easy_gt_annotation_generator = util.easy_gt_annotation_generator(
         json.load(easy_gt_instances_file))
 
+easy_gt_index_generator = util.easy_gt_index_generator()
+
 cache_annotations = []
 
 annotation_id = 0
@@ -33,12 +35,12 @@ for image_id, instance in train_instances.items():
 
         current_annotations = cache_annotations[:config.predict_per_file]
 
-        for gt_index in config.gt_indexes:
-            easy_gt_annotation = next(easy_gt_annotation_generator)
-            shutil.copy(config.project_dir+'easy_gt/images/'+easy_gt_annotation['image_id']+'.jpg',
-                        config.project_dir+'predict/images/')
-            current_annotations.insert(
-                gt_index, easy_gt_annotation)
+        easy_gt_index = next(easy_gt_index_generator)
+        easy_gt_annotation = next(easy_gt_annotation_generator)
+        shutil.copy(config.project_dir+'easy_gt/images/'+easy_gt_annotation['image_id']+'.jpg',
+                    config.project_dir+'predict/images/')
+        current_annotations.insert(
+            easy_gt_index, easy_gt_annotation)
 
         util.write_json_file(
             current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')

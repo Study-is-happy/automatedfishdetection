@@ -8,8 +8,7 @@ import config
 
 # TODO: Set the dirs
 
-src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/SH-18-12/'
-# src_dataset_dir = '/home/zhiyongzhang/datasets/seagate/'
+src_dataset_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/'
 
 des_dataset_dir = config.project_dir+'train/'
 

@@ -67,31 +67,41 @@
       </td>
       <td>
         <div class="instructionText">
-          <font color="orange">corals</font>
+          <font color="orange">coral</font>
         </div>
         <table border="5" bordercolor="orange">
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_1.png" alt="rockfish_1" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_1.png" alt="corals_1" width="150" height="150" />
             </td>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_2.png" alt="rockfish_2" width="150" height="150" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_3.png" alt="rockfish_3" width="150" height="150" />
-            </td>
-            <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_4.png" alt="rockfish_4" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_2.png" alt="corals_2" width="150" height="150" />
             </td>
           </tr>
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_5.png" alt="rockfish_5" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_3.png" alt="corals_3" width="150" height="150" />
             </td>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/rockfish_6.png" alt="rockfish_6" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_4.png" alt="corals_4" width="150" height="150" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_5.png" alt="corals_5" width="150" height="150" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_6.png" alt="corals_6" width="150" height="150" />
+            </td>
+          </tr>
+        </table>
+        <div class="instructionText">
+          <font color="red">Not a coral! (starfish)</font>
+        </div>
+        <table border="5" bordercolor="red">
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/not_corals_1.png" alt="not_corals_1" width="150" height="150" />
             </td>
           </tr>
         </table>
@@ -106,7 +116,7 @@
 const dataSrc = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/"
 
 const categories = [
-  { "name": "corals", "color": "orange" }
+  { "name": "coral", "color": "orange" }
 ]
 
 const tutorialModalTexts = ["Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Some objects overlap, labeling the unlabeled one"]
@@ -118,8 +128,6 @@ const imgBorderWidth = 4
 const boxBorderWidth = 3
 
 const resizerExtraWidth = 4
-
-const gtIndexes = [9]
 
 const maxZoom = 4
 
@@ -239,7 +247,7 @@ function display() {
       })
       annotationsInput.value = JSON.stringify(annotations)
       submitButton.click()
-      console.log(annotations)
+      // console.log(annotations)
     }
   } else {
     nextButton.innerHTML = "Next"
@@ -361,7 +369,7 @@ function zoomIn() {
 }
 
 function next() {
-  console.log(annotation)
+  // console.log(annotation)
   currentIndex += 1
   display()
 }
@@ -372,7 +380,7 @@ img.onload = function() {
 
   let currentZoom = Math.min(imgDiv.clientWidth / ((annotation["bbox"][2] - annotation["bbox"][0]) * annotation["width"]), imgDiv.clientHeight / ((annotation["bbox"][3] - annotation["bbox"][1]) * annotation["height"])) / 1.6
 
-  currentZoom = norm(currentZoom, minZoom, maxZoom)
+  currentZoom = norm(currentZoom, minZoom, 2.5)
 
   zoomLevel = minZoom
 
@@ -1103,15 +1111,18 @@ window.onload = function() {
 
   const xhr = new XMLHttpRequest()
   // xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
-  xhr.open("GET", dataSrc + "predict/annotations/300.json")
+  xhr.open("GET", dataSrc + "predict/annotations/655.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
       annotations = JSON.parse(xhr.response)
 
-      gtIndexes.forEach(function(gtIndex) {
-        modifyGtBbox(annotations[gtIndex])
-      })
+      for (let i = 0; i < annotations.length; i++) {
+        annotation = annotations[i]
+        if ("iou" in annotation){
+          modifyGtBbox(annotation)
+        }
+      }
 
       annotations.forEach(function(annotation) {
         annotation["category_id"] = ""

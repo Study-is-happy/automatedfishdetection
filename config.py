@@ -40,5 +40,4 @@ MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.7
 MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_final.pth'
 
 annotation_per_file = 10
-gt_indexes = [9]
-predict_per_file = annotation_per_file - len(gt_indexes)
+predict_per_file = 9
