@@ -39,7 +39,7 @@ with open(results_approve_path) as results_approve_file:
         os.remove(predict_annotations_file_path)
 
         not_conf_indexes = json.loads(result[-3])
-        reject_indexes = json.loads(result[-1])
+        reject_indexes = json.loads(result[-2])
 
         for index in not_conf_indexes:
             predict_annotations[index]['category_id'] = result_annotations[index]['category_id']

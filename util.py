@@ -86,6 +86,7 @@ def easy_gt_index_generator():
 def easy_gt_annotation_generator(instances):
     while True:
         for image_id, instance in instances.items():
-            for annotation in instance['annotations']:
-                yield {'image_id': image_id, 'width': instance['width'], 'height': instance['height'], 'category_id': annotation['category_id'], 'iou': annotation['iou'], 'score': 1,
-                       'bbox': annotation['bbox']}
+            for index, annotation in enumerate(instance['annotations']):
+                if annotation['iou'] > 0.5:
+                    yield {'image_id': image_id, 'width': instance['width'], 'height': instance['height'], 'category_id': annotation['category_id'], 'gt_annotation_index': index, 'score': 1,
+                           'bbox': annotation['bbox']}

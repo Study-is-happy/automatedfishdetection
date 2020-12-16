@@ -310,7 +310,7 @@ def approve():
     approve_button.config(highlightbackground='green')
     email_result = email_result_list[current_index]
     email_result['approve'] = True
-    email_result['email_text'] = '\tThank you for working on our tasks! The attached image was flagged by our program for being outside range of acceptable labelling. However, after reviewing this image, it appears your labelling was rejected in error. We have updated the status of the batch of images which were rejected because of this to “accepted.” We appreciate you taking the time to work on our tasks, and thank you for your understanding in this matter, as we are still fine-tuning the rejection parameters.'
+    email_result['email_text'] = '\tThank you for working on our tasks! The attached image shows the labelling that we initially rejected. However, after reviewing this image, it appears your labelling was rejected in error. We have updated the status of the batch of images which were rejected because of this to “accepted.” We appreciate you taking the time to work on our tasks, and thank you for your understanding in this matter, as we are still fine-tuning the rejection parameters.'
     email_result['reject_option'] = ''
     update_input_text_options(email_result)
 
@@ -320,9 +320,9 @@ def reject():
     reject_button.config(highlightbackground='red')
     email_result = email_result_list[current_index]
     email_result['approve'] = False
-    email_result['email_text'] = '\tThank you for working on our tasks! The attached image was flagged by our program for being outside range of acceptable labelling. After reviewing this image, it appears your labelling was rejected for the following reason:' + \
+    email_result['email_text'] = '\tThank you for working on our tasks! The attached image shows the labelling that resulted in this set of images being rejected. After reviewing this image, it appears your labelling was rejected for the following reason:' + \
         '\n\n{}\n\n' + \
-        '\tUnfortunately, we believe this labelling does not meet our requirements. We apologize for our strict rejection parameters, our use case requires very precise labelling. We appreciate you taking the time to work on our tasks and hope you will consider working on more in the future, as we are continuing to fine-tune our rejection parameters.'
+        '\tUnfortunately, we believe this labelling does not meet our requirements. We apologize for our strict rejection parameters; our use case requires very precise labelling. We appreciate you taking the time to work on our tasks and hope you will consider working on more in the future, as we are continuing to fine-tune our rejection parameters.'
     email_result['reject_option'] = ''
     update_input_text_options(email_result)
 

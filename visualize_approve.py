@@ -20,7 +20,7 @@ with open(results_approve_path) as results_approve_file:
 
     for result in results:
 
-        # if result[-9] != '12616':
+        # if result[-9] != '1574':
         #     continue
 
         print(result[-9])
@@ -32,23 +32,31 @@ with open(results_approve_path) as results_approve_file:
 
         conf_indexes = json.loads(result[-4])
         not_conf_indexes = json.loads(result[-3])
-        approved_gt_indexes = json.loads(result[-2])
+        reject_indexes = json.loads(result[-2])
+        gt_indexes = json.loads(result[-1])
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
 
-            if result[-6] == 'x' or index not in config.gt_indexes:
+            if result[-6] == 'x' or 'gt_annotation_index' not in predict_annotation:
                 continue
-
             # if result_annotation['image_id'] != '20161027.175242.00310_rect_color':
             #     continue
 
-            if index in conf_indexes+approved_gt_indexes:
+            if index in gt_indexes:
+                if result[-6] == 'x':
+                    judge_color = 'green'
+                    judge_text = 'Approve'
+                else:
+                    judge_color = 'red'
+                    judge_text = 'Reject'
+
+            elif index in conf_indexes:
                 judge_color = 'green'
                 judge_text = 'Approve'
             elif index in not_conf_indexes:
                 judge_color = 'orange'
                 judge_text = 'Not Sure'
-            else:
+            elif index in reject_indexes:
                 judge_color = 'red'
                 judge_text = 'Reject'
 

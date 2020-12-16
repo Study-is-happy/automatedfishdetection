@@ -25,7 +25,7 @@
   <table id="layoutTable" align="center">
     <thead>
       <tr class="titleText">
-        <th>Workspace</th>
+        <th>Label the object in the box</th>
         <th>Examples</th>
       </tr>
     </thead>
@@ -72,26 +72,26 @@
         <table border="5" bordercolor="orange">
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_1.png" alt="corals_1" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_1.png" alt="corals_1" width="130" height="130" />
             </td>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_2.png" alt="corals_2" width="150" height="150" />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_3.png" alt="corals_3" width="150" height="150" />
-            </td>
-            <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_4.png" alt="corals_4" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_2.png" alt="corals_2" width="130" height="130" />
             </td>
           </tr>
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_5.png" alt="corals_5" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_3.png" alt="corals_3" width="130" height="130" />
             </td>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_6.png" alt="corals_6" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_4.png" alt="corals_4" width="130" height="130" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_5.png" alt="corals_5" width="130" height="130" />
+            </td>
+            <td>
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/corals_6.png" alt="corals_6" width="130" height="130" />
             </td>
           </tr>
         </table>
@@ -101,7 +101,7 @@
         <table border="5" bordercolor="red">
           <tr>
             <td>
-              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/not_corals_1.png" alt="not_corals_1" width="150" height="150" />
+              <img src="https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/instruction/not_corals_1.png" alt="not_corals_1" width="130" height="130" />
             </td>
           </tr>
         </table>
@@ -369,7 +369,7 @@ function zoomIn() {
 }
 
 function next() {
-  // console.log(annotation)
+  console.log(annotation)
   currentIndex += 1
   display()
 }
@@ -1087,16 +1087,18 @@ function modifyGtBbox(gt_annotation) {
   width = gt_annotation["width"]
   height = gt_annotation["height"]
 
+  half_bbox_size = Math.max((bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height)/2*1.6
+
   center_x = (bbox[0] + bbox[2])/2
   center_y = (bbox[1] + bbox[3])/2
 
-  bbox[0] = center_x-40/width
+  bbox[0] = center_x-half_bbox_size/width
   bbox[0] = norm(bbox[0], 0, 1)
-  bbox[1] = center_y-40/height
+  bbox[1] = center_y-half_bbox_size/height
   bbox[1] = norm(bbox[1], 0, 1)
-  bbox[2] = center_x+40/width
+  bbox[2] = center_x+half_bbox_size/width
   bbox[2] = norm(bbox[2], 0, 1)
-  bbox[3] = center_y+40/height
+  bbox[3] = center_y+half_bbox_size/height
   bbox[3] = norm(bbox[3], 0, 1)
 }
 
@@ -1119,7 +1121,7 @@ window.onload = function() {
 
       for (let i = 0; i < annotations.length; i++) {
         annotation = annotations[i]
-        if ("iou" in annotation){
+        if ("gt_annotation_index" in annotation){
           modifyGtBbox(annotation)
         }
       }
