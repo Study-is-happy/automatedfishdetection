@@ -35,10 +35,10 @@ cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = config.MODEL_ROI_HEADS_NMS_THRESH_TEST
 
 predictor = DefaultPredictor(cfg)
 
-with open(config.project_dir+'update/instances.json') as update_instances_file:
+with open(config.project_dir + 'update/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
-with open(config.project_dir+'easy_gt/instances.json') as easy_instances_file:
+with open(config.project_dir + 'easy_gt/instances.json') as easy_instances_file:
     easy_gt_annotation_generator = util.easy_gt_annotation_generator(
         json.load(easy_instances_file))
 
@@ -46,7 +46,7 @@ easy_gt_index_generator = util.easy_gt_index_generator()
 
 cache_annotations = []
 
-images_dir = config.project_dir+'update/images/'
+images_dir = config.project_dir + 'update/images/'
 
 vis_instances = {}
 
@@ -56,7 +56,7 @@ for image_file_name in os.listdir(images_dir):
 
     image_id = os.path.splitext(image_file_name)[0]
 
-    image = cv2.imread(images_dir+image_file_name)
+    image = cv2.imread(images_dir + image_file_name)
 
     height, width, _ = image.shape
 
@@ -89,7 +89,7 @@ for image_file_name in os.listdir(images_dir):
         for index, annotation in enumerate(annotations):
 
             if annotation['score'] > 0:
-                for unchecked_annotation in annotations[index+1:]:
+                for unchecked_annotation in annotations[index + 1:]:
                     if util.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.1:
                         unchecked_annotation['score'] = 0
 
@@ -106,8 +106,8 @@ for image_file_name in os.listdir(images_dir):
 
             cache_annotations.extend(annotations)
 
-            shutil.copy(images_dir+image_file_name,
-                        config.project_dir+'predict/images/')
+            shutil.copy(images_dir + image_file_name,
+                        config.project_dir + 'predict/images/')
 
             vis_instance = {
                 'width': width, 'height': height, 'annotations': []}
@@ -115,7 +115,7 @@ for image_file_name in os.listdir(images_dir):
 
             if update_annotations is not None:
                 util.write_json_file(
-                    update_annotations, config.project_dir+'predict/exist_annotations/'+image_id+'.json')
+                    update_annotations, config.project_dir + 'predict/exist_annotations/' + image_id + '.json')
                 for update_annotation in update_annotations:
                     vis_instance['annotations'].append({'category_id': update_annotation['category_id'],
                                                         'bbox': update_annotation['bbox']})
@@ -130,25 +130,30 @@ for image_file_name in os.listdir(images_dir):
 
                 easy_gt_index = next(easy_gt_index_generator)
                 easy_gt_annotation = next(easy_gt_annotation_generator)
-                shutil.copy(config.project_dir+'gt_easy/images/'+easy_gt_annotation['image_id']+'.jpg',
-                            config.project_dir+'predict/images/')
+                shutil.copy(config.project_dir + 'gt_easy/images/' + easy_gt_annotation['image_id'] + '.jpg',
+                            config.project_dir + 'predict/images/')
                 current_annotations.insert(
                     easy_gt_index, easy_gt_annotation)
 
+                annotations_file_path = config.project_dir + 'predict/annotations/' + str(annotation_id) + '.json'
+
                 util.write_json_file(
-                    current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
+                    current_annotations, annotations_file_path)
+
+                shutil.copy(annotations_file_path,
+                            config.project_dir + 'predict/current_annotations/')
 
                 cache_annotations = cache_annotations[config.predict_per_file:]
 
                 annotation_id += 1
 
 util.write_json_file(
-    cache_annotations, config.project_dir+'predict/annotations/cache.json')
+    cache_annotations, config.project_dir + 'predict/annotations/cache.json')
 
 util.write_json_file(
-    vis_instances, config.project_dir+'predict/instances.json')
+    vis_instances, config.project_dir + 'predict/instances.json')
 
-with open(config.project_dir+'predict/annotation_ids.csv', 'a') as annotation_ids_file:
+with open(config.project_dir + 'predict/annotation_ids.csv', 'a') as annotation_ids_file:
 
     for i in range(annotation_id):
         annotation_ids_file.write(str(i) + '\n')

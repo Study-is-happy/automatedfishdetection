@@ -1112,8 +1112,8 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/annotations/${annotation_id}.json")
-  // xhr.open("GET", dataSrc + "predict/annotations/0.json")
+  xhr.open("GET", dataSrc + "predict/current_annotations/${annotation_id}.json")
+  // xhr.open("GET", dataSrc + "predict/current_annotations/0.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 

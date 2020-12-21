@@ -7,13 +7,13 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'easy_gt/'
+dataset_dir = config.project_dir + 'update/'
 
 ###########################################################################
 
-images_dir = dataset_dir+'images/'
+images_dir = dataset_dir + 'images/'
 
-instances_file_path = dataset_dir+'instances.json'
+instances_file_path = dataset_dir + 'instances.json'
 
 with open(instances_file_path) as instances_file:
 
@@ -28,10 +28,10 @@ for image_id in sorted(instances_dict):
     # if image_id != '20100922.163718.01228':
     #     continue
 
-    # if len(instance['annotations']) < 20:
-    #     continue
+    if len(instance['annotations']) < 20:
+        continue
 
-    image = mpimg.imread(images_dir+image_id+'.jpg')
+    image = mpimg.imread(images_dir + image_id + '.jpg')
 
     width = instance['width']
     height = instance['height']
@@ -51,9 +51,9 @@ for image_id in sorted(instances_dict):
         color = config.colors[annotation['category_id']]
 
         current_axis.add_patch(plt.Rectangle(
-            (bbox[0]*width, bbox[1]*height), (bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height, color=color, fill=False, linewidth=3))
+            (bbox[0] * width, bbox[1] * height), (bbox[2] - bbox[0]) * width, (bbox[3] - bbox[1]) * height, color=color, fill=False, linewidth=3))
 
-        plt.text(bbox[0]*width, bbox[1]*height-3,
+        plt.text(bbox[0] * width, bbox[1] * height - 3,
                  config.categories[annotation['category_id']], color='white', size=15, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
     plt.show()

@@ -5,13 +5,13 @@ import config
 import util
 import reset_predict
 
-shutil.copy(config.project_dir+'train/instances.json',
-            config.project_dir+'predict/')
+shutil.copy(config.project_dir + 'train/instances.json',
+            config.project_dir + 'predict/')
 
-with open(config.project_dir+'train/instances.json') as train_instances_file:
+with open(config.project_dir + 'train/instances.json') as train_instances_file:
     train_instances = json.load(train_instances_file)
 
-with open(config.project_dir+'easy_gt/instances.json') as easy_gt_instances_file:
+with open(config.project_dir + 'easy_gt/instances.json') as easy_gt_instances_file:
     easy_gt_annotation_generator = util.easy_gt_annotation_generator(
         json.load(easy_gt_instances_file))
 
@@ -28,8 +28,8 @@ for image_id, instance in train_instances.items():
         cache_annotations.append({'image_id': image_id, 'width': width, 'height': height, 'category_id': annotation['category_id'], 'score': 1,
                                   'bbox': annotation['bbox']})
 
-    shutil.copy(config.project_dir+'train/images/'+image_id+'.jpg',
-                config.project_dir+'predict/images/')
+    shutil.copy(config.project_dir + 'train/images/' + image_id + '.jpg',
+                config.project_dir + 'predict/images/')
 
     while len(cache_annotations) >= config.predict_per_file:
 
@@ -37,22 +37,27 @@ for image_id, instance in train_instances.items():
 
         easy_gt_index = next(easy_gt_index_generator)
         easy_gt_annotation = next(easy_gt_annotation_generator)
-        shutil.copy(config.project_dir+'easy_gt/images/'+easy_gt_annotation['image_id']+'.jpg',
-                    config.project_dir+'predict/images/')
+        shutil.copy(config.project_dir + 'easy_gt/images/' + easy_gt_annotation['image_id'] + '.jpg',
+                    config.project_dir + 'predict/images/')
         current_annotations.insert(
             easy_gt_index, easy_gt_annotation)
 
+        annotations_file_path = config.project_dir + 'predict/annotations/' + str(annotation_id) + '.json'
+
         util.write_json_file(
-            current_annotations, config.project_dir+'predict/annotations/'+str(annotation_id)+'.json')
+            current_annotations, annotations_file_path)
+
+        shutil.copy(annotations_file_path,
+                    config.project_dir + 'predict/current_annotations/')
 
         cache_annotations = cache_annotations[config.predict_per_file:]
 
         annotation_id += 1
 
 util.write_json_file(
-    cache_annotations, config.project_dir+'predict/annotations/cache.json')
+    cache_annotations, config.project_dir + 'predict/annotations/cache.json')
 
-with open(config.project_dir+'predict/annotation_ids.csv', 'a') as annotation_ids_file:
+with open(config.project_dir + 'predict/annotation_ids.csv', 'a') as annotation_ids_file:
 
     for i in range(annotation_id):
         annotation_ids_file.write(str(i) + '\n')

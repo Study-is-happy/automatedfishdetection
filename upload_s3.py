@@ -6,13 +6,13 @@ import config
 # TODO: Set the dir
 
 # upload_dir = 'images/'
-upload_dir = 'annotations/'
+upload_dir = 'current_annotations/'
 # upload_dir = 'exist_annotations/'
 
 ###########################################################################
 
-s3_bucket_dir = 'zhiyongzhang/predict/'+upload_dir
-local_dir = config.project_dir+'predict/'+upload_dir
+s3_bucket_dir = 'zhiyongzhang/predict/' + upload_dir
+local_dir = config.project_dir + 'predict/' + upload_dir
 
 s3_bucket = boto3.resource('s3',
                            aws_access_key_id=config.aws_access_key_id,
