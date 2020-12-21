@@ -1,4 +1,5 @@
-project_dir = '/data/automatedfishdetection/seagate/corals/'
+# project_dir = '/data/automatedfishdetection/seagate/corals/'
+project_dir = '/data/automatedfishdetection/pacstorm_pmfs/'
 
 results_name = 'results_1.csv'
 
@@ -28,7 +29,7 @@ categories = ['corals', 'background']
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']
 colors = ['orange', 'grey']
 
-num_categories = len(categories)-1
+num_categories = len(categories) - 1
 
 train_update = False
 
