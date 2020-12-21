@@ -6,7 +6,7 @@ import numpy as np
 import util
 import config
 
-results_path = config.project_dir+'results/' + config.results_name
+results_path = config.project_dir + 'results/' + config.results_name
 
 results_approve_path = config.project_dir + \
     'results_approve/' + config.results_name
@@ -16,12 +16,12 @@ approve_confident_count = 6
 
 
 def calc_timer(edge_timer, corner_timer):
-    return edge_timer + corner_timer*1.5
+    return edge_timer + corner_timer * 1.5
 
 
-print_results = {'approve': 0, 'reject': 0, 'empty': 0}
+print_results = {'approve': 0, 'reject': 0, 'empty': 0, 'bug': 0}
 
-with open(config.project_dir+'easy_gt/instances.json') as easy_gt_instances_file:
+with open(config.project_dir + 'easy_gt/instances.json') as easy_gt_instances_file:
     easy_gt_instances = json.load(easy_gt_instances_file)
 
 with open(results_path) as results_file:
@@ -43,11 +43,11 @@ with open(results_path) as results_file:
 
         for result in results:
 
-            result.extend(['']*(len(headers)-len(result)))
+            result.extend([''] * (len(headers) - len(result)))
 
             result_annotations = json.loads(result[-8])
 
-            with open(config.project_dir+'predict/annotations/'+result[-9]+'.json') as predict_annotations_file:
+            with open(config.project_dir + 'predict/annotations/' + result[-9] + '.json') as predict_annotations_file:
                 predict_annotations = json.load(predict_annotations_file)
 
             conf_indexes = []
@@ -67,6 +67,8 @@ with open(results_path) as results_file:
 
             result[-1] = gt_indexes
 
+            bug = False
+
             if len(result_annotations) == len(predict_annotations):
 
                 approve = True
@@ -78,6 +80,11 @@ with open(results_path) as results_file:
                                                            ]['annotations'][predict_annotation['gt_annotation_index']]
 
                     result_annotation = result_annotations[gt_index]
+
+                    if None in result_annotation['bbox']:
+                        approve = False
+                        bug = True
+                        continue
 
                     if easy_gt_annotation['category_id'] != result_annotation['category_id']:
                         approve = False
@@ -100,6 +107,11 @@ with open(results_path) as results_file:
                         predict_annotation = predict_annotations[annotation_index]
                         result_annotation = result_annotations[annotation_index]
 
+                        if None in result_annotation['bbox']:
+                            bug = True
+                            reject_indexes.append(annotation_index)
+                            continue
+
                         confident = True
 
                         if config.categories[result_annotation['category_id']] != 'background':
@@ -118,7 +130,7 @@ with open(results_path) as results_file:
 
                             exist_annotations_file_path = config.project_dir + \
                                 'predict/exist_annotations/' + \
-                                result_annotation['image_id']+'.json'
+                                result_annotation['image_id'] + '.json'
 
                             if os.path.exists(exist_annotations_file_path):
 
@@ -151,6 +163,10 @@ with open(results_path) as results_file:
                         conf_indexes = []
                         not_conf_indexes = []
 
+                if bug:
+                    result[-6] = 'x'
+                    print_results['bug'] += 1
+
                 if not approve:
                     result[-5] = ', '.join(reject_reasons)
                     reject_indexes = annotation_indexes
@@ -167,6 +183,8 @@ with open(results_path) as results_file:
                 result[-2] = annotation_indexes
                 print_results['empty'] += 1
 
+            # if bug:
+            #     print(result_annotations)
             writer.writerow(result)
 
 print(print_results)

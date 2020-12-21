@@ -10,7 +10,7 @@ import util
 results_approve_path = config.project_dir + \
     'results_approve/' + config.results_name
 
-predict_dir = config.project_dir+'predict/'
+predict_dir = config.project_dir + 'predict/'
 
 with open(results_approve_path) as results_approve_file:
 
@@ -20,14 +20,14 @@ with open(results_approve_path) as results_approve_file:
 
     for result in results:
 
-        # if result[-9] != '1574':
+        # if result[-9] != '1473':
         #     continue
 
         print(result[-9])
 
         result_annotations = json.loads(result[-8])
 
-        with open(predict_dir+'annotations/'+result[-9]+'.json') as predict_annotations_file:
+        with open(predict_dir + 'annotations/' + result[-9] + '.json') as predict_annotations_file:
             predict_annotations = json.load(predict_annotations_file)
 
         conf_indexes = json.loads(result[-4])
@@ -37,10 +37,8 @@ with open(results_approve_path) as results_approve_file:
 
         for index, (predict_annotation, result_annotation) in enumerate(zip(predict_annotations, result_annotations)):
 
-            if result[-6] == 'x' or 'gt_annotation_index' not in predict_annotation:
+            if result[-6] == 'x' or index not in gt_indexes:
                 continue
-            # if result_annotation['image_id'] != '20161027.175242.00310_rect_color':
-            #     continue
 
             if index in gt_indexes:
                 if result[-6] == 'x':
@@ -60,8 +58,8 @@ with open(results_approve_path) as results_approve_file:
                 judge_color = 'red'
                 judge_text = 'Reject'
 
-            image = mpimg.imread(predict_dir+'images/' +
-                                 result_annotation['image_id']+'.jpg')
+            image = mpimg.imread(predict_dir + 'images/'
+                                 + result_annotation['image_id'] + '.jpg')
 
             width = image.shape[1]
 
@@ -83,12 +81,12 @@ with open(results_approve_path) as results_approve_file:
             xmax = max(predict_bbox[2], result_bbox[2])
             ymax = max(predict_bbox[3], result_bbox[3])
 
-            offsetWidth = (xmax-xmin)*1.6
-            offsetHeight = (ymax-ymin)*1.6
-            offsetLeft = util.get_rint(max(0, xmin-offsetWidth/2))
-            offsetTop = util.get_rint(max(0, ymin-offsetHeight/2))
-            offsetRight = util.get_rint(min(width, xmax+offsetWidth/2))
-            offsetBottom = util.get_rint(min(height, ymax+offsetHeight/2))
+            offsetWidth = (xmax - xmin) * 1.6
+            offsetHeight = (ymax - ymin) * 1.6
+            offsetLeft = util.get_rint(max(0, xmin - offsetWidth / 2))
+            offsetTop = util.get_rint(max(0, ymin - offsetHeight / 2))
+            offsetRight = util.get_rint(min(width, xmax + offsetWidth / 2))
+            offsetBottom = util.get_rint(min(height, ymax + offsetHeight / 2))
 
             image = image[offsetTop:offsetBottom, offsetLeft:offsetRight, :]
 
@@ -110,12 +108,12 @@ with open(results_approve_path) as results_approve_file:
             current_axis = plt.gca()
 
             current_axis.add_patch(plt.Rectangle(
-                (predict_bbox[0], predict_bbox[1]), predict_bbox[2]-predict_bbox[0], predict_bbox[3]-predict_bbox[1], color=predict_color, fill=False, linewidth=3, linestyle='dashed'))
+                (predict_bbox[0], predict_bbox[1]), predict_bbox[2] - predict_bbox[0], predict_bbox[3] - predict_bbox[1], color=predict_color, fill=False, linewidth=3, linestyle='dashed'))
             current_axis.add_patch(plt.Rectangle(
-                (result_bbox[0], result_bbox[1]), result_bbox[2]-result_bbox[0], result_bbox[3]-result_bbox[1], color=result_color, fill=False, linewidth=3))
+                (result_bbox[0], result_bbox[1]), result_bbox[2] - result_bbox[0], result_bbox[3] - result_bbox[1], color=result_color, fill=False, linewidth=3))
 
-            text = 'edge timer: ' + str(result_annotation['edge_timer']/10) + 's\ncorner timer: '+str(
-                result_annotation['corner_timer']/10) + '\nIOU: ' + format(iou, '0.2f')
+            text = 'edge timer: ' + str(result_annotation['edge_timer'] / 10) + 's\ncorner timer: ' + str(
+                result_annotation['corner_timer'] / 10) + '\nIOU: ' + format(iou, '0.2f')
 
             plt.text(0, 0, text, ha='left', va='top',
                      fontdict={'color': judge_color, 'size': 30}, bbox={'edgecolor': judge_color, 'facecolor': 'white'})

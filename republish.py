@@ -36,8 +36,6 @@ with open(results_approve_path) as results_approve_file:
         with open(predict_annotations_file_path) as predict_annotations_file:
             predict_annotations = json.load(predict_annotations_file)
 
-        os.remove(predict_annotations_file_path)
-
         not_conf_indexes = json.loads(result[-3])
         reject_indexes = json.loads(result[-2])
 
