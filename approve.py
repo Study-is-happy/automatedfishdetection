@@ -11,7 +11,7 @@ results_path = config.project_dir + 'results/' + config.results_name
 results_approve_path = config.project_dir + \
     'results_approve/' + config.results_name
 
-abs_timer_threshold = 15
+abs_timer_threshold = 10
 approve_confident_count = 6
 
 
