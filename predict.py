@@ -13,7 +13,7 @@ print_results = {'fish': 0, 'starfish': 0, 'sponge': 0}
 
 cfg = get_cfg()
 cfg.merge_from_file(
-    'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
+    'detectron2/configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml')
 
 cfg.MODEL.RESNETS.NORM = 'GN'
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
@@ -26,7 +26,7 @@ cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
 
-cfg.INPUT.MIN_SIZE_TEST = 896
+cfg.INPUT.MIN_SIZE_TEST = 832
 
 cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TEST
 
@@ -90,7 +90,7 @@ for image_file_name in os.listdir(images_dir):
 
             if annotation['score'] > 0:
                 for unchecked_annotation in annotations[index + 1:]:
-                    if util.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.1:
+                    if util.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.5:
                         unchecked_annotation['score'] = 0
 
                 if update_annotations is not None:
@@ -130,7 +130,7 @@ for image_file_name in os.listdir(images_dir):
 
                 easy_gt_index = next(easy_gt_index_generator)
                 easy_gt_annotation = next(easy_gt_annotation_generator)
-                shutil.copy(config.project_dir + 'gt_easy/images/' + easy_gt_annotation['image_id'] + '.jpg',
+                shutil.copy(config.project_dir + 'easy_gt/images/' + easy_gt_annotation['image_id'] + '.jpg',
                             config.project_dir + 'predict/images/')
                 current_annotations.insert(
                     easy_gt_index, easy_gt_annotation)

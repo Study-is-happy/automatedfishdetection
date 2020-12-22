@@ -25,7 +25,7 @@ for image_id in sorted(instances_dict):
 
     instance = instances_dict[image_id]
 
-    # if image_id != '20100922.163718.01228':
+    # if image_id != '20181026.222637.03493_rect_color':
     #     continue
 
     if len(instance['annotations']) < 20:
@@ -44,7 +44,12 @@ for image_id in sorted(instances_dict):
 
     current_axis = plt.gca()
 
+    exist_category_count = 0
+
     for annotation in instance['annotations']:
+
+        if annotation['category_id'] == 3:
+            exist_category_count += 1
 
         bbox = annotation['bbox']
 
@@ -56,4 +61,7 @@ for image_id in sorted(instances_dict):
         plt.text(bbox[0] * width, bbox[1] * height - 3,
                  config.categories[annotation['category_id']], color='white', size=15, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
-    plt.show()
+    if exist_category_count >= 0:
+        plt.show()
+    else:
+        plt.close()

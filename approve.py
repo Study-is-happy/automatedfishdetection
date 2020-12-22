@@ -11,13 +11,16 @@ results_path = config.project_dir + 'results/' + config.results_name
 results_approve_path = config.project_dir + \
     'results_approve/' + config.results_name
 
-abs_timer_threshold = 10
+abs_timer_threshold = 20
 approve_confident_count = 6
+test_ratio = 1.06
 
 
 def calc_timer(edge_timer, corner_timer):
     return edge_timer + corner_timer * 1.5
 
+
+instances = {}
 
 print_results = {'approve': 0, 'reject': 0, 'empty': 0, 'bug': 0}
 
@@ -35,156 +38,177 @@ with open(results_path) as results_file:
     headers.append('reject_indexes')
     headers.append('gt_indexes')
 
-    with open(results_approve_path, 'w') as results_approve_file:
+    results = list(results)
 
-        writer = csv.writer(results_approve_file, quoting=csv.QUOTE_NONNUMERIC)
+    for result_index, result in enumerate(results):
 
-        writer.writerow(headers)
+        result.extend([''] * (len(headers) - len(result)))
 
-        for result in results:
+        result_annotations = json.loads(result[-8])
 
-            result.extend([''] * (len(headers) - len(result)))
+        with open(config.project_dir + 'predict/annotations/' + result[-9] + '.json') as predict_annotations_file:
+            predict_annotations = json.load(predict_annotations_file)
 
-            result_annotations = json.loads(result[-8])
+        conf_indexes = []
+        not_conf_indexes = []
+        reject_indexes = []
 
-            with open(config.project_dir + 'predict/annotations/' + result[-9] + '.json') as predict_annotations_file:
-                predict_annotations = json.load(predict_annotations_file)
+        reject_reasons = set()
 
-            conf_indexes = []
-            not_conf_indexes = []
-            reject_indexes = []
+        annotation_indexes = []
+        gt_indexes = []
 
-            reject_reasons = set()
+        for index, predict_annotation in enumerate(predict_annotations):
+            if 'gt_annotation_index' in predict_annotation:
+                gt_indexes.append(index)
+            else:
+                annotation_indexes.append(index)
 
-            annotation_indexes = []
-            gt_indexes = []
+        result[-1] = gt_indexes
 
-            for index, predict_annotation in enumerate(predict_annotations):
-                if 'gt_annotation_index' in predict_annotation:
-                    gt_indexes.append(index)
-                else:
-                    annotation_indexes.append(index)
+        bug = False
 
-            result[-1] = gt_indexes
+        if len(result_annotations) == len(predict_annotations):
 
-            bug = False
+            approve = True
 
-            if len(result_annotations) == len(predict_annotations):
+            for gt_index in gt_indexes:
 
-                approve = True
+                predict_annotation = predict_annotations[gt_index]
+                easy_gt_annotation = easy_gt_instances[predict_annotation['image_id']]['annotations'][predict_annotation['gt_annotation_index']]
 
-                for gt_index in gt_indexes:
+                result_annotation = result_annotations[gt_index]
 
-                    predict_annotation = predict_annotations[gt_index]
-                    easy_gt_annotation = easy_gt_instances[predict_annotation['image_id']
-                                                           ]['annotations'][predict_annotation['gt_annotation_index']]
+                if None in result_annotation['bbox']:
+                    approve = False
+                    bug = True
+                    continue
 
-                    result_annotation = result_annotations[gt_index]
+                if easy_gt_annotation['category_id'] != result_annotation['category_id']:
+                    approve = False
+                    reject_reasons.add('Wrong species')
+
+                if util.get_bboxes_iou(easy_gt_annotation['bbox'], result_annotation['bbox']) < easy_gt_annotation['iou'] * test_ratio:
+                    approve = False
+                    reject_reasons.add(
+                        'Bounding box not fitting tightly')
+
+                gt_timer = calc_timer(
+                    result_annotation['edge_timer'], result_annotation['corner_timer'])
+
+            if approve:
+
+                confident_count = 0
+
+                for annotation_index in annotation_indexes:
+
+                    predict_annotation = predict_annotations[annotation_index]
+                    result_annotation = result_annotations[annotation_index]
 
                     if None in result_annotation['bbox']:
-                        approve = False
                         bug = True
+                        reject_indexes.append(annotation_index)
                         continue
 
-                    if easy_gt_annotation['category_id'] != result_annotation['category_id']:
-                        approve = False
-                        reject_reasons.add('Wrong species')
+                    confident = True
 
-                    if util.get_bboxes_iou(easy_gt_annotation['bbox'], result_annotation['bbox']) < easy_gt_annotation['iou']:
-                        approve = False
-                        reject_reasons.add(
-                            'Bounding box not fitting tightly')
+                    if config.categories[result_annotation['category_id']] != 'background':
 
-                    gt_timer = calc_timer(
-                        result_annotation['edge_timer'], result_annotation['corner_timer'])
+                        if calc_timer(result_annotation['edge_timer'], result_annotation['corner_timer']) < min(abs_timer_threshold, gt_timer):
+                            confident = False
+                            reject_reasons.add('Bad bounding box')
 
-                if approve:
+                        if util.get_bboxes_iou(predict_annotation['bbox'], result_annotation['bbox']) == 0:
+                            confident = False
+                            reject_reasons.add(
+                                'Labeling unwanted object')
 
-                    confident_count = 0
+                        exist_annotations_file_path = config.project_dir + \
+                            'predict/exist_annotations/' + result_annotation['image_id'] + '.json'
 
-                    for annotation_index in annotation_indexes:
+                        if os.path.exists(exist_annotations_file_path):
 
-                        predict_annotation = predict_annotations[annotation_index]
-                        result_annotation = result_annotations[annotation_index]
+                            with open(exist_annotations_file_path) as exist_annotations_file:
+                                exist_annotations = json.load(
+                                    exist_annotations_file)
 
-                        if None in result_annotation['bbox']:
-                            bug = True
-                            reject_indexes.append(annotation_index)
-                            continue
+                            for exist_annotation in exist_annotations:
+                                if util.get_bboxes_iou(exist_annotation['bbox'], result_annotation['bbox']) > 0.3:
+                                    confident = False
+                                    reject_reasons.add(
+                                        'Duplicate bounding box')
+                                    break
 
-                        confident = True
-
-                        if config.categories[result_annotation['category_id']] != 'background':
-
-                            if calc_timer(result_annotation['edge_timer'], result_annotation['corner_timer']) < min(abs_timer_threshold, gt_timer):
-                                confident = False
-                                reject_reasons.add('Bad bounding box')
-
-                            target_iou = util.get_bboxes_iou(
-                                predict_annotation['bbox'], result_annotation['bbox'])
-
-                            if target_iou == 0:
-                                confident = False
-                                reject_reasons.add(
-                                    'Labeling unwanted object')
-
-                            exist_annotations_file_path = config.project_dir + \
-                                'predict/exist_annotations/' + \
-                                result_annotation['image_id'] + '.json'
-
-                            if os.path.exists(exist_annotations_file_path):
-
-                                with open(exist_annotations_file_path) as exist_annotations_file:
-                                    exist_annotations = json.load(
-                                        exist_annotations_file)
-
-                                for exist_annotation in exist_annotations:
-                                    if util.get_bboxes_iou(exist_annotation['bbox'], result_annotation['bbox']) > target_iou:
-                                        confident = False
-                                        reject_reasons.add(
-                                            'Duplicate bounding box')
-                                        break
-
-                        if confident:
-                            confident_count += 1
-                            if predict_annotation['category_id'] == result_annotation['category_id']:
-                                conf_indexes.append(annotation_index)
-                            else:
-                                not_conf_indexes.append(annotation_index)
+                    if confident:
+                        confident_count += 1
+                        if predict_annotation['category_id'] == result_annotation['category_id']:
+                            conf_indexes.append(annotation_index)
                         else:
-                            reject_indexes.append(annotation_index)
-
-                    if confident_count >= approve_confident_count:
-                        result[-6] = 'x'
-                        print_results['approve'] += 1
-
+                            not_conf_indexes.append(annotation_index)
                     else:
-                        approve = False
-                        conf_indexes = []
-                        not_conf_indexes = []
+                        reject_indexes.append(annotation_index)
 
-                if bug:
+                if confident_count >= approve_confident_count:
                     result[-6] = 'x'
-                    print_results['bug'] += 1
+                    print_results['approve'] += 1
 
-                if not approve:
-                    result[-5] = ', '.join(reject_reasons)
-                    reject_indexes = annotation_indexes
-                    print_results['reject'] += 1
+                else:
+                    approve = False
+                    conf_indexes = []
+                    not_conf_indexes = []
 
-                result[-4] = conf_indexes
-                result[-3] = not_conf_indexes
-                result[-2] = reject_indexes
+            if bug:
+                result[-6] = 'x'
+                print_results['bug'] += 1
 
-            else:
-                result[-5] = 'Getting empty results, might be something wrong with MTurk'
-                result[-4] = []
-                result[-3] = []
-                result[-2] = annotation_indexes
-                print_results['empty'] += 1
+            if not approve:
+                result[-5] = ', '.join(reject_reasons)
+                reject_indexes = annotation_indexes
+                print_results['reject'] += 1
 
-            # if bug:
-            #     print(result_annotations)
-            writer.writerow(result)
+            result[-4] = conf_indexes
+            result[-3] = not_conf_indexes
+            result[-2] = reject_indexes
+
+        else:
+            result[-5] = 'Getting empty results, might be something wrong with MTurk'
+            result[-4] = []
+            result[-3] = []
+            result[-2] = annotation_indexes
+            print_results['empty'] += 1
+
+        # if bug:
+        #     print(result_annotations)
+
+        for conf_index in conf_indexes:
+            annotation = result_annotations[conf_index]
+            image_id = annotation['image_id']
+            if image_id not in instances:
+                instances[image_id] = {'width': annotation['width'], 'height': annotation['height'], 'annotations': []}
+            annotation['result_index'] = result_index
+            annotation['annotation_index'] = conf_index
+            instances[image_id]['annotations'].append(annotation)
+
 
 print(print_results)
+
+for instance in instances.values():
+
+    overlap_annotations = util.filter_overlap_instance(instance, 0.1)
+    for overlap_annotation in overlap_annotations:
+        result = results[overlap_annotation['result_index']]
+        annotation_index = overlap_annotation['annotation_index']
+        result[-4].remove(annotation_index)
+        result[-2].append(annotation_index)
+
+with open(results_approve_path, 'w') as results_approve_file:
+
+    writer = csv.writer(results_approve_file, quoting=csv.QUOTE_NONNUMERIC)
+
+    writer.writerow(headers)
+
+    for result in results:
+        row_len = len(result[-4]) + len(result[-3]) + len(result[-2]) + len(result[-1])
+        if row_len != 10:
+            print(row_len)
+        writer.writerow(result)

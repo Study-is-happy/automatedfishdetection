@@ -22,7 +22,7 @@ torch.set_printoptions(precision=2, threshold=2000, sci_mode=False)
 
 def get_dicts(datasets_dir):
 
-    with open(datasets_dir+'instances.json') as instances_file:
+    with open(datasets_dir + 'instances.json') as instances_file:
 
         instances_dict = json.load(instances_file)
 
@@ -32,7 +32,7 @@ def get_dicts(datasets_dir):
 
         instance['image_id'] = image_id
 
-        instance['file_name'] = datasets_dir+'images/'+image_id+'.jpg'
+        instance['file_name'] = datasets_dir + 'images/' + image_id + '.jpg'
 
         for annotation in instance['annotations']:
 
@@ -47,9 +47,8 @@ def get_dicts(datasets_dir):
 
 cfg = get_cfg()
 cfg.merge_from_file(
-    'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
+    'detectron2/configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml')
 
-# cfg.MODEL.PROPOSAL_GENERATOR.NAME = 'my_RPN'
 cfg.MODEL.RESNETS.NORM = 'GN'
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
 cfg.MODEL.ROI_BOX_HEAD.NORM = 'GN'
@@ -60,8 +59,8 @@ cfg.MODEL.BACKBONE.FREEZE_AT = 0
 cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 cfg.MODEL.RPN.POSITIVE_FRACTION = 0.5
 
-cfg.INPUT.CROP.ENABLED = True
-cfg.INPUT.CROP.SIZE = [0.8, 0.8]
+# cfg.INPUT.CROP.ENABLED = True
+# cfg.INPUT.CROP.SIZE = [0.8, 0.8]
 
 cfg.SOLVER.IMS_PER_BATCH = 2
 cfg.SOLVER.BASE_LR = 0.0025
@@ -72,7 +71,7 @@ cfg.SOLVER.CHECKPOINT_PERIOD = 4000
 
 cfg.CUSTOM_CLS_LOSS_FACTOR = 1.0
 
-cfg.OUTPUT_DIR = config.project_dir+'outputs/'
+cfg.OUTPUT_DIR = config.project_dir + 'outputs/'
 
 cfg.TEST.EVAL_PERIOD = cfg.SOLVER.CHECKPOINT_PERIOD
 
@@ -86,10 +85,11 @@ cfg.MODEL.ROI_HEADS.NMS_THRESH_TEST = config.MODEL_ROI_HEADS_NMS_THRESH_TEST
 
 if config.train_update:
 
-    cfg.DATASETS.TRAIN = ['update/']
-    cfg.DATASETS.TEST = ['east_gt/']
-    cfg.CUSTOM_IGNORE_PROB = 0.5
-    cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
+    cfg.DATASETS.TRAIN = ['train/']
+    cfg.DATASETS.TEST = ['test/']
+    cfg.CUSTOM_IGNORE_PROB = 1
+    # cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TRAIN
+    cfg.MODEL.PROPOSAL_GENERATOR.NAME = 'my_RPN'
 
 else:
     cfg.DATASETS.TRAIN = ['train/']
@@ -99,9 +99,9 @@ else:
     # cfg.DATASETS.TEST = ['init/']
 
 
-for datasets_dir in cfg.DATASETS.TRAIN+cfg.DATASETS.TEST:
+for datasets_dir in cfg.DATASETS.TRAIN + cfg.DATASETS.TEST:
     DatasetCatalog.register(datasets_dir, lambda datasets_dir=datasets_dir: get_dicts(
-        config.project_dir+datasets_dir))
+        config.project_dir + datasets_dir))
     MetadataCatalog.get(datasets_dir).set(thing_classes=config.categories[:-1])
 
 print(cfg)
@@ -120,7 +120,7 @@ class Trainer(DefaultTrainer):
 
 
 trainer = Trainer(cfg)
-if config.train_update:
-    checkpoint = trainer.checkpointer._load_file(cfg.MODEL.WEIGHTS)
-    trainer.checkpointer._load_model(checkpoint)
+# if config.train_update:
+#     checkpoint = trainer.checkpointer._load_file(cfg.MODEL.WEIGHTS)
+#     trainer.checkpointer._load_model(checkpoint)
 trainer.train()

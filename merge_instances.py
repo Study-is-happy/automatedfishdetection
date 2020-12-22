@@ -5,10 +5,10 @@ import util
 
 # TODO: Set the paths
 
-instances_file_path_list = [config.project_dir+'easy_gt/instances.json',
-                            config.project_dir+'easy_gt/instances_2.json']
+instances_file_path_list = [config.project_dir + 'update/instances.json',
+                            config.project_dir + 'update/instances (copy).json']
 
-merge_instances_file_path = config.project_dir+'easy_gt/instances.json'
+merge_instances_file_path = config.project_dir + 'update/instances_merge.json'
 
 ###########################################################################
 

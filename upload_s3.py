@@ -6,8 +6,8 @@ import config
 # TODO: Set the dir
 
 # upload_dir = 'images/'
-upload_dir = 'current_annotations/'
-# upload_dir = 'exist_annotations/'
+# upload_dir = 'current_annotations/'
+upload_dir = 'exist_annotations/'
 
 ###########################################################################
 

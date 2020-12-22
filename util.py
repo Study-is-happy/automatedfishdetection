@@ -12,34 +12,59 @@ def write_json_file(obj, json_file_path):
 
 def get_bboxes_iou(bbox1, bbox2):
 
-    width1 = bbox1[2]-bbox1[0]
+    width1 = bbox1[2] - bbox1[0]
 
-    width2 = bbox2[2]-bbox2[0]
+    width2 = bbox2[2] - bbox2[0]
 
-    overlap_width = width1+width2 - (max(bbox1[2], bbox2[2]) -
-                                     min(bbox1[0], bbox2[0]))
+    overlap_width = width1 + width2 - (max(bbox1[2], bbox2[2])
+                                       - min(bbox1[0], bbox2[0]))
 
-    height1 = bbox1[3]-bbox1[1]
+    height1 = bbox1[3] - bbox1[1]
 
-    height2 = bbox2[3]-bbox2[1]
+    height2 = bbox2[3] - bbox2[1]
 
-    overlap_height = height1+height2 - (max(bbox1[3], bbox2[3]) -
-                                        min(bbox1[1], bbox2[1]))
+    overlap_height = height1 + height2 - (max(bbox1[3], bbox2[3])
+                                          - min(bbox1[1], bbox2[1]))
 
     if overlap_width > 0 and overlap_height > 0:
 
-        area1 = width1*height1
+        area1 = width1 * height1
 
-        overlap_area = overlap_width*overlap_height
+        overlap_area = overlap_width * overlap_height
 
-        area2 = width2*height2
+        area2 = width2 * height2
 
         iou = float(overlap_area) / \
-            (area1+area2-overlap_area)
+            (area1 + area2 - overlap_area)
 
         return iou
 
     return 0
+
+
+def get_bbox_size(bbox, image_width, image_height):
+    return (bbox[2] - bbox[0]) * image_width * (bbox[3] - bbox[1]) * image_height
+
+
+def filter_overlap_instance(instance, iou):
+
+    annotations = instance['annotations']
+
+    width = instance['width']
+    height = instance['height']
+
+    for index, annotation in enumerate(annotations):
+
+        for unchecked_annotation in annotations[index + 1:]:
+            if get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > iou:
+                if get_bbox_size(annotation['bbox'], width, height) < get_bbox_size(unchecked_annotation['bbox'], width, height):
+                    unchecked_annotation['overlap'] = True
+                else:
+                    annotation['overlap'] = True
+
+    instance['annotations'] = [annotation for annotation in annotations if 'overlap' not in annotation]
+
+    return [annotation for annotation in annotations if 'overlap' in annotation]
 
 
 def norm_abs_bbox(bbox):

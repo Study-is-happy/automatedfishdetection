@@ -29,7 +29,7 @@ _, receive_email_id_list = imap.search(
     'SUBJECT "[Amazon Mechanical Turk] Regarding Amazon Mechanical Turk HIT" ' +
     'FROM "<mturk-noreply@amazon.com>" ' +
     'UNANSWERED ' +
-    'SINCE "12-Dec-2020"' +
+    'SINCE "18-Dec-2020"' +
     ')')
 
 receive_email_id_list = receive_email_id_list[0].decode(
@@ -94,7 +94,7 @@ progressbar_style = tkinter.ttk.Style()
 progressbar_style.theme_use('default')
 progressbar_style.configure('TProgressbar', thickness=30, background='green')
 progressbar = tkinter.ttk.Progressbar(
-    mode='determinate', style='TProgressbar', value=current_index/len(email_result_list)*100, length=canvas_size)
+    mode='determinate', style='TProgressbar', value=current_index / len(email_result_list) * 100, length=canvas_size)
 progressbar.grid(row=4, columnspan=4)
 name_var = tk.StringVar()
 orig_highlightbackground = '#d9d9d9'
@@ -171,8 +171,11 @@ def read_and_display():
     else:
         previous_button.config(state='disabled')
 
-    annotations = email_result['annotations']
-    gt_annotation = annotations[config.gt_indexes[0]]
+    for annotation in email_result['annotations']:
+        if 'gt_annotation_index' in annotation:
+            gt_annotation = annotation
+            break
+
     print(gt_annotation['image_id'])
 
     image_width = gt_annotation['width']
@@ -189,16 +192,16 @@ def read_and_display():
     image = cv2.rectangle(
         image, (rint_bbox[0], rint_bbox[1]), (rint_bbox[2], rint_bbox[3]), (0, 0, 255), 2)
 
-    half_image_size = max(bbox[2]-bbox[0], bbox[3]-bbox[1])*1.8/2
+    half_image_size = max(bbox[2] - bbox[0], bbox[3] - bbox[1]) * 1.8 / 2
 
-    center_x = (bbox[0]+bbox[2])/2
-    center_y = (bbox[1]+bbox[3])/2
+    center_x = (bbox[0] + bbox[2]) / 2
+    center_y = (bbox[1] + bbox[3]) / 2
 
-    offset_left = util.get_rint(max(0, center_x-half_image_size))
-    offset_right = util.get_rint(max(0, center_x+half_image_size))
+    offset_left = util.get_rint(max(0, center_x - half_image_size))
+    offset_right = util.get_rint(max(0, center_x + half_image_size))
 
-    offset_top = util.get_rint(max(0, center_y-half_image_size))
-    offset_bottom = util.get_rint(max(0, center_y+half_image_size))
+    offset_top = util.get_rint(max(0, center_y - half_image_size))
+    offset_bottom = util.get_rint(max(0, center_y + half_image_size))
 
     image = image[offset_top:offset_bottom, offset_left:offset_right, :]
 
@@ -243,11 +246,12 @@ def reply():
                     )
 
             else:
-                s3_client.approve_assignment(
-                    AssignmentId=assignment_id,
-                    RequesterFeedback=email_result['reject_option'],
-                    OverrideRejection=False
-                )
+                pass
+                # s3_client.approve_assignment(
+                #     AssignmentId=assignment_id,
+                #     RequesterFeedback=email_result['reject_option'],
+                #     OverrideRejection=False
+                # )
 
             imap.store(email_result['email_id'], '+FLAGS', '\\Answered \\SEEN')
 
@@ -258,15 +262,17 @@ def reply():
             reply_email['From'] = config.email_name
             reply_email['To'] = email_result['email_from']
 
-            reply_email_text = 'Hello '+email_result['email_from'].split()[0]+',\n\n'+email_result['email_text'].format(
-                email_result['reject_option'])+'\n\nBest,\n'+config.email_name
+            reply_email_text = 'Hello ' + email_result['email_from'].split()[0] + ',\n\n' + email_result['email_text'].format(
+                email_result['reject_option']) + '\n\nBest,\n' + config.email_name
 
             reply_email.attach(email.mime.text.MIMEText(reply_email_text))
 
-            with open('/tmp/'+assignment_id+'.jpg', 'rb') as image_file:
+            with open('/tmp/' + assignment_id + '.jpg', 'rb') as image_file:
 
                 mime_image = email.mime.image.MIMEImage(image_file.read())
                 reply_email.attach(mime_image)
+
+            smtp.sendmail(reply_email['From'], reply_email['To'], reply_email.as_bytes())
 
     imap.close()
     imap.logout()
@@ -288,7 +294,7 @@ def next():
     global current_index
 
     current_index += 1
-    progressbar['value'] = current_index/len(email_result_list)*100
+    progressbar['value'] = current_index / len(email_result_list) * 100
 
     if current_index == len(email_result_list):
         on_closing()
@@ -310,7 +316,7 @@ def approve():
     approve_button.config(highlightbackground='green')
     email_result = email_result_list[current_index]
     email_result['approve'] = True
-    email_result['email_text'] = '\tThank you for working on our tasks! The attached image shows the labelling that we initially rejected. However, after reviewing this image, it appears your labelling was rejected in error. We have updated the status of the batch of images which were rejected because of this to “accepted.” We appreciate you taking the time to work on our tasks, and thank you for your understanding in this matter, as we are still fine-tuning the rejection parameters.'
+    email_result['email_text'] = '\tThank you for working on our tasks! The attached image shows the labelling that we initially rejected. However, after reviewing this image, it appears your labelling was rejected in error. We have updated the status of the batch of images which were rejected because of this to “accepted.” We appreciate you taking the time to work on our tasks, and thank you for your understanding in this matter, as we are still working on fine-tuning our quality standards.'
     email_result['reject_option'] = ''
     update_input_text_options(email_result)
 
@@ -322,7 +328,7 @@ def reject():
     email_result['approve'] = False
     email_result['email_text'] = '\tThank you for working on our tasks! The attached image shows the labelling that resulted in this set of images being rejected. After reviewing this image, it appears your labelling was rejected for the following reason:' + \
         '\n\n{}\n\n' + \
-        '\tUnfortunately, we believe this labelling does not meet our requirements. We apologize for our strict rejection parameters; our use case requires very precise labelling. We appreciate you taking the time to work on our tasks and hope you will consider working on more in the future, as we are continuing to fine-tune our rejection parameters.'
+        '\tUnfortunately, we believe this labelling does not meet our requirements. We apologize for our strict criteria; our use case requires very precise labelling. We appreciate you taking the time to work on our tasks and hope you will consider working on more in the future, as we are continuing to work on fine-tuning our quality standards.'
     email_result['reject_option'] = ''
     update_input_text_options(email_result)
 

@@ -7,27 +7,28 @@ import util
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir+'update/'
+dataset_dir = config.project_dir + 'update/'
 
 ###########################################################################
 
-instances_file_path = dataset_dir+'instances.json'
+instances_file_path = dataset_dir + 'instances.json'
 
 with open(instances_file_path) as instances_file:
     instances = json.load(instances_file)
 
     for image_id, instance in instances.items():
 
-            image_width = instance['width']
-            image_height = instance['height']
+        image_width = instance['width']
+        image_height = instance['height']
 
-            annotations = []
+        annotations = []
 
-            for annotation in instance['annotations']:
+        for annotation in instance['annotations']:
 
-                if annotation['category_id'] != len(config.categories)-1:
-                    annotations.append(annotation)
+            annotation['category_id'] += 1
+            # if annotation['category_id'] != 0:
+            annotations.append(annotation)
 
-            instance['annotations'] = annotations
+        instance['annotations'] = annotations
 
 util.write_json_file(instances, instances_file_path)

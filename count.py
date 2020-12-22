@@ -5,7 +5,7 @@ import config
 
 # TODO: Set the path
 
-instances_file_path = config.project_dir+'update/instances.json'
+instances_file_path = config.project_dir + 'update/instances.json'
 
 ###########################################################################
 
@@ -25,4 +25,4 @@ with open(instances_file_path) as instances_file:
             print_results[config.categories[annotation['category_id']]] += 1
 
 print(print_results)
-print('images: '+str(image_count))
+print('images: ' + str(image_count))

@@ -116,7 +116,15 @@
 const dataSrc = "https://datasetocean.s3.us-east-2.amazonaws.com/zhiyongzhang/"
 
 const categories = [
-  { "name": "coral", "color": "orange" }
+  { "name": "coral", "color": "gold" }
+]
+const exist_categories = [
+  { "name": "coral", "color": "gold" },
+  { "name": "rockfish", "color": "red" },
+  { "name": "fish", "color": "red" },
+  { "name": "starfish", "color": "orange" },
+  { "name": "sponge", "color": "GhostWhite" },
+  { "name": "background", "color": "grey" }
 ]
 
 const tutorialModalTexts = ["Adjust bounding box as <font color='red' size='36px'>Tightly</font> as Possbile!", "Some objects overlap, labeling the unlabeled one"]
@@ -312,22 +320,27 @@ function display() {
   while (existBoxDivs[0]) {
     imgDiv.removeChild(existBoxDivs[0])
   }
+  existAnnotations = []
 
   const existXhr = new XMLHttpRequest()
   existXhr.open("GET", dataSrc + "predict/exist_annotations/" + annotation["image_id"] + ".json")
   existXhr.onload = function() {
     if (existXhr.readyState === 4 && existXhr.status === 200) {
 
-      existAnnotations = JSON.parse(existXhr.response)
+      allExistAnnotations = JSON.parse(existXhr.response)
 
-      existAnnotations.forEach(function(existAnnotation) {
-        const existBoxDiv = document.createElement("div")
-        existBoxDiv.className = "existBoxDiv"
-        existBoxDiv.style.borderColor = categories[existAnnotation["category_id"]]["color"]
-        imgDiv.appendChild(existBoxDiv)
+      const larger_annotation = JSON.parse(JSON.stringify(annotation))
+      modifyBbox(larger_annotation, 10)
+
+      allExistAnnotations.forEach(function(existAnnotation) {
+        if (checkOverlap(larger_annotation["bbox"], existAnnotation["bbox"])){
+          const existBoxDiv = document.createElement("div")
+          existBoxDiv.className = "existBoxDiv"
+          existBoxDiv.style.borderColor = exist_categories[existAnnotation["category_id"]]["color"]
+          imgDiv.appendChild(existBoxDiv)
+          existAnnotations.push(existAnnotation)
+        }
       })
-    } else {
-      existAnnotations = []
     }
     img.src = ""
     img.src = dataSrc + "predict/images/" + annotation["image_id"] + ".jpg"
@@ -1081,13 +1094,13 @@ function checkNext() {
   }
 }
 
-function modifyGtBbox(gt_annotation) {
+function modifyBbox(annotation, ratio) {
 
-  bbox = gt_annotation["bbox"]
-  width = gt_annotation["width"]
-  height = gt_annotation["height"]
+  bbox = annotation["bbox"]
+  width = annotation["width"]
+  height = annotation["height"]
 
-  half_bbox_size = Math.max((bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height)/2*1.6
+  half_bbox_size = Math.max((bbox[2]-bbox[0])*width, (bbox[3]-bbox[1])*height)/2*ratio
 
   center_x = (bbox[0] + bbox[2])/2
   center_y = (bbox[1] + bbox[3])/2
@@ -1102,6 +1115,24 @@ function modifyGtBbox(gt_annotation) {
   bbox[3] = norm(bbox[3], 0, 1)
 }
 
+function checkOverlap(bbox1, bbox2){
+
+  width1 = bbox1[2] - bbox1[0]
+  width2 = bbox2[2] - bbox2[0]
+
+  overlap_width = width1 + width2 - (Math.max(bbox1[2], bbox2[2])
+                                     - Math.min(bbox1[0], bbox2[0]))
+
+  height1 = bbox1[3] - bbox1[1]
+
+  height2 = bbox2[3] - bbox2[1]
+
+  overlap_height = height1 + height2 - (Math.max(bbox1[3], bbox2[3])
+                                        - Math.min(bbox1[1], bbox2[1]))
+
+  return overlap_width > 0 && overlap_height > 0
+}
+
 window.onload = function() {
 
   nextTutorialModal()
@@ -1112,8 +1143,8 @@ window.onload = function() {
   imgDiv.style.height = imgDivWidth + "px"
 
   const xhr = new XMLHttpRequest()
-  xhr.open("GET", dataSrc + "predict/current_annotations/${annotation_id}.json")
-  // xhr.open("GET", dataSrc + "predict/current_annotations/0.json")
+  // xhr.open("GET", dataSrc + "predict/current_annotations/${annotation_id}.json")
+  xhr.open("GET", dataSrc + "predict/current_annotations/4584.json")
   xhr.onload = function() {
     if (xhr.readyState === 4 && xhr.status === 200) {
 
@@ -1122,7 +1153,7 @@ window.onload = function() {
       for (let i = 0; i < annotations.length; i++) {
         annotation = annotations[i]
         if ("gt_annotation_index" in annotation){
-          modifyGtBbox(annotation)
+          modifyBbox(annotation, 1.6)
         }
       }
 
