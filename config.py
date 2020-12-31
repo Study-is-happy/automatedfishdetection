@@ -1,4 +1,4 @@
-project_dir = '/data/automatedfishdetection/seagate/corals/'
+project_dir = '/data/automatedfishdetection/seagate/sponges/'
 
 results_name = 'results_1.csv'
 
@@ -23,12 +23,13 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832)
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
 #               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-categories = ['corals', 'rockfish', 'fish', 'starfish', 'sponge', 'background']
-# categories = ['fish', 'starfish', 'sponge', 'background']
+categories = ['sponges', 'background']
 
-colors = ['green', 'red', 'white', 'orange', 'grey', 'white']
+colors = ['white', 'grey']
+# colors = ['green', 'red', 'white', 'orange', 'grey', 'white']
 # colors = ['purple', 'white', 'orange', 'blue',
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']
+
 
 num_categories = len(categories) - 1
 
