@@ -6,15 +6,17 @@ import os
 import util
 import config
 
-with open(config.project_dir+'update/instances.json') as update_instances_file:
+test_b = 100
+
+with open(config.project_dir + 'train/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
 for image_id, instance in update_instances.items():
 
-    shutil.copy(config.project_dir+'/update/images/'+image_id +
-                '.jpg', config.project_dir+'pro/images/')
+    shutil.copy(config.project_dir + 'train/images/' + image_id
+                + '.jpg', config.project_dir + 'xml/images/')
 
-    xml_file_path = config.project_dir+'pro/annotations/'+image_id+'.xml'
+    xml_file_path = config.project_dir + 'xml/annotations/' + image_id + '.xml'
 
     width = instance['width']
     height = instance['height']
@@ -26,18 +28,18 @@ for image_id, instance in update_instances.items():
 
     folder_node = xml_document.createElement('folder')
     annotation_node.appendChild(folder_node)
-    folder_node_text = xml_document.createTextNode('fish')
+    folder_node_text = xml_document.createTextNode('images')
     folder_node.appendChild(folder_node_text)
 
     filename_node = xml_document.createElement('filename')
     annotation_node.appendChild(filename_node)
-    filename_node_text = xml_document.createTextNode(image_id+'.jpg')
+    filename_node_text = xml_document.createTextNode(image_id + '.jpg')
     filename_node.appendChild(filename_node_text)
 
     path_node = xml_document.createElement('path')
     annotation_node.appendChild(path_node)
     path_node_text = xml_document.createTextNode(
-        '\\\\yqhz\\xietongzuoye\\fish\\'+image_id+'.jpg')
+        'images/' + image_id + '.jpg')
     path_node.appendChild(path_node_text)
 
     source_node = xml_document.createElement('source')
@@ -105,7 +107,6 @@ for image_id, instance in update_instances.items():
 
         bbox = annotation['bbox']
         util.rel_to_abs(bbox, width, height)
-        util.norm_abs_bbox(bbox)
 
         xmin_node = xml_document.createElement('xmin')
         bndbox_node.appendChild(xmin_node)

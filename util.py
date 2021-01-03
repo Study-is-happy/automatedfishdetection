@@ -67,12 +67,6 @@ def filter_overlap_instance(instance, iou):
     return [annotation for annotation in annotations if 'overlap' in annotation]
 
 
-def norm_abs_bbox(bbox):
-    for i in range(4):
-        if bbox[i] < 1:
-            bbox[i] = 1
-
-
 def abs_to_rel(bbox, image_width, image_height):
 
     bbox[0] /= image_width
@@ -83,10 +77,10 @@ def abs_to_rel(bbox, image_width, image_height):
 
 def rel_to_abs(bbox, image_width, image_height):
 
-    bbox[0] *= image_width
-    bbox[1] *= image_height
-    bbox[2] *= image_width
-    bbox[3] *= image_height
+    bbox[0] = bbox[0] * (image_width - 1) + 1
+    bbox[1] = bbox[1] * (image_height - 1) + 1
+    bbox[2] = bbox[2] * (image_width - 1) + 1
+    bbox[3] = bbox[3] * (image_height - 1) + 1
 
 
 def norm_rel_bbox(bbox):
