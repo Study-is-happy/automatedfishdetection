@@ -14,19 +14,19 @@ import config
 
 # src_annotations_dir = src_dataset_dir+'down_Annotations/'
 
-src_dataset_dir = config.project_dir+'pro/'
+src_dataset_dir = config.project_dir + 'pro/'
 
-src_images_dir = src_dataset_dir+'images/'
+src_images_dir = src_dataset_dir + 'images/'
 
-src_annotations_dir = src_dataset_dir+'annotations/'
+src_annotations_dir = src_dataset_dir + 'annotations/'
 
-des_dataset_dir = config.project_dir+'update/'
+des_dataset_dir = config.project_dir + 'update/'
 
 ###########################################################################
 
-des_images_dir = des_dataset_dir+'images/'
+des_images_dir = des_dataset_dir + 'images/'
 
-des_instances_file_path = des_dataset_dir+'instances.json'
+des_instances_file_path = des_dataset_dir + 'instances.json'
 
 if os.path.exists(des_instances_file_path):
 
@@ -42,7 +42,7 @@ for annotation_file_name in os.listdir(src_annotations_dir):
     instance = {}
 
     annotation_node = ElementTree.parse(
-        src_annotations_dir+annotation_file_name)
+        src_annotations_dir + annotation_file_name)
 
     size_node = annotation_node.find('size')
 
@@ -63,12 +63,12 @@ for annotation_file_name in os.listdir(src_annotations_dir):
 
             bndbox_node = object_node.find('bndbox')
 
-            annotation['bbox'] = [float(bndbox_node.find('xmin').text)-1,
-                                  float(bndbox_node.find('ymin').text)-1,
+            annotation['bbox'] = [float(bndbox_node.find('xmin').text),
+                                  float(bndbox_node.find('ymin').text),
                                   float(bndbox_node.find('xmax').text),
                                   float(bndbox_node.find('ymax').text)]
 
-            util.abs_to_rel(
+            util.pascal_voc_abs_to_rel(
                 annotation['bbox'], instance['width'], instance['height'])
 
             # annotation['difficult'] = int(
@@ -78,7 +78,7 @@ for annotation_file_name in os.listdir(src_annotations_dir):
 
     if len(instance['annotations']) > 0:
 
-        shutil.copy(src_images_dir+image_id+'.jpg', des_images_dir)
+        shutil.copy(src_images_dir + image_id + '.jpg', des_images_dir)
 
         instances[image_id] = instance
 

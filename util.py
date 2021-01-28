@@ -77,10 +77,26 @@ def abs_to_rel(bbox, image_width, image_height):
 
 def rel_to_abs(bbox, image_width, image_height):
 
-    bbox[0] = bbox[0] * (image_width - 1) + 1
-    bbox[1] = bbox[1] * (image_height - 1) + 1
-    bbox[2] = bbox[2] * (image_width - 1) + 1
-    bbox[3] = bbox[3] * (image_height - 1) + 1
+    bbox[0] = bbox[0] * image_width
+    bbox[1] = bbox[1] * image_height
+    bbox[2] = bbox[2] * image_width
+    bbox[3] = bbox[3] * image_height
+
+
+def pascal_voc_abs_to_rel(bbox, image_width, image_height):
+
+    bbox[0] = (bbox[0] - 1) / image_width
+    bbox[1] = (bbox[1] - 1) / image_height
+    bbox[2] /= image_width
+    bbox[3] /= image_height
+
+
+def pascal_voc_rel_to_abs(bbox, image_width, image_height):
+
+    bbox[0] = bbox[0] * image_width + 1
+    bbox[1] = bbox[1] * image_height + 1
+    bbox[2] = bbox[2] * image_width
+    bbox[3] = bbox[3] * image_height
 
 
 def norm_rel_bbox(bbox):
@@ -93,7 +109,7 @@ def norm_rel_bbox(bbox):
 
 
 def get_rint(num):
-    return np.rint(num).astype(int)
+    return int(np.rint(num))
 
 
 def easy_gt_index_generator():

@@ -20,7 +20,7 @@ init_box_size = 1
 
 instances = {}
 
-categories = set()
+print_categories = {}
 
 
 def is_port_dir(root_path):
@@ -54,7 +54,10 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                                 category = annotation_line[10].lower()
 
-                                categories.add(category)
+                                if category not in print_categories:
+                                    print_categories[category] = 0
+
+                                print_categories[category] += 1
 
                                 if category in config.categories:
 
@@ -80,7 +83,7 @@ for root_path, dir_list, file_list in os.walk(src_dataset_dir):
 
                                     instance['annotations'].append(annotation)
 
-print(categories)
+print(print_categories)
 util.write_json_file(instances, des_instances_file_path)
 
 des_images_dir = des_dataset_dir + 'images/'

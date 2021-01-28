@@ -1,4 +1,5 @@
-project_dir = '/data/automatedfishdetection/seagate/sponges/'
+project_dir = '/data/automatedfishdetection/seagate/rockfish_train_zz/'
+# project_dir = '/data/automatedfishdetection/pacstorm_pmfs_raw/'
 
 results_name = 'results_1.csv'
 
@@ -10,7 +11,7 @@ email_password = 'HSingh1!'
 email_name = 'Field Robotics Lab'
 
 # INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
-INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832)
+INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768)
 
 # categories = ['fish', 'starfish', 'sponge', 'background']
 # categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
@@ -23,17 +24,20 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832)
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
 #               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-categories = ['sponges', 'background']
+# categories = ['invertebrates', 'roundfish', 'flatfish', 'skates', 'background']
 
-colors = ['white', 'grey']
-# colors = ['green', 'red', 'white', 'orange', 'grey', 'white']
+# categories = ['无脊椎动物', '圆鱼', '比目鱼', '鳐鱼', 'background']
+# colors = ['yellow', 'red', 'orange', 'purple', 'grey']
+
 # colors = ['purple', 'white', 'orange', 'blue',
 #           'green', 'red', 'pink', 'yellow','grey', 'grey']
 
+categories = ['rockfish', 'background']
+colors = ['red', 'grey']
 
 num_categories = len(categories) - 1
 
-train_update = True
+train_update = False
 
 MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/pacstorm_pmfs_model.pth'
 

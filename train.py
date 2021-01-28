@@ -93,7 +93,7 @@ if config.train_update:
 
 else:
     cfg.DATASETS.TRAIN = ['train/']
-    cfg.DATASETS.TEST = ['east_gt/']
+    cfg.DATASETS.TEST = ['test/']
 
 
 for datasets_dir in cfg.DATASETS.TRAIN + cfg.DATASETS.TEST:

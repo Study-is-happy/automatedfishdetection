@@ -6,15 +6,13 @@ import os
 import util
 import config
 
-test_b = 100
-
 with open(config.project_dir + 'train/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
 for image_id, instance in update_instances.items():
 
-    shutil.copy(config.project_dir + 'train/images/' + image_id
-                + '.jpg', config.project_dir + 'xml/images/')
+    # shutil.copy(config.project_dir + 'train/images/' + image_id
+    #             + '.jpg', config.project_dir + 'xml/images/')
 
     xml_file_path = config.project_dir + 'xml/annotations/' + image_id + '.xml'
 
@@ -106,7 +104,7 @@ for image_id, instance in update_instances.items():
         object_node.appendChild(bndbox_node)
 
         bbox = annotation['bbox']
-        util.rel_to_abs(bbox, width, height)
+        util.pascal_voc_rel_to_abs(bbox, width, height)
 
         xmin_node = xml_document.createElement('xmin')
         bndbox_node.appendChild(xmin_node)
