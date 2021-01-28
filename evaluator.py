@@ -82,8 +82,8 @@ class Evaluator():
             sorted_confidence_index = np.argsort(-confidence)
             tp = np.cumsum(tp[sorted_confidence_index])
 
-            recall = tp/self.npos_list[index]
-            precision = tp/(np.arange(len(tp))+1)
+            recall = tp / self.npos_list[index]
+            precision = tp / (np.arange(len(tp)) + 1)
 
             mrecall = np.concatenate(([0.0], recall, [1.0]))
             mprecision = np.concatenate(([0.0], precision, [0.0]))
@@ -99,10 +99,12 @@ class Evaluator():
         mAP = np.mean(ap_list)
         result = OrderedDict()
         result['mAP'] = {'50': mAP}
-        result['recall'] = {'fish': np.sum(self.tp_list[0])/self.npos_list[0],
-                            'starfish': np.sum(self.tp_list[1])/self.npos_list[1],
-                            'sponge': np.sum(self.tp_list[2])/self.npos_list[2]}
-        result['precision'] = {'fish': np.sum(self.tp_list[0])/len(self.tp_list[0]),
-                               'starfish': np.sum(self.tp_list[1])/len(self.tp_list[1]),
-                               'sponge': np.sum(self.tp_list[2])/len(self.tp_list[2])}
+
+        result['recall'] = {}
+        result['precision'] = {}
+
+        for category, tp, npos in zip(config.categories[:-1], self.tp_list, self.npos_list):
+            result['recall'][category] = np.sum(tp) / npos
+            result['precision'][category] = np.sum(tp) / len(tp)
+
         return result
