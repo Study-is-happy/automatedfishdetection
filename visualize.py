@@ -11,9 +11,9 @@ dataset_dir = config.project_dir + 'train/'
 
 ###########################################################################
 
-images_dir = dataset_dir + 'crop_images/'
+images_dir = dataset_dir + 'images/'
 
-instances_file_path = dataset_dir + 'crop_instances.json'
+instances_file_path = dataset_dir + 'instances.json'
 
 with open(instances_file_path) as instances_file:
 
@@ -35,8 +35,8 @@ for image_id in sorted(instances_dict):
 
     instance = instances_dict[image_id]
 
-    # if len(instance['annotations']) < 10:
-    #     continue
+    if len(instance['annotations']) < 100:
+        continue
 
     image = mpimg.imread(images_dir + image_id + '.jpg')
 
@@ -55,7 +55,7 @@ for image_id in sorted(instances_dict):
 
     for annotation in instance['annotations']:
 
-        if annotation['category_id'] == 0:
+        if annotation['category_id'] == 1:
             exist_category_count += 1
 
         bbox = annotation['bbox']
@@ -68,7 +68,7 @@ for image_id in sorted(instances_dict):
         plt.text(bbox[0] * width, bbox[1] * height - 3,
                  config.categories[annotation['category_id']], color='white', size=10, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
-    if exist_category_count >= 0:
+    if exist_category_count >= 10:
         plt.show()
     else:
         plt.close()

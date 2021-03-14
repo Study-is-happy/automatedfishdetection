@@ -1,5 +1,7 @@
-project_dir = '/data/automatedfishdetection/seagate/rockfish_train_zz/'
+project_dir = '/data/automatedfishdetection/seagate/all/'
 # project_dir = '/data/automatedfishdetection/pacstorm_pmfs_raw/'
+
+calib_dir = '/data/automatedfishdetection/seagate/calib/SH_17_09/'
 
 results_name = 'results_1.csv'
 
@@ -23,27 +25,24 @@ INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768)
 #                      'background']
 
 # categories = ['corals', 'sponges', 'invertebrates', 'roundfish',
-#               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'other', 'background']
-# categories = ['invertebrates', 'roundfish', 'flatfish', 'skates', 'background']
+#               'skates/sharks', 'rockfish', 'flatfish', 'skates', 'unknown', 'background']
 
-# categories = ['无脊椎动物', '圆鱼', '比目鱼', '鳐鱼', 'background']
-# colors = ['yellow', 'red', 'orange', 'purple', 'grey']
+categories = ['sponges', 'rockfish', 'corals', 'invertebrates', 'roundfish', 'flatfish', 'skates', 'unknown', 'background']
 
-# colors = ['purple', 'white', 'orange', 'blue',
-#           'green', 'red', 'pink', 'yellow','grey', 'grey']
+colors = ['white', 'red', 'orange', 'yellow', 'pink', 'purple', 'blue', 'grey', 'grey']
 
-categories = ['rockfish', 'background']
-colors = ['red', 'grey']
+# categories = ['珊瑚', 'unknown']
+# colors = ['red', 'grey']
 
 num_categories = len(categories) - 1
 
-train_update = False
+train_update = True
 
-MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/pacstorm_pmfs_model.pth'
+MODEL_WEIGHTS_TRAIN = project_dir + 'outputs/model_0215999.pth'
 
-MODEL_ROI_HEADS_SCORE_THRESH_TEST = 0.7
-MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.7
+MODEL_ROI_HEADS_SCORE_THRESH_TEST = 0.5
+MODEL_ROI_HEADS_NMS_THRESH_TEST = 0.5
 
-MODEL_WEIGHTS_TEST = project_dir + 'outputs/pacstorm_pmfs_model.pth'
+MODEL_WEIGHTS_TEST = project_dir + 'outputs/model_0215999.pth'
 
 predict_per_file = 9

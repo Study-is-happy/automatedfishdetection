@@ -15,6 +15,7 @@ row_num = 3
 
 
 def get_crop_bbox_point(bbox_point, start_point, end_point):
+
     if bbox_point > end_point:
         return end_point - start_point
 

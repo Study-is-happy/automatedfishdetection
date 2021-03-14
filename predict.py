@@ -9,7 +9,10 @@ import config
 import util
 import reset_predict
 
-print_results = {'fish': 0, 'starfish': 0, 'sponge': 0}
+print_results = {}
+for category in config.categories:
+
+    print_results[category] = 0
 
 cfg = get_cfg()
 cfg.merge_from_file(
@@ -26,7 +29,7 @@ cfg.MODEL.PIXEL_MEAN = [0, 0, 0]
 
 cfg.MODEL.ROI_HEADS.NUM_CLASSES = config.num_categories
 
-cfg.INPUT.MIN_SIZE_TEST = 832
+cfg.INPUT.MIN_SIZE_TEST = config.INPUT_MIN_SIZE_TRAIN[-1]
 
 cfg.MODEL.WEIGHTS = config.MODEL_WEIGHTS_TEST
 

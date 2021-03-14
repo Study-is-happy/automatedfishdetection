@@ -59,8 +59,6 @@ for annotation_file_name in os.listdir(src_annotations_dir):
                               float(pro_bbox[2]['x']),
                               float(pro_bbox[2]['y'])]
 
-        print(annotation['bbox'])
-
         util.abs_to_rel(
             annotation['bbox'], instance['width'], instance['height'])
 

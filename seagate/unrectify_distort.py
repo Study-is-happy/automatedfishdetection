@@ -7,8 +7,6 @@ from scipy.spatial.transform import Rotation
 width = 2448
 height = 2050
 
-mask_image = np.full((height, width), 127, np.uint8)
-
 left_camera_matrix = np.array([[3200.30144, 0, 1238.67489],
                                [0, 3194.1071, 991.12046],
                                [0, 0, 1]])
@@ -28,15 +26,13 @@ R1, R2, P1, P2, Q, validPixROI1, validPixROI2 = cv2.stereoRectify(left_camera_ma
                                                                   right_camera_matrix, right_distortion_coefficients,
                                                                   (width, height), rotation_matrix, translation, flags=0)
 
+# mapx, mapy = cv2.initUndistortRectifyMap(left_camera_matrix, left_distortion_coefficients, R1, P1, (width, height), cv2.CV_16SC2)
+mapx, mapy = cv2.initUndistortRectifyMap(right_camera_matrix, right_distortion_coefficients, R2, P2, (width, height), cv2.CV_16SC2)
 
-# mapx, mapy = cv2.initUndistortRectifyMap(left_camera_matrix, left_distortion_coefficients, R1, P1, (width, height), cv2.CV_32F)
-mapx, mapy = cv2.initUndistortRectifyMap(left_camera_matrix, left_distortion_coefficients, R1, P1, (width, height), cv2.CV_16SC2)
-
-mask_image = cv2.remap(mask_image, mapx, mapy, cv2.INTER_LINEAR)
-
-image = cv2.imread('/home/auv/venv3/stbd.jpg', -1)
+image = cv2.imread('/home/auv/venv3/stbd_2_rect.jpg', -1)
 
 orig_image = np.zeros((height, width, 3), np.uint8)
+orig_image_mask = np.zeros((height, width), np.uint8)
 
 for i in range(width):
     for j in range(height):
@@ -45,10 +41,18 @@ for i in range(width):
         map_j = map_xy[1]
         if map_i >= 0 and map_j >= 0 and map_i < width and map_j < height:
             orig_image[map_j, map_i, :] = image[j, i, :]
+            orig_image_mask[map_j, map_i] = 255
+
+# test_mask_image = np.full((height, width), 127, np.uint8)
+# test_mask_image = cv2.remap(test_mask_image, mapx, mapy, cv2.INTER_LINEAR)
 
 # matlab_mask_image = cv2.imread('/home/auv/venv3/port_mask.bmp', -1)
-# matlab_mask_image[matlab_mask_image == 255] = 0
 
-cv2.imwrite('/home/auv/venv3/orig_stbd.jpg', orig_image)
+# test_mask_image[matlab_mask_image != 255] = 0
+
+cv2.imwrite('/home/auv/venv3/stbd_2.png', orig_image)
+cv2.imwrite('/home/auv/venv3/stbd_mask.png', orig_image_mask)
 plt.imshow(orig_image)
+plt.show()
+plt.imshow(orig_image_mask)
 plt.show()
