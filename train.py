@@ -12,7 +12,7 @@ from my_detectron2.my_rpn import my_RPN
 from my_detectron2.my_dataset_mapper import DatasetMapper
 from evaluator import Evaluator
 
-import util
+import utils
 import config
 
 
@@ -36,8 +36,8 @@ def get_dicts(datasets_dir):
 
         for annotation in instance['annotations']:
 
-            util.rel_to_abs(annotation['bbox'],
-                            instance['width'], instance['height'])
+            utils.rel_to_abs(annotation['bbox'],
+                             instance['width'], instance['height'])
             annotation['bbox_mode'] = BoxMode.XYXY_ABS
 
         dicts.append(instance)

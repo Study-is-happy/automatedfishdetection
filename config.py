@@ -1,7 +1,7 @@
-project_dir = '/data/automatedfishdetection/seagate/all/'
-# project_dir = '/data/automatedfishdetection/pacstorm_pmfs_raw/'
+# project_dir = '/data/automatedfishdetection/seagate/all/'
+project_dir = '/media/auv/Seagate Desktop Drive/automatedfishdetection/seagate/all/'
 
-calib_dir = '/data/automatedfishdetection/seagate/calib/SH_17_09/'
+# calib_dir = '/data/automatedfishdetection/seagate/calib/SH_17_09/'
 
 results_name = 'results_1.csv'
 
@@ -12,8 +12,7 @@ email_address = 'isec.neufr@gmail.com'
 email_password = 'HSingh1!'
 email_name = 'Field Robotics Lab'
 
-# INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
-INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768)
+INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 
 # categories = ['fish', 'starfish', 'sponge', 'background']
 # categories = ['rockfish_unid', 'greenstriped_rockfish', 'dover_sole', 'rex_sole', 'eelpout_unid',
