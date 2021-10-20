@@ -321,6 +321,11 @@ class MultiHarrisZernike:
 
         for k in range(scales):
             [eig[k], nL[k]] = self.eigen_image_p(lpimages[k], ratio**(k))
+            # plt.imshow(lpimages[k])
+            # plt.show()
+            # plt.imshow(eig[k])
+            # plt.show()
+
             # extract regional max and block out borders (edge effect)
 
             # generate mask for border
@@ -406,8 +411,8 @@ class MultiHarrisZernike:
         Nsec = self.seci * self.secj
         Nfsec = np.ceil(self.Nfeats / Nsec).astype(int)
 
-        seclimi = np.linspace(0, rows - 1, self.seci + 1)
-        seclimj = np.linspace(0, cols - 1, self.secj + 1)
+        seclimi = np.linspace(0, rows, self.seci + 1)
+        seclimj = np.linspace(0, cols, self.secj + 1)
 
         Fivec = F['ivec']
         Fjvec = F['jvec']
@@ -424,33 +429,10 @@ class MultiHarrisZernike:
                 selectsec = np.logical_and(selecti, selectj)
                 evec = Fevec[selectsec]
                 selindsec = selind[selectsec]
-                N, bin_centers = np.histogram(evec, 50)
-                X = bin_centers[:-1] + np.diff(bin_centers) / 2
 
-                C = np.cumsum(N[::-1])
+                sorted_index = np.flip(np.argsort(evec))
 
-                bins = X[::-1]
-
-                if C[-1] < Nfsec:
-                    thresh = bins[-1]
-                    selecte = np.ones_like(evec, dtype=bool)
-
-                else:
-                    k = 0
-                    while C[k] < Nfsec and k < 50 - 1:
-                        k = k + 1
-
-                    thresh = bins[k]
-                    selecte = evec > thresh
-                    while np.sum(selecte) > Nfsec:
-                        thresh = thresh * 1.2
-                        selecte = evec > thresh
-
-                    while np.sum(selecte) < Nfsec and thresh > 1e-9:
-                        thresh = thresh * 0.9
-                        selecte = evec > thresh
-
-                select = np.append(select, selindsec[selecte])
+                select = np.append(select, selindsec[sorted_index[:Nfsec]])
 
         Fout = {'ivec': Fivec[select], 'jvec': Fjvec[select], 'evec': Fevec[select],
                 'sivec': Fsivec[select], 'sjvec': Fsjvec[select], 'svec': Fsvec[select]}
@@ -492,6 +474,11 @@ class MultiHarrisZernike:
             Wb = images[sk][i_s - self.brad:i_s + self.brad + 1,
                             j_s - self.brad:j_s + self.brad + 1]
             Wbh = Wb - np.mean(Wb)
+            if (np.sum(Wbh**2))**0.5 == 0:
+                print(i_s, j_s)
+                plt.imshow(Wb)
+                plt.show()
+
             Wb = Wbh / ((np.sum(Wbh**2))**0.5)
             Wb_rav = Wb.ravel()
 
@@ -607,7 +594,7 @@ class MultiHarrisZernike:
         if timing:
             print("Feature invariants - {:0.4f}".format(time.time() - st))
             st = time.time()
-        kp = [cv2.KeyPoint(float(x), float(y), float(self.zrad * (sc + 1) * 2), _angle=float(ang), _response=float(res), _octave=int(sc))
+        kp = [cv2.KeyPoint(float(x), float(y), float(self.zrad * (sc + 1) * 2), angle=float(ang), response=float(res), octave=int(sc))
               for x, y, ang, res, sc in zip(Ft['jvec'], Ft['ivec'], np.rad2deg(alpha),
                                             Ft['evec'], Ft['svec'])]
         return kp, V,  # Ft, F, Ft, JA, JB, alpha, A
@@ -651,7 +638,7 @@ class MultiHarrisZernike:
         if timing:
             print("Angle computation - {:0.4f}".format(time.time() - st))
             st = time.time()
-        kp = [cv2.KeyPoint(x, y, self.zrad * (sc + 1) * 2, _angle=ang, _response=res, _octave=sc)
+        kp = [cv2.KeyPoint(x, y, self.zrad * (sc + 1) * 2, angle=ang, response=res, octave=sc)
               for x, y, ang, res, sc in zip(Ft['jvec'], Ft['ivec'], np.rad2deg(alpha),
                                             Ft['evec'], Ft['svec'])]
         if timing:
