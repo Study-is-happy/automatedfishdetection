@@ -1,4 +1,5 @@
 __pycache__
+*.pyc
 private_config.py
 Study-is-happy.pem
 nohup.out
