@@ -7,9 +7,6 @@ seagate_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/SH-18-12/'
 
 results_name = 'results_1.csv'
 
-aws_access_key_id = 'AKIAIRD5JIXH2T5ERTGA'
-aws_secret_access_key = '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'
-
 email_address = 'isec.neufr@gmail.com'
 email_password = 'HSingh1!'
 email_name = 'Field Robotics Lab'
