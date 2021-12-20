@@ -7,10 +7,6 @@ seagate_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/SH-18-12/'
 
 results_name = 'results_1.csv'
 
-email_address = 'isec.neufr@gmail.com'
-email_password = 'HSingh1!'
-email_name = 'Field Robotics Lab'
-
 INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768, 832, 896)
 # INPUT_MIN_SIZE_TRAIN = (448, 512, 576, 640, 704, 768)
 
