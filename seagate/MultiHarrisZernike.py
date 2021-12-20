@@ -475,9 +475,7 @@ class MultiHarrisZernike:
                             j_s - self.brad:j_s + self.brad + 1]
             Wbh = Wb - np.mean(Wb)
             if (np.sum(Wbh**2))**0.5 == 0:
-                print(i_s, j_s)
-                plt.imshow(Wb)
-                plt.show()
+                pass
 
             Wb = Wbh / ((np.sum(Wbh**2))**0.5)
             Wb_rav = Wb.ravel()

@@ -3,16 +3,16 @@ import shutil
 import json
 import os
 
-import util
+import utils
 import config
 
 # TODO: Set the dirs
 
 src_annotations_dir = config.project_dir + 'pro_annotations/'
 
-src_images_dir = config.project_dir + 'train/images/'
+src_images_dir = config.project_dir + 'update/images/'
 
-des_instances_file_path = config.project_dir + 'update/instances.json'
+des_instances_file_path = config.project_dir + 'update/instances_1.json'
 
 ###########################################################################
 
@@ -59,9 +59,9 @@ for annotation_file_name in os.listdir(src_annotations_dir):
                               float(pro_bbox[2]['x']),
                               float(pro_bbox[2]['y'])]
 
-        util.abs_to_rel(
+        utils.abs_to_rel(
             annotation['bbox'], instance['width'], instance['height'])
 
         instance['annotations'].append(annotation)
 
-util.write_json_file(instances, des_instances_file_path)
+utils.write_json_file(instances, des_instances_file_path)

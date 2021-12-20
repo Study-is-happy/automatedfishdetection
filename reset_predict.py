@@ -2,7 +2,7 @@ import os
 import shutil
 
 import config
-import util
+import utils
 
 predict_dir = config.project_dir + 'predict/'
 
@@ -15,4 +15,4 @@ os.mkdir(predict_dir + 'current_annotations/')
 os.mkdir(predict_dir + 'exist_annotations/')
 with open(predict_dir + 'annotation_ids.csv', 'w') as predict_annotations_file:
     predict_annotations_file.write('annotation_id\n')
-util.write_json_file({}, config.project_dir + 'predict/instances.json')
+utils.write_json_file({}, config.project_dir + 'predict/instances.json')

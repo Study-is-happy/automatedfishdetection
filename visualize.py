@@ -7,7 +7,7 @@ import config
 
 # TODO: Set the dirs
 
-dataset_dir = config.project_dir + 'train/'
+dataset_dir = config.project_dir + 'init/'
 
 ###########################################################################
 
@@ -19,7 +19,6 @@ with open(instances_file_path) as instances_file:
 
     instances_dict = json.load(instances_file)
 
-interval = 100
 index = -1
 
 for image_id in sorted(instances_dict):
@@ -27,16 +26,16 @@ for image_id in sorted(instances_dict):
     print(image_id)
     index += 1
 
-    # if index % interval != 0:
+    # if index % 10 != 0:
     #     continue
 
-    # if image_id != '20171014.194218.01099_rect_color':
+    # if image_id != '20100922.160434.00356':
     #     continue
 
     instance = instances_dict[image_id]
 
-    if len(instance['annotations']) < 100:
-        continue
+    # if len(instance['annotations']) < 20:
+    #     continue
 
     image = mpimg.imread(images_dir + image_id + '.jpg')
 
@@ -55,20 +54,32 @@ for image_id in sorted(instances_dict):
 
     for annotation in instance['annotations']:
 
-        if annotation['category_id'] == 1:
+        if annotation['category_id'] == 9:
             exist_category_count += 1
 
         bbox = annotation['bbox']
 
         color = config.colors[annotation['category_id']]
 
+        if 'score' in annotation:
+            text = config.categories[annotation['category_id']] + ': ' + '{:.2f}'.format(annotation['score'])
+            linestyle = 'dashed'
+        else:
+            text = config.categories[annotation['category_id']]
+            linestyle = None
+
+        if annotation['category_id'] == 9:
+            linestyle = 'dashed'
+
         current_axis.add_patch(plt.Rectangle(
-            (bbox[0] * width, bbox[1] * height), (bbox[2] - bbox[0]) * width, (bbox[3] - bbox[1]) * height, color=color, fill=False, linewidth=3))
+            (bbox[0] * width, bbox[1] * height), (bbox[2] - bbox[0]) * width, (bbox[3] - bbox[1]) * height, color=color, fill=False, linewidth=3, linestyle=linestyle))
+        # current_axis.add_patch(plt.Rectangle(
+        #     ((bbox[0] + bbox[2]) / 2 * width - 2, (bbox[1] + bbox[3]) / 2 * height - 2), 4, 4, color=color, fill=False, linewidth=3, linestyle=linestyle))
 
         plt.text(bbox[0] * width, bbox[1] * height - 3,
-                 config.categories[annotation['category_id']], color='white', size=10, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
+                 text, color='white', size=10, bbox={'facecolor': color, 'alpha': 0.5, 'pad': 3})
 
-    if exist_category_count >= 10:
+    if exist_category_count >= 0:
         plt.show()
     else:
         plt.close()

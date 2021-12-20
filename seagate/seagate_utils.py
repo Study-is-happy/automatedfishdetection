@@ -30,17 +30,10 @@ def get_non_max_suppression_mask(keypoints, image_shape):
     return non_max_suppression_mask
 
 
-def get_match_points(detector, gray_left_image, gray_right_image, left_roi, right_roi):
-
-    left_keypoints, left_descriptors = detector.detectAndCompute(gray_left_image, left_roi)
-    right_keypoints, right_descriptors = detector.detectAndCompute(gray_right_image, right_roi)
-
-    return left_keypoints, right_keypoints, left_descriptors, right_descriptors
-
-
 def get_good_match_points(src_keypoints, dst_keypoints, src_descriptors, dst_descriptors):
 
-    bf_matcher = cv2.BFMatcher(cv2.NORM_HAMMING)
+    # bf_matcher = cv2.BFMatcher(cv2.NORM_HAMMING)
+    bf_matcher = cv2.BFMatcher(cv2.NORM_L2)
 
     matches = bf_matcher.knnMatch(src_descriptors, dst_descriptors, k=2)
     cross_matches = bf_matcher.match(dst_descriptors, src_descriptors)
@@ -65,26 +58,41 @@ def get_good_match_points(src_keypoints, dst_keypoints, src_descriptors, dst_des
     return np.array(src_points), np.array(dst_points), np.array(distances)
 
 
-def multi_scale_match(src_keypoints_list, dst_keypoints_list, src_descriptors_list, dst_descriptors_list, src_image, dst_image):
+def keypoints_2_keypoints_list(keypoints, descriptors, num_octaves):
 
-    bf_matcher = cv2.BFMatcher(cv2.NORM_HAMMING)
+    keypoints_list = [[] for octave in range(num_octaves)]
+    descriptors_list = [[] for octave in range(num_octaves)]
+
+    for keypoint, descriptor in zip(keypoints, descriptors):
+        octave = np.int8(keypoint.octave & 255) + 1
+
+        keypoints_list[octave].append(keypoint)
+        descriptors_list[octave].append(descriptor)
+
+    for index, descriptors in enumerate(descriptors_list):
+        descriptors_list[index] = np.array(descriptors)
+
+    return keypoints_list, descriptors_list
+
+
+def multi_scale_match(src_keypoints_list, dst_keypoints_list, src_descriptors_list, dst_descriptors_list, src_image, dst_image):
 
     all_src_points = []
     all_dst_points = []
-    all_distances = []
 
-    for src_keypoints, src_descriptors, dst_keypoints, dst_descriptors in zip(src_keypoints_list, src_descriptors_list, dst_keypoints_list, dst_descriptors_list):
+    for src_keypoints, dst_keypoints, src_descriptors, dst_descriptors in zip(src_keypoints_list, dst_keypoints_list, src_descriptors_list, dst_descriptors_list):
 
-        src_points, dst_points, distances = get_good_match_points(src_keypoints, dst_keypoints, src_descriptors, dst_descriptors)
+        if len(src_keypoints) > 2 and len(dst_keypoints) > 2:
 
-        all_src_points.extend(src_points)
-        all_dst_points.extend(dst_points)
-        all_distances.extend(distances)
+            src_points, dst_points, _ = get_good_match_points(src_keypoints, dst_keypoints, src_descriptors, dst_descriptors)
+
+            all_src_points.extend(src_points)
+            all_dst_points.extend(dst_points)
 
         # print(unpack_sift_octave(src_keypoints[match_1.queryIdx].octave))
         # plot_match_points(src_image, dst_image, src_points, dst_points, True)
 
-    return np.array(all_src_points), np.array(all_dst_points), np.array(all_distances)
+    return np.array(all_src_points), np.array(all_dst_points)
 
 
 def get_non_max_suppression_match_mask(left_points, right_points, distance_list, image_shape):

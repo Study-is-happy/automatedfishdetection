@@ -113,10 +113,10 @@ def my_find_top_rpn_proposals(
         for index_j, (logits_j, gt_logits_j) in enumerate(zip(logits_i, gt_logits_i)):
 
             logits_i[index_j][gt_logits_j == -1] \
-                = torch.min(logits_j)*2-logits_j[gt_logits_j == -1]
+                = torch.min(logits_j) * 2 - logits_j[gt_logits_j == -1]
 
             num_remain_logits.append(
-                Hi_Wi_A-torch.sum(gt_logits_j == -1).item())
+                Hi_Wi_A - torch.sum(gt_logits_j == -1).item())
 
         # num_proposals_i = min(pre_nms_topk, Hi_Wi_A)
         num_proposals_i = min(pre_nms_topk, min(num_remain_logits))

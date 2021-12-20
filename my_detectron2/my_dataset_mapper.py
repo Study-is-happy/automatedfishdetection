@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from fvcore.common.file_io import PathManager
 from PIL import Image
+import matplotlib.pyplot as plt
 
 from detectron2.data import transforms as T
 
@@ -96,6 +97,9 @@ class DatasetMapper:
                 )
                 image = crop_tfm.apply_image(image)
             image, transforms = T.apply_transform_gens(self.tfm_gens, image)
+            # print(image.shape)
+            # plt.imshow(image)
+            # plt.show()
             if self.crop_gen:
                 transforms = crop_tfm + transforms
 

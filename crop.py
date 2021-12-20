@@ -2,11 +2,11 @@ import cv2
 import json
 
 import config
-import util
+import utils
 
 # TODO: Set the dir
 
-crop_dir = config.project_dir + 'train/'
+crop_dir = config.project_dir + 'all/'
 
 ###########################################################################
 
@@ -23,6 +23,10 @@ def get_crop_bbox_point(bbox_point, start_point, end_point):
         return 0
 
     return bbox_point - start_point
+
+
+def get_bbox_size(bbox):
+    return (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
 
 
 with open(crop_dir + 'instances.json') as instances_file:
@@ -45,11 +49,11 @@ for image_id, instance in instances.items():
 
     for col_index in range(col_num + 1):
 
-        col_list.append(util.get_rint(crop_image_width * col_index))
+        col_list.append(utils.get_rint(crop_image_width * col_index))
 
     for row_index in range(row_num + 1):
 
-        row_list.append(util.get_rint(crop_image_height * row_index))
+        row_list.append(utils.get_rint(crop_image_height * row_index))
 
     for col_index in range(col_num):
         start_col = col_list[col_index]
@@ -68,24 +72,27 @@ for image_id, instance in instances.items():
 
                 bbox = annotation['bbox'].copy()
 
-                util.rel_to_abs(bbox, image_width, image_height)
+                utils.rel_to_abs(bbox, image_width, image_height)
 
-                if util.get_bboxes_iou(crop_image_bbox, bbox) > 0:
-                    bbox[0] = get_crop_bbox_point(bbox[0], start_col, end_col)
-                    bbox[1] = get_crop_bbox_point(bbox[1], start_row, end_row)
-                    bbox[2] = get_crop_bbox_point(bbox[2], start_col, end_col)
-                    bbox[3] = get_crop_bbox_point(bbox[3], start_row, end_row)
+                if utils.get_bboxes_iou(crop_image_bbox, bbox) > 0:
+                    crop_bbox = bbox.copy()
+                    crop_bbox[0] = get_crop_bbox_point(bbox[0], start_col, end_col)
+                    crop_bbox[1] = get_crop_bbox_point(bbox[1], start_row, end_row)
+                    crop_bbox[2] = get_crop_bbox_point(bbox[2], start_col, end_col)
+                    crop_bbox[3] = get_crop_bbox_point(bbox[3], start_row, end_row)
 
-                    util.abs_to_rel(bbox, crop_image_width, crop_image_height)
+                    if get_bbox_size(crop_bbox) / get_bbox_size(bbox) > 0.3:
 
-                    annotations.append({'category_id': annotation['category_id'], 'bbox': bbox})
+                        utils.abs_to_rel(crop_bbox, crop_image_width, crop_image_height)
+
+                        annotations.append({'category_id': annotation['category_id'], 'bbox': crop_bbox})
 
             if len(annotations) > 0:
                 crop_image_id = image_id + '_' + str(col_index) + '_' + str(row_index)
-                crop_instances[crop_image_id] = {'width': crop_image_width,
-                                                 'height': crop_image_height,
+                crop_instances[crop_image_id] = {'width': int(crop_image_width),
+                                                 'height': int(crop_image_height),
                                                  'annotations': annotations}
 
-                cv2.imwrite(crop_dir + 'crop_images/' + crop_image_id + '.jpg', image[start_row:end_row, start_col:end_col])
+                # cv2.imwrite(crop_dir + 'crop_images/' + crop_image_id + '.jpg', image[start_row:end_row, start_col:end_col])
 
-util.write_json_file(crop_instances, crop_dir + 'crop_instances.json')
+utils.write_json_file(crop_instances, crop_dir + 'crop_instances.json')

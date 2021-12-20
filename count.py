@@ -5,7 +5,7 @@ import config
 
 # TODO: Set the path
 
-instances_file_path = config.project_dir + 'train/instances.json'
+instances_file_path = config.project_dir + 'train/instances_1.json'
 
 ###########################################################################
 
@@ -22,6 +22,7 @@ with open(instances_file_path) as instances_file:
         image_count += 1
 
         for annotation in instance['annotations']:
+            # if annotation['category_id'] < 2:
             print_results[config.categories[annotation['category_id']]] += 1
 
 print(print_results)

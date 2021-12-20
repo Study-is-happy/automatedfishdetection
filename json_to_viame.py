@@ -4,13 +4,16 @@ import csv
 import utils
 import config
 
-with open(config.project_dir + 'train/instances.json') as instances_file:
+with open(config.project_dir + 'all/instances_1.json') as instances_file:
     instances = json.load(instances_file)
+
+with open(config.project_dir + 'all/dive_dict.json') as dive_dict_file:
+    dive_dict = json.load(dive_dict_file)
 
 annotation_index = 0
 image_index = 0
 
-with open(config.project_dir + 'viame.csv', 'w') as viame_file:
+with open(config.project_dir + 'viame_RL-19-02.csv', 'w') as viame_file:
 
     writer = csv.writer(viame_file)
 
@@ -19,17 +22,21 @@ with open(config.project_dir + 'viame.csv', 'w') as viame_file:
 
     for image_id, instance in instances.items():
 
-        width = instance['width']
-        height = instance['height']
+        dive_info = dive_dict[image_id]
 
-        for annotation in instance['annotations']:
+        if dive_info['dive'] == 'RL-19-02':
 
-            bbox = annotation['bbox']
+            width = instance['width']
+            height = instance['height']
 
-            utils.rel_to_abs(bbox, width, height)
+            for annotation in instance['annotations']:
 
-            writer.writerow([annotation_index, image_id + '.jpg', image_index, bbox[0], bbox[1], bbox[2], bbox[3], 1, 0, config.categories[annotation['category_id']], 1])
+                bbox = annotation['bbox']
 
-            annotation_index += 1
+                utils.rel_to_abs(bbox, width, height)
 
-    image_index += 1
+                writer.writerow([annotation_index, image_id + dive_info['extension'], image_index, bbox[0], bbox[1], bbox[2], bbox[3], 1, 0, config.categories[annotation['category_id']], 1])
+
+                annotation_index += 1
+
+            image_index += 1

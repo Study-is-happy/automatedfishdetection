@@ -49,11 +49,11 @@ cluster = sklearn.cluster.KMeans(n_clusters=2)
 # annotation_block_size = 3
 # dilate_kernel = np.ones((annotation_block_size * 2 + 1, annotation_block_size * 2 + 1))
 
-with open(config.project_dir + 'rockfish_size.csv', 'a') as mean_size_file:
+with open(config.project_dir + 'rockfish_size.csv', 'w') as mean_size_file:
 
     mean_size_writer = csv.writer(mean_size_file)
 
-    with open(config.project_dir + 'all/instances_all.json') as instances_file:
+    with open(config.project_dir + 'train/instances.json') as instances_file:
 
         instances_dict = json.load(instances_file)
 
@@ -62,9 +62,9 @@ with open(config.project_dir + 'rockfish_size.csv', 'a') as mean_size_file:
 
             image_id = os.path.splitext(os.path.basename(left_image_path))[0]
 
-            # if image_id in instances_dict:
+            if image_id in instances_dict:
 
-            if image_id == '20191009.154112.00088_rect_color':
+                # if image_id == '20191009.154112.00088_rect_color':
 
                 print(image_id)
 
@@ -112,8 +112,6 @@ with open(config.project_dir + 'rockfish_size.csv', 'a') as mean_size_file:
                 min_disparity = min_points_diff - disparity_unit * 2
                 num_disparities = max_points_diff + disparity_unit * 2 - min_disparity
                 num_disparities += disparity_unit - num_disparities % disparity_unit
-                print(min_points_diff)
-                print(max_points_diff)
 
                 stereo_disparity = cv2.StereoSGBM_create(minDisparity=min_disparity,
                                                          numDisparities=num_disparities,
@@ -176,13 +174,13 @@ with open(config.project_dir + 'rockfish_size.csv', 'a') as mean_size_file:
                             disparity_points = disparity_map[annotation_mask == 255]
                             disparity_points = disparity_points[disparity_points > min_disparity]
 
-                            plt.hist(disparity_points, bins='auto')
-                            plt.show()
+                            # plt.hist(disparity_points, bins='auto')
+                            # plt.show()
 
                             cluster.fit(disparity_points.reshape(-1, 1))
 
-                            print(cluster.cluster_centers_)
-                            print(np.abs(cluster.cluster_centers_[0] - cluster.cluster_centers_[1]))
+                            # print(cluster.cluster_centers_)
+                            # print(np.abs(cluster.cluster_centers_[0] - cluster.cluster_centers_[1]))
 
                             if np.abs(cluster.cluster_centers_[0] - cluster.cluster_centers_[1]) > 5:
 
@@ -256,24 +254,24 @@ with open(config.project_dir + 'rockfish_size.csv', 'a') as mean_size_file:
 
                                 bbox_points = utils.get_rint(np.squeeze(bbox_points))
 
-                                annotaion_disparity_map = disparity_map.copy()
+                                annotation_disparity_map = disparity_map.copy()
 
                                 for bbox_point in bbox_points:
-                                    annotaion_disparity_map[bbox_point[1], bbox_point[0]] = mean_disparity_point
+                                    annotation_disparity_map[bbox_point[1], bbox_point[0]] = mean_disparity_point
 
-                                boundary_point_image = cv2.reprojectImageTo3D(annotaion_disparity_map, stereo_params['Q'])
+                                boundary_point_image = cv2.reprojectImageTo3D(annotation_disparity_map, stereo_params['Q'])
 
                                 mean_size = (cv2.norm(boundary_point_image[bbox_points[0][1], bbox_points[0][0]] - boundary_point_image[bbox_points[2][1], bbox_points[2][0]]) +
                                              cv2.norm(boundary_point_image[bbox_points[1][1], bbox_points[1][0]] - boundary_point_image[bbox_points[3][1], bbox_points[3][0]])) / 2
 
-                                print(mean_size)
+                                # print(mean_size)
                                 mean_size_writer.writerow([image_id, str(annotation_index), str(mean_size)])
 
-                plt.subplot(121)
-                plt.imshow(vis_left_image)
-                plt.subplot(122)
-                plt.imshow(vis_disparity_image)
-                plt.show()
+                # plt.subplot(121)
+                # plt.imshow(vis_left_image)
+                # plt.subplot(122)
+                # plt.imshow(vis_disparity_image)
+                # plt.show()
 
                 # # cv2.imwrite(config.calib_dir + config.calib_sub_dir + 'vis_disparity_image.png', disparity_image)
 

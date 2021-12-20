@@ -3,7 +3,7 @@ import numpy as np
 from collections import OrderedDict
 
 import config
-import util
+import utils
 
 
 class Evaluator():
@@ -60,7 +60,7 @@ class Evaluator():
                 best_gt_annotation = None
 
                 for index, gt_annotation in enumerate(gt_annotations[category_id]):
-                    iou = util.get_bboxes_iou(bbox, gt_annotation['bbox'])
+                    iou = utils.get_bboxes_iou(bbox, gt_annotation['bbox'])
                     if iou > best_iou:
                         best_iou = iou
                         best_gt_annotation = gt_annotation

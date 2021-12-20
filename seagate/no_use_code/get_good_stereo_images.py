@@ -16,14 +16,7 @@ import config
 import utils
 import seagate_utils
 
-seagate_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/'
-
-for calib_dir in ['RL-16_06', 'RL-19-02', 'SH-17-09', 'SH-18-12']:
-    for calib_sub_dir in os.listdir(seagate_dir + calib_dir):
-        if os.path.isdir(calib_sub_dir):
-            print(calib_sub_dir)
-
-seagate_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/SH-18-12/d20181015_3/'
+seagate_dir = '/media/auv/Seagate Desktop Drive/AUV_images_fcts/RL-16_06/d20161027_7/'
 
 unrectify_params = np.load(config.calib_dir + 'unrectify_params.npz')
 
@@ -42,14 +35,12 @@ right_unrectify_polygon = shapely.geometry.Polygon(np.squeeze(right_unrectify_co
 left_roi = seagate_utils.get_roi_mask(image_shape, unrectify_params['left_roi'])
 right_roi = seagate_utils.get_roi_mask(image_shape, unrectify_params['right_roi'])
 
-zernike = MultiHarrisZernike(Nfeats=10000, seci=5, secj=4, levels=6, ratio=0.75,
+
+zernike = MultiHarrisZernike(Nfeats=41 * 48 * 20, seci=41, secj=48, levels=12, ratio=0.75,
                              sigi=2.75, sigd=1.0, nmax=8, lmax_nd=3, harris_threshold=None)
 
-# clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-
-# os.mkdir(config.calib_dir + config.calib_sub_dir + 'port_images/')
-# os.mkdir(config.calib_dir + config.calib_sub_dir + 'stbd_images/')
-# os.mkdir(config.calib_dir + config.calib_sub_dir + 'match_points/')
+# zernike = MultiHarrisZernike(Nfeats=10000, seci=5, secj=4, levels=6, ratio=0.75,
+#                              sigi=2.75, sigd=1.0, nmax=8, lmax_nd=3, harris_threshold=None)
 
 cfg = get_cfg()
 cfg.merge_from_file(
@@ -110,14 +101,11 @@ def get_transform_point(homography_matrix, point):
 with open(config.project_dir + 'all/instances_all.json') as instances_file:
     instances_dict = json.load(instances_file)
 
-for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif')),
-                                             sorted(glob.glob(right_dir + '*.tif'))):
+for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.jpg')),
+                                             sorted(glob.glob(right_dir + '*.jpg'))):
 
-    # if left_image_path != left_dir + '20191009.165433.01738_rect_color.tif':
-    #     continue
-
-    # if left_image_path != left_dir + '20191009.170145.01900_rect_color.tif':
-    #     continue
+    if left_image_path != left_dir + '20161027.174658.00181_rect_color.jpg':
+        continue
 
     print(left_image_path)
 
@@ -171,9 +159,9 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
                 # shutil.copy(left_image_path, config.calib_dir + config.calib_sub_dir + 'port_images/')
                 # shutil.copy(right_image_path, config.calib_dir + config.calib_sub_dir + 'stbd_images/')
 
-                np.savez(config.calib_dir + config.calib_sub_dir + 'match_points/' + left_image_id + '_' + right_image_id,
-                         left_points=left_points,
-                         right_points=right_points)
+                # np.savez(config.calib_dir + config.calib_sub_dir + 'match_points/' + left_image_id + '_' + right_image_id,
+                #          left_points=left_points,
+                #          right_points=right_points)
 
                 bad_fundamental = False
 
@@ -186,8 +174,8 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
             left_bbox_list = []
             right_transform_polygon_list = []
 
-            # vis_left_image = left_image.copy()
-            # vis_right_image = right_image.copy()
+            vis_left_image = left_image.copy()
+            vis_right_image = right_image.copy()
 
             for annotation in instance['annotations']:
                 if annotation['category_id'] == 1:
@@ -211,9 +199,9 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
 
                     right_transform_polygon_list.append(right_transform_polygon)
 
-                    # vis_left_bbox_points = utils.get_rint(left_bbox_points)
-                    # cv2.rectangle(vis_left_image, tuple(vis_left_bbox_points[0:2]), tuple(vis_left_bbox_points[2:4]), (255, 0, 0), 3)
-                    # cv2.polylines(vis_right_image, [utils.get_rint(right_transform_polygon.exterior.coords)], True, (255, 0, 0), 3)
+                    vis_left_bbox_points = utils.get_rint(left_bbox_points)
+                    cv2.rectangle(vis_left_image, tuple(vis_left_bbox_points[0:2]), tuple(vis_left_bbox_points[2:4]), (255, 0, 0), 3)
+                    cv2.polylines(vis_right_image, [utils.get_rint(right_transform_polygon.exterior.coords)], True, (255, 0, 0), 3)
 
             if len(left_bbox_list) > 0:
 
@@ -230,17 +218,17 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
 
                         right_polygon_list.append(get_bbox_polygon(right_bbox))
 
-                        # vis_right_bbox = utils.get_rint(right_bbox)
+                        vis_right_bbox = utils.get_rint(right_bbox)
 
-                        # cv2.rectangle(vis_right_image, tuple(vis_right_bbox[0:2]), tuple(vis_right_bbox[2:4]), (0, 255, 0), 3)
+                        cv2.rectangle(vis_right_image, tuple(vis_right_bbox[0:2]), tuple(vis_right_bbox[2:4]), (0, 255, 0), 3)
 
                 if len(right_bbox_list) > 0:
 
-                    # plt.subplot(121)
-                    # plt.imshow(vis_left_image)
-                    # plt.subplot(122)
-                    # plt.imshow(vis_right_image)
-                    # plt.show()
+                    plt.subplot(121)
+                    plt.imshow(vis_left_image)
+                    plt.subplot(122)
+                    plt.imshow(vis_right_image)
+                    plt.show()
 
                     iou_matrix = np.full((len(left_bbox_list), len(right_bbox_list)), -1.0)
 
@@ -255,8 +243,8 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
                     left_annotation_mask = np.zeros(image_shape, np.uint8)
                     right_annotation_mask = np.zeros(image_shape, np.uint8)
 
-                    # vis_left_image = left_image.copy()
-                    # vis_right_image = right_image.copy()
+                    vis_left_image = left_image.copy()
+                    vis_right_image = right_image.copy()
 
                     exist_annotation = False
 
@@ -275,8 +263,8 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
                         iou_matrix[left_index, :] = -1
                         iou_matrix[:, right_index] = -1
 
-                        # cv2.rectangle(vis_left_image, tuple(left_bbox[0:2]), tuple(left_bbox[2:4]), (0, 255, 0), 3)
-                        # cv2.rectangle(vis_right_image, tuple(right_bbox[0:2]), tuple(right_bbox[2:4]), (0, 255, 0), 3)
+                        cv2.rectangle(vis_left_image, tuple(left_bbox[0:2]), tuple(left_bbox[2:4]), (0, 255, 0), 3)
+                        cv2.rectangle(vis_right_image, tuple(right_bbox[0:2]), tuple(right_bbox[2:4]), (0, 255, 0), 3)
 
                         exist_annotation = True
 
@@ -293,11 +281,11 @@ for left_image_path, right_image_path in zip(sorted(glob.glob(left_dir + '*.tif'
 
                             left_points, right_points = match_points
 
-                            # seagate_utils.plot_match_points(left_image, right_image, left_points, right_points)
+                            seagate_utils.plot_match_points(left_image, right_image, left_points, right_points)
 
                             # shutil.copy(left_image_path, config.calib_dir + config.calib_sub_dir + 'port_images/')
                             # shutil.copy(right_image_path, config.calib_dir + config.calib_sub_dir + 'stbd_images/')
 
-                            np.savez(config.calib_dir + config.calib_sub_dir + 'match_points/' + left_image_id + '_' + right_image_id,
-                                     left_points=left_points,
-                                     right_points=right_points)
+                            # np.savez(config.calib_dir + config.calib_sub_dir + 'match_points/' + left_image_id + '_' + right_image_id,
+                            #          left_points=left_points,
+                            #          right_points=right_points)

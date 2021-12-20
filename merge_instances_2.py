@@ -32,6 +32,13 @@ for instances_file_path in instances_file_path_list:
                 merge_annotations = merge_instances[image_id]['annotations']
 
                 for annotation in annotations:
-                    merge_annotations.append(annotation)
+                    for merge_annotation in merge_annotations:
+                        if util.get_bboxes_iou(annotation['bbox'], merge_annotation['bbox']) > 0.5:
+                            break
+                    else:
+                        merge_annotations.append(annotation)
+
+            else:
+                print(image_id)
 
 util.write_json_file(merge_instances, merge_instances_file_path)

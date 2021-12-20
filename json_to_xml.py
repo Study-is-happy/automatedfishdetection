@@ -1,20 +1,19 @@
 from xml.dom import minidom
 import shutil
 import json
-import os
 
-import util
+import utils
 import config
 
-with open(config.project_dir + 'train/instances.json') as update_instances_file:
+with open(config.project_dir + 'init/instances.json') as update_instances_file:
     update_instances = json.load(update_instances_file)
 
 for image_id, instance in update_instances.items():
 
-    # shutil.copy(config.project_dir + 'train/images/' + image_id
+    # shutil.copy(config.project_dir + 'predict/images/' + image_id
     #             + '.jpg', config.project_dir + 'xml/images/')
 
-    xml_file_path = config.project_dir + 'xml/annotations/' + image_id + '.xml'
+    xml_file_path = config.project_dir + 'init/annotations/' + image_id + '.xml'
 
     width = instance['width']
     height = instance['height']
@@ -26,7 +25,7 @@ for image_id, instance in update_instances.items():
 
     folder_node = xml_document.createElement('folder')
     annotation_node.appendChild(folder_node)
-    folder_node_text = xml_document.createTextNode('images')
+    folder_node_text = xml_document.createTextNode('images/')
     folder_node.appendChild(folder_node_text)
 
     filename_node = xml_document.createElement('filename')
@@ -82,7 +81,9 @@ for image_id, instance in update_instances.items():
         name_node = xml_document.createElement('name')
         object_node.appendChild(name_node)
 
-        if annotation['category_id'] == -1:
+        if 'score' in annotation:
+            name_text = 'predict'
+        elif annotation['category_id'] == -1:
             name_text = 'unknown'
         else:
             name_text = config.categories[annotation['category_id']]
@@ -104,7 +105,7 @@ for image_id, instance in update_instances.items():
         object_node.appendChild(bndbox_node)
 
         bbox = annotation['bbox']
-        util.pascal_voc_rel_to_abs(bbox, width, height)
+        utils.pascal_voc_rel_to_abs(bbox, width, height)
 
         xmin_node = xml_document.createElement('xmin')
         bndbox_node.appendChild(xmin_node)

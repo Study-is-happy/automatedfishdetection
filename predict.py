@@ -6,7 +6,7 @@ from detectron2.config import get_cfg
 from detectron2.engine import DefaultPredictor
 
 import config
-import util
+import utils
 import reset_predict
 
 print_results = {}
@@ -16,7 +16,7 @@ for category in config.categories:
 
 cfg = get_cfg()
 cfg.merge_from_file(
-    'detectron2/configs/COCO-Detection/faster_rcnn_R_50_FPN_3x.yaml')
+    'detectron2/configs/COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml')
 
 cfg.MODEL.RESNETS.NORM = 'GN'
 cfg.MODEL.RESNETS.STRIDE_IN_1X1 = False
@@ -42,10 +42,10 @@ with open(config.project_dir + 'update/instances.json') as update_instances_file
     update_instances = json.load(update_instances_file)
 
 with open(config.project_dir + 'easy_gt/instances.json') as easy_instances_file:
-    easy_gt_annotation_generator = util.easy_gt_annotation_generator(
+    easy_gt_annotation_generator = utils.easy_gt_annotation_generator(
         json.load(easy_instances_file))
 
-easy_gt_index_generator = util.easy_gt_index_generator()
+easy_gt_index_generator = utils.easy_gt_index_generator()
 
 cache_annotations = []
 
@@ -64,6 +64,7 @@ for image_file_name in os.listdir(images_dir):
     height, width, _ = image.shape
 
     output = predictor(image)
+    print(image_file_name)
 
     output_instances = output['instances']
     fields = output_instances.get_fields()
@@ -76,12 +77,13 @@ for image_file_name in os.listdir(images_dir):
         score = score.item()
         bbox = bbox.tolist()
 
-        util.abs_to_rel(bbox, width, height)
+        utils.abs_to_rel(bbox, width, height)
 
         annotation = {'image_id': image_id, 'width': width, 'height': height, 'category_id': category_id, 'score': score,
                       'bbox': bbox}
         annotations.append(annotation)
 
+    print(len(annotations))
     if len(annotations) > 0:
 
         if image_id in update_instances:
@@ -93,12 +95,12 @@ for image_file_name in os.listdir(images_dir):
 
             if annotation['score'] > 0:
                 for unchecked_annotation in annotations[index + 1:]:
-                    if util.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.5:
+                    if utils.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.5:
                         unchecked_annotation['score'] = 0
 
                 if update_annotations is not None:
                     for update_annotation in update_annotations:
-                        if util.get_bboxes_iou(annotation['bbox'], update_annotation['bbox']) > 0.3:
+                        if utils.get_bboxes_iou(annotation['bbox'], update_annotation['bbox']) > 0.3:
                             annotation['score'] = 0
                             break
 
@@ -117,7 +119,7 @@ for image_file_name in os.listdir(images_dir):
             vis_instances[image_id] = vis_instance
 
             if update_annotations is not None:
-                util.write_json_file(
+                utils.write_json_file(
                     update_annotations, config.project_dir + 'predict/exist_annotations/' + image_id + '.json')
                 for update_annotation in update_annotations:
                     vis_instance['annotations'].append({'category_id': update_annotation['category_id'],
@@ -140,7 +142,7 @@ for image_file_name in os.listdir(images_dir):
 
                 annotations_file_path = config.project_dir + 'predict/annotations/' + str(annotation_id) + '.json'
 
-                util.write_json_file(
+                utils.write_json_file(
                     current_annotations, annotations_file_path)
 
                 shutil.copy(annotations_file_path,
@@ -150,10 +152,10 @@ for image_file_name in os.listdir(images_dir):
 
                 annotation_id += 1
 
-util.write_json_file(
+utils.write_json_file(
     cache_annotations, config.project_dir + 'predict/annotations/cache.json')
 
-util.write_json_file(
+utils.write_json_file(
     vis_instances, config.project_dir + 'predict/instances.json')
 
 with open(config.project_dir + 'predict/annotation_ids.csv', 'a') as annotation_ids_file:

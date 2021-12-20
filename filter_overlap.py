@@ -1,7 +1,7 @@
 import json
 
 import config
-import util
+import utils
 
 instances_file_path = config.project_dir + 'update/instances.json'
 
@@ -16,10 +16,10 @@ for _, instance in instances.items():
 
         if 'overlap' not in annotation:
             for unchecked_annotation in annotations[index + 1:]:
-                if util.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.5:
+                if utils.get_bboxes_iou(annotation['bbox'], unchecked_annotation['bbox']) > 0.5:
                     unchecked_annotation['overlap'] = True
 
     instance['annotations'] = [
         annotation for annotation in annotations if 'overlap' not in annotation]
 
-util.write_json_file(instances, instances_file_path)
+utils.write_json_file(instances, instances_file_path)
